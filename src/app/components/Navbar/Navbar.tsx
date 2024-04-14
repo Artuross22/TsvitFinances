@@ -14,6 +14,9 @@ type Props = {
           <li><Link href="/services" passHref><span style={{ color: 'white', textDecoration: 'none' }}>Services</span></Link></li>
         </ul>
       </nav>
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <span style={{ color: 'white' }}>Tsvit</span>
+      </div>
       <nav>
         <ul style={{ listStyle: 'none', display: 'flex', gap: '10px' }}>
           <li><Link href="/blog" passHref><span style={{ color: 'white', textDecoration: 'none' }}>Investing</span></Link></li>
