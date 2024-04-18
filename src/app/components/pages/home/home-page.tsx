@@ -1,16 +1,18 @@
-import React from 'react'
-import Image from 'next/image';
+import React from "react";
+import Image from "next/image";
 import avatarSrc from "./images/Idee.jpg";
 
 export default function Home() {
   return (
-    <div style={{
-      position: 'relative',
-      height: '100vh',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-    }}>
+    <div
+      style={{
+        position: "relative",
+        height: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       <Image
         src={avatarSrc}
         layout="fill"
@@ -18,8 +20,9 @@ export default function Home() {
         quality={100}
         alt="Background image"
       />
-      <h1 style={{ position: 'absolute', color: 'green',top: '10%' }}>Welcome to Tsvit</h1>
+      <h1 style={{ position: "absolute", color: "green", top: "10%" }}>
+        Welcome to Tsvit
+      </h1>
     </div>
   );
-  }
-  
+}
