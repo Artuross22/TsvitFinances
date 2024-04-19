@@ -19,3 +19,14 @@ model Task {
   createdAt DateTime @default(now())
   completed Boolean  @default(false)
 }
+
+model Assets {
+  id           String   @id @default(uuid())
+  name         String
+  currentPrice Float
+  addedAt      DateTime @default(now())
+  boughtFor    Float
+  profi        Float
+  active       Boolean  @default(true)
+  closedAt     DateTime @default(now())
+}
