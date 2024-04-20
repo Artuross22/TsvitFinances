@@ -20,7 +20,7 @@ model Task {
   completed Boolean  @default(false)
 }
 
-model Assets {
+model Asset {
   id           String   @id @default(uuid())
   name         String
   currentPrice Float

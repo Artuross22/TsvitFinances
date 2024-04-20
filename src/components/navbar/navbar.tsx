@@ -24,7 +24,7 @@ function Navbar({}: Props) {
             </Link>
           </li>
           <li>
-            <Link href="/about" passHref>
+            <Link href="/pages/about" passHref>
               <span style={{ color: "white", textDecoration: "none" }}>
                 About
               </span>
@@ -51,7 +51,7 @@ function Navbar({}: Props) {
       <nav>
         <ul style={{ listStyle: "none", display: "flex", gap: "10px" }}>
           <li>
-            <Link href="/blog" passHref>
+            <Link href="pages/investing" passHref>
               <span style={{ color: "white", textDecoration: "none" }}>
                 Investing
               </span>
