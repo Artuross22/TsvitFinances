@@ -34,21 +34,25 @@ const ListAssets: React.FC = () => {
 
   return (
     <div>
-      <h2>List of Assets</h2>
-      <ul>
-        {assets.map((asset) => (
-          <li key={asset.id}>
-            <p>Name: {asset.name}</p>
-            <p>Current Price: {asset.currentPrice}</p>
-            {/* <p>Added At: {asset.addedAt}</p> */}
-            <p>Bought For: {asset.boughtFor}</p>
-            <p>Profit: {asset.profi}</p>
-            <p>Active: {asset.active ? 'Yes' : 'No'}</p>
-            {/* <p>Closed At: {asset.closedAt}</p> */}
+      <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <h2>List of Assets</h2>
+      </div>
+    <ul style={{ display: 'flex'}}>
+      {assets.map(({ id, name, currentPrice, addedAt, boughtFor, profi, active, closedAt }) => (
+        <div key={id} style={{ border: '1px solid black', margin: '5px', padding: '10px', backgroundColor: currentPrice < boughtFor ? 'lightcoral' : 'lightgreen'}}>
+          <li>
+            <p>Name: {name}</p>
+            <p>Current Price: {currentPrice}</p>
+            <p>Added At: {new Date(addedAt).toLocaleDateString()}</p>
+            <p>Bought For: {boughtFor}</p>
+            <p>Profit: {profi}</p>
+            <p>Active: {active ? 'Yes' : 'No'}</p>
+            <p>Closed At: {new Date(closedAt).toLocaleDateString()}</p>
           </li>
-        ))}
-      </ul>
-    </div>
+        </div>
+      ))}
+    </ul>
+  </div>
   );
 };
 
