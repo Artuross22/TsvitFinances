@@ -1,5 +1,5 @@
 import React from "react";
-import Investing from "@/components/pages/investing/listAssets";
+import Investing from "@/features/investing/listAssets";
 
 const page = () => {
   return (
