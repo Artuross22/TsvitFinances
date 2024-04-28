@@ -69,7 +69,7 @@ const ListAssets: React.FC = () => {
                 <p>
                   <div className="flex gap-6 items-center">
                     <Link
-                      href={`/investing/ViewAsset`}
+                      href={`/investing/ViewAsset/${id}`}
                       className="btn btn-accent btn-xs"
                     >
                       <span style={{ color: "white", textDecoration: "none" }}>
