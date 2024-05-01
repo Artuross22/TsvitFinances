@@ -1,4 +1,4 @@
-import ViewAsset from "@/features/investing/viewAsset";
+import EditAsset from "@/features/investing/editAsset";
 import React from "react";
 
 interface AssetProps {
@@ -10,7 +10,7 @@ interface AssetProps {
 const AssetDetail: React.FC<AssetProps> = ({ params }) => {
   return (
     <div>
-      <ViewAsset id={params.id} />
+      <EditAsset id={params.id} />
     </div>
   );
 };

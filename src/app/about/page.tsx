@@ -1,4 +1,4 @@
-import prisma from '@/utils/db';
+import prisma from "@/utils/db";
 
 const prismaHandlers = async () => {
   await prisma.task.create({

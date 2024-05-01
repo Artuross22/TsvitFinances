@@ -1,15 +1,11 @@
 import { getAsset } from "@/utils/asset";
 import Link from "next/link";
 
-interface Asset {
-  id: string;
-}
-
-const ViewAsset: React.FC<Asset> = async ({ id }) => {
+const EditAsset: React.FC<{ id: string }> = async ({ id }) => {
   const asset = await getAsset(id);
 
   if (!asset) {
-    return null; // or handle the case when props is null
+    return null; // or handle the case when asset is null
   }
 
   return (
@@ -22,7 +18,7 @@ const ViewAsset: React.FC<Asset> = async ({ id }) => {
         }}
       >
         <Link
-          href={"/investing"}
+          href={`/investing/ViewAsset/${asset.id}`}
           style={{ position: "absolute", left: "1%", color: "green" }}
         >
           Back
@@ -46,11 +42,8 @@ const ViewAsset: React.FC<Asset> = async ({ id }) => {
         <p>Profit: {asset.currentPrice - asset.boughtFor}</p>
         <p>Active: {asset.active ? "Yes" : "No"}</p>
         <p>Closed At: {asset.closedAt.toLocaleString()}</p>
-        <div>
-          <Link href={`/investing/EditAsset/${asset.id}`}>Edit</Link>
-        </div>
       </div>
     </div>
   );
 };
-export default ViewAsset;
+export default EditAsset;
