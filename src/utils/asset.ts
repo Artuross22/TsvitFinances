@@ -17,3 +17,22 @@ export const getAsset = async (id: string) => {
     where: { id },
   });
 };
+
+
+
+export const editTask = async (formData: FormData) => {
+    const id = formData.get("id");
+    const content = formData.get("content");
+    const completed = formData.get("completed");
+
+    await prisma.asset.update({
+      where: { 
+        id: id?.toString(),
+      },
+      data: {
+        active: completed === "on" ? true : false,
+      },
+    });
+
+    redirect("/tasks");
+};
