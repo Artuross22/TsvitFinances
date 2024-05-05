@@ -18,21 +18,23 @@ export const getAsset = async (id: string) => {
   });
 };
 
+export const editAsset = async (formData: FormData): Promise<void> => {
+  const id = formData.get("id") as string;
+  const currentPrice = Number(formData.get("currentPrice"));
+  const active = Boolean(formData.get("active"));
+  const name = formData.get("name") as string | undefined;
+  const boughtFor = Number(formData.get("boughtFor"));
 
-
-export const editTask = async (formData: FormData) => {
-    const id = formData.get("id");
-    const content = formData.get("content");
-    const completed = formData.get("completed");
-
-    await prisma.asset.update({
-      where: { 
-        id: id?.toString(),
-      },
-      data: {
-        active: completed === "on" ? true : false,
-      },
-    });
-
-    redirect("/tasks");
+  await prisma.asset.update({
+    where: {
+      id: id,
+    },
+    data: {
+      name: name,
+      currentPrice: currentPrice,
+      active: active,
+      boughtFor: boughtFor,
+    },
+  });
+  redirect(`/investing/ViewAsset/${id}`);
 };
