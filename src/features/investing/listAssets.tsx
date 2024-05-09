@@ -3,17 +3,8 @@
 import React, { useEffect, useState } from "react";
 import { getAllAsset } from "@/utils/asset";
 import Link from "next/link";
+import { Asset } from "@/types/asset";
 
-interface Asset {
-  id: string;
-  name: string;
-  currentPrice: number;
-  addedAt: Date;
-  boughtFor: number;
-  profi: number;
-  active: boolean;
-  closedAt: Date;
-}
 
 const ListAssets: React.FC = () => {
   const [assets, setAssets] = useState<Asset[]>([]);

@@ -1,13 +1,7 @@
 import EditAsset from "@/features/investing/editAsset";
 import React from "react";
 
-interface AssetProps {
-  params: {
-    id: string;
-  };
-}
-
-const AssetDetail: React.FC<AssetProps> = ({ params }) => {
+const Page = ({ params }: { params: { id: string } }) => {
   return (
     <div>
       <EditAsset id={params.id} />
@@ -15,4 +9,4 @@ const AssetDetail: React.FC<AssetProps> = ({ params }) => {
   );
 };
 
-export default AssetDetail;
+export default Page;

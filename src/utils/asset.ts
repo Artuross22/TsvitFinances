@@ -1,8 +1,30 @@
 "use server";
+import { Asset } from "@/types/asset";
 import prisma from "@/utils/db";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 // import {z} from 'zod'
+
+export const createAsset = async (asset : Partial<Asset>) => {
+    try {
+      await prisma.asset.create({
+        data: {
+          name: asset.name ?? '',
+          currentPrice: asset.currentPrice ?? 0, 
+          boughtFor: asset.boughtFor ?? 0,
+          profi: asset.profi ?? 0,
+          active: asset.active,
+        },
+      });
+
+      revalidatePath("/investing");
+      return {message:'success'};
+    }
+    catch (error) {
+      console.log(error);
+      return {message: 'error'};
+    }
+};
 
 export const getAllAsset = async () => {
   return await prisma.asset.findMany({
@@ -18,23 +40,18 @@ export const getAsset = async (id: string) => {
   });
 };
 
-export const editAsset = async (formData: FormData): Promise<void> => {
-  const id = formData.get("id") as string;
-  const currentPrice = Number(formData.get("currentPrice"));
-  const active = Boolean(formData.get("active"));
-  const name = formData.get("name") as string | undefined;
-  const boughtFor = Number(formData.get("boughtFor"));
-
+export const editAsset = async (formData: Asset): Promise<void> => {
   await prisma.asset.update({
     where: {
-      id: id,
+      id: formData.id,
     },
     data: {
-      name: name,
-      currentPrice: currentPrice,
-      active: active,
-      boughtFor: boughtFor,
+      name: formData.name,
+      currentPrice: formData.currentPrice,
+      boughtFor: formData.boughtFor,
+      profi: formData.profi,
     },
   });
-  redirect(`/investing/ViewAsset/${id}`);
+  
+  redirect(`/investing/ViewAsset/${formData.id}`);
 };

@@ -1,105 +1,63 @@
-import { editAsset, getAsset } from "@/utils/asset";
-import Link from "next/link";
+"use client"
 
-interface Asset {
+import React, { useEffect, useState } from 'react';
+import { editAsset, getAsset } from '@/utils/asset';
+import { Asset } from '@/types/asset';
+
+
+interface AssetFormProps {
   id: string;
 }
 
-const ViewAsset: React.FC<Asset> = async ({ id }) => {
-  const asset = await getAsset(id);
+const AssetForm: React.FC<AssetFormProps> = ({ id }) => {
+  const [formAsset, setFormAsset] = useState<Asset | null>(null);
 
-  if (!asset) {
-    return null;
+  useEffect(() => {
+    const fetchAsset = async () => {
+      const asset = await getAsset(id);
+      setFormAsset(asset);
+    };
+
+    fetchAsset();
+  }, [id]);
+
+  if (!formAsset) {
+    return <div>Loading...</div>;
   }
 
-  return (
-    <div>
-      <div
-        style={{
-          display: "flex",
-          backgroundColor: "lightgray",
-          justifyContent: "center",
-        }}
-      >
-        <Link
-          href={`/investing/ViewAsset/${id}`}
-          style={{ position: "absolute", left: "1%", color: "green" }}
-        >
-          Back
-        </Link>
-        <h2>
-          <strong>{asset.name}</strong>
-        </h2>
-      </div>
+  const handleSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
+    editAsset(formAsset);
+    // Handle form submission here
+  };
 
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "40vh",
-        }}
-      >
-        <form action={editAsset}>
-          <input type="hidden" name="id" value={asset.id} />
-          <label htmlFor="name">
-            Name
-            <input
-              type="text"
-              id="name"
-              name="name"
-              defaultValue={asset.name}
-              required
-            />
-          </label>
-          <br />
-          <label htmlFor="currentPrice">
-            Current Price
-            <input
-              type="number"
-              id="currentPrice"
-              name="currentPrice"
-              defaultValue={asset.currentPrice}
-              required
-            />
-          </label>
-          <br />
-          <label htmlFor="boughtFor">
-            Bought For
-            <input
-              type="number"
-              id="boughtFor"
-              name="boughtFor"
-              defaultValue={asset.boughtFor}
-              required
-            />
-          </label>
-          <br />
-          <label htmlFor="profi">
-            Profi
-            <input
-              type="number"
-              id="profi"
-              name="profi"
-              defaultValue={asset.profi}
-              required
-            />
-          </label>
-          <br />
-          <label htmlFor="active">
-            Active
-            <input
-              type="checkbox"
-              id="active"
-              name="active"
-              defaultChecked={asset.active}
-            />
-          </label>
-          <br />
-          <button type="submit">Submit</button>
-        </form>
-      </div>
-    </div>
+  return (
+    <form onSubmit={handleSubmit} className="max-w-sm p-12 border border-base-300 rounded-lg">
+      <input type="hidden" name="id" value={formAsset.id} />
+      <label>
+        Name:
+        <input value={formAsset.name} onChange={e => setFormAsset({...formAsset, name: e.target.value} as Asset)} required/>
+      </label>
+      <label>
+        Current Price:
+        <input type="number" value={formAsset.currentPrice} onChange={e => setFormAsset({...formAsset, currentPrice: Number(e.target.value)} as Asset)} required/>
+      </label>
+      <label>
+        Bought For:
+        <input type="number" value={formAsset.boughtFor} onChange={e => setFormAsset({...formAsset, boughtFor: Number(e.target.value)} as Asset)} required/>
+      </label>
+      <label>
+        Profit:
+        <input type="number" value={formAsset.profi} onChange={e => setFormAsset({...formAsset, profi: Number(e.target.value)} as Asset)} required/>
+      </label>
+      <label>
+        Active:
+        <input type="checkbox" checked={formAsset.active} onChange={e => setFormAsset({...formAsset, active: e.target.checked} as Asset)} required/>
+      </label>
+      {/* Add other input fields similarly */}
+      <button type="submit">Submit</button>
+    </form>
   );
 };
-export default ViewAsset;
+
+export default AssetForm;
