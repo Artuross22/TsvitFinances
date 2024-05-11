@@ -1,8 +1,9 @@
 "use client";
 
-import { createAsset } from '@/utils/asset';
-import React, { useState } from 'react';
-import { Asset } from '@/types/asset';
+import { createAsset } from "@/utils/asset";
+import React, { useState } from "react";
+import { Asset } from "@/types/asset";
+import Link from "next/link";
 
 const initialAsset: Partial<Asset> = {
   active: true,
@@ -14,41 +15,63 @@ export default function AssetForm() {
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     createAsset(values);
-    console.log(values);
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div className="join w-full">
+    <div>
+      <div className="flex bg-gray-200 justify-center mt-2">
+        <Link href={"/investing"} className="absolute left-1 text-green">
+          Back
+        </Link>
+        <h2>
+          <strong>Create Asset</strong>
+        </h2>
+      </div>
+
+      <form
+        onSubmit={handleSubmit}
+        className="flex flex-col items-center mx-auto mt-10"
+      >
         <input
           type="text"
-          className="input input-bordered join-item w-full"
+          className="px-4 py-2 border rounded-md mb-4"
           placeholder="Asset name"
-          name="name"
           value={values.name}
           onChange={(e) => setValues({ ...values, name: e.target.value })}
           required
         />
         <input
           type="number"
-          className="input input-bordered join-item w-full"
+          className="px-4 py-2 border rounded-md mb-4"
           placeholder="Current price"
-          name="currentPrice"
           value={values.currentPrice}
-          onChange={(e) => setValues({ ...values, currentPrice: Number(e.target.value) || undefined })}
+          onChange={(e) =>
+            setValues({
+              ...values,
+              currentPrice: Number(e.target.value) || undefined,
+            })
+          }
           required
         />
         <input
           type="number"
-          className="input input-bordered join-item w-full"
-          placeholder="Profit"
+          className="px-4 py-2 border rounded-md mb-4"
+          placeholder="Bought For"
           value={values.boughtFor}
-          onChange={(e) => setValues({ ...values, boughtFor: Number(e.target.value) || undefined })}
+          onChange={(e) =>
+            setValues({
+              ...values,
+              boughtFor: Number(e.target.value) || undefined,
+            })
+          }
         />
-        <button type="submit" className="btn btn-primary join-item">
+        <button
+          type="submit"
+          className="px-4 py-2 bg-blue-500 text-white rounded-md"
+        >
           Create Asset
         </button>
-      </div>
-    </form>
+      </form>
+    </div>
   );
 }

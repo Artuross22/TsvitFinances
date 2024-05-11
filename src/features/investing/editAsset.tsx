@@ -1,15 +1,11 @@
-"use client"
+"use client";
 
-import React, { useEffect, useState } from 'react';
-import { editAsset, getAsset } from '@/utils/asset';
-import { Asset } from '@/types/asset';
+import React, { useEffect, useState } from "react";
+import { editAsset, getAsset } from "@/utils/asset";
+import { Asset } from "@/types/asset";
+import Link from "next/link";
 
-
-interface AssetFormProps {
-  id: string;
-}
-
-const AssetForm: React.FC<AssetFormProps> = ({ id }) => {
+const AssetForm: React.FC<{ id: string }> = ({ id }) => {
   const [formAsset, setFormAsset] = useState<Asset | null>(null);
 
   useEffect(() => {
@@ -28,35 +24,81 @@ const AssetForm: React.FC<AssetFormProps> = ({ id }) => {
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     editAsset(formAsset);
-    // Handle form submission here
   };
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-sm p-12 border border-base-300 rounded-lg">
-      <input type="hidden" name="id" value={formAsset.id} />
-      <label>
-        Name:
-        <input value={formAsset.name} onChange={e => setFormAsset({...formAsset, name: e.target.value} as Asset)} required/>
-      </label>
-      <label>
-        Current Price:
-        <input type="number" value={formAsset.currentPrice} onChange={e => setFormAsset({...formAsset, currentPrice: Number(e.target.value)} as Asset)} required/>
-      </label>
-      <label>
-        Bought For:
-        <input type="number" value={formAsset.boughtFor} onChange={e => setFormAsset({...formAsset, boughtFor: Number(e.target.value)} as Asset)} required/>
-      </label>
-      <label>
-        Profit:
-        <input type="number" value={formAsset.profi} onChange={e => setFormAsset({...formAsset, profi: Number(e.target.value)} as Asset)} required/>
-      </label>
-      <label>
-        Active:
-        <input type="checkbox" checked={formAsset.active} onChange={e => setFormAsset({...formAsset, active: e.target.checked} as Asset)} required/>
-      </label>
-      {/* Add other input fields similarly */}
-      <button type="submit">Submit</button>
-    </form>
+    <div>
+      <div className="flex bg-gray-200 justify-center mt-2">
+        <Link
+          href={`/investing/ViewAsset/${id}`}
+          className="absolute left-1 text-green"
+        >
+          Back
+        </Link>
+        <h2>
+          <strong>Edit {formAsset.name}</strong>
+        </h2>
+      </div>
+      <form
+        onSubmit={handleSubmit}
+        className="flex flex-col items-center mx-auto mt-10"
+      >
+        <input type="hidden" name="id" value={formAsset.id} />
+
+        <input
+          type="text"
+          className="px-4 py-2 border rounded-md mb-4"
+          placeholder="Asset name"
+          value={formAsset.name}
+          onChange={(e) => setFormAsset({ ...formAsset, name: e.target.value })}
+          required
+        />
+
+        <input
+          type="text"
+          className="px-4 py-2 border rounded-md mb-4"
+          placeholder="Current Price"
+          value={formAsset.currentPrice || ""}
+          onChange={(e) =>
+            setFormAsset({
+              ...formAsset,
+              currentPrice: parseFloat(e.target.value),
+            })
+          }
+          required
+        />
+        <input
+          type="text"
+          className="px-4 py-2 border rounded-md mb-4"
+          placeholder="Bought For"
+          value={formAsset.boughtFor || ""}
+          onChange={(e) =>
+            setFormAsset({
+              ...formAsset,
+              boughtFor: parseFloat(e.target.value),
+            })
+          }
+          required
+        />
+
+        <input
+          type="checkbox"
+          className="px-4 py-2 border rounded-md mb-4"
+          placeholder="Bought For"
+          checked={formAsset.active}
+          onChange={(e) =>
+            setFormAsset({ ...formAsset, active: e.target.checked })
+          }
+        />
+
+        <button
+          type="submit"
+          className="px-4 py-2 bg-blue-500 text-white rounded-md"
+        >
+          Update Asset
+        </button>
+      </form>
+    </div>
   );
 };
 

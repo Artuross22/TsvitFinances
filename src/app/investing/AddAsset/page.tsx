@@ -1,12 +1,8 @@
-
-import AddAsset from '@/features/investing/addAsset';
+import AddAsset from "@/features/investing/addAsset";
+import Link from "next/link";
 
 const Page = ({}) => {
-  return (
-    <div>
-      <AddAsset />
-    </div>
-  );
+  return <AddAsset />;
 };
 
 export default Page;

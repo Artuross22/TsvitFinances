@@ -5,7 +5,6 @@ import { getAllAsset } from "@/utils/asset";
 import Link from "next/link";
 import { Asset } from "@/types/asset";
 
-
 const ListAssets: React.FC = () => {
   const [assets, setAssets] = useState<Asset[]>([]);
 
@@ -24,8 +23,20 @@ const ListAssets: React.FC = () => {
 
   return (
     <div>
-      <div style={{ display: "flex", justifyContent: "center" }}>
-        <h2>List of Assets</h2>
+      <div className="flex bg-gray-200 justify-center mt-2">
+        <Link href={`/`} className="absolute left-1 text-green">
+          Back
+        </Link>
+
+        <Link
+          href={`/investing/AddAsset`}
+          className="absolute right-1 text-green"
+        >
+          Create
+        </Link>
+        <h2>
+          <strong>List of Assets</strong>
+        </h2>
       </div>
       <ul style={{ display: "flex" }}>
         {assets.map(

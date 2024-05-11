@@ -14,17 +14,8 @@ const ViewAsset: React.FC<Asset> = async ({ id }) => {
 
   return (
     <div>
-      <div
-        style={{
-          display: "flex",
-          backgroundColor: "lightgray",
-          justifyContent: "center",
-        }}
-      >
-        <Link
-          href={"/investing"}
-          style={{ position: "absolute", left: "1%", color: "green" }}
-        >
+      <div className="flex bg-gray-200 justify-center mt-2">
+        <Link href={`/investing`} className="absolute left-1 text-green">
           Back
         </Link>
         <h2>
