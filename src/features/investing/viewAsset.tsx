@@ -20,7 +20,7 @@ const ViewAsset: React.FC<Asset> = async ({ id }) => {
           Back
         </Link>
         <div className="absolute right-1 text-green">
-          <DeleteForm id={id} /> 
+          <DeleteForm id={id} />
         </div>
         <h2>
           <strong>{asset.name}</strong>
@@ -42,7 +42,7 @@ const ViewAsset: React.FC<Asset> = async ({ id }) => {
         <p>Active: {asset.active ? "Yes" : "No"}</p>
         <p>Closed At: {asset.closedAt.toLocaleString()}</p>
         <div>
-          <Link href={`/investing/EditAsset/${asset.id}`}>Edit</Link> 
+          <Link href={`/investing/EditAsset/${asset.id}`}>Edit</Link>
         </div>
       </div>
     </div>

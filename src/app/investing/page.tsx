@@ -3,9 +3,11 @@ import Investing from "@/features/investing/listAssets";
 import Link from "next/link";
 
 const page = () => {
- return <>
+  return (
+    <>
       <Investing />
-  </>
+    </>
+  );
 };
 
 export default page;

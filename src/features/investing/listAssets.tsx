@@ -68,15 +68,11 @@ const ListAssets: React.FC = () => {
                 <p>Profit: {profi}</p>
                 <p>Active: {active ? "Yes" : "No"}</p>
                 <p>Closed At: {new Date(closedAt).toLocaleDateString()}</p>
-                  <div>
-                    <Link
-                      href={`/investing/ViewAsset/${id}`}
-                    >
-                     <span className="text-white no-underline">
-                        Go In!
-                      </span>
-                    </Link>
-                  </div>
+                <div>
+                  <Link href={`/investing/ViewAsset/${id}`}>
+                    <span className="text-white no-underline">Go In!</span>
+                  </Link>
+                </div>
               </li>
             </div>
           ),

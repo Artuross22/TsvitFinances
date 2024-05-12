@@ -57,9 +57,9 @@ export const editAsset = async (formData: Asset): Promise<void> => {
 
 export const deleteAsset = async (id: string) => {
   await prisma.asset.delete({
-      where: { id },
+    where: { id },
   });
 
-  revalidatePath("/investing"); 
+  revalidatePath("/investing");
   redirect("/investing");
-}
+};
