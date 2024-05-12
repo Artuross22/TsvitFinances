@@ -21,7 +21,7 @@ export default function Home() {
         alt="Background image"
       />
       <h1 style={{ position: "absolute", color: "green", top: "10%" }}>
-        Welcome to Tsvit
+        <strong>From simple to complex</strong>
       </h1>
     </div>
   );

@@ -68,18 +68,15 @@ const ListAssets: React.FC = () => {
                 <p>Profit: {profi}</p>
                 <p>Active: {active ? "Yes" : "No"}</p>
                 <p>Closed At: {new Date(closedAt).toLocaleDateString()}</p>
-                <p>
-                  <div className="flex gap-6 items-center">
+                  <div>
                     <Link
                       href={`/investing/ViewAsset/${id}`}
-                      className="btn btn-accent btn-xs"
                     >
-                      <span style={{ color: "white", textDecoration: "none" }}>
+                     <span className="text-white no-underline">
                         Go In!
                       </span>
                     </Link>
                   </div>
-                </p>
               </li>
             </div>
           ),

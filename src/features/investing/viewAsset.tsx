@@ -1,5 +1,6 @@
 import { getAsset } from "@/utils/asset";
 import Link from "next/link";
+import DeleteForm from "../components/DeleteForm";
 
 interface Asset {
   id: string;
@@ -18,6 +19,9 @@ const ViewAsset: React.FC<Asset> = async ({ id }) => {
         <Link href={`/investing`} className="absolute left-1 text-green">
           Back
         </Link>
+        <div className="absolute right-1 text-green">
+          <DeleteForm id={id} /> 
+        </div>
         <h2>
           <strong>{asset.name}</strong>
         </h2>
@@ -38,7 +42,7 @@ const ViewAsset: React.FC<Asset> = async ({ id }) => {
         <p>Active: {asset.active ? "Yes" : "No"}</p>
         <p>Closed At: {asset.closedAt.toLocaleString()}</p>
         <div>
-          <Link href={`/investing/EditAsset/${asset.id}`}>Edit</Link>
+          <Link href={`/investing/EditAsset/${asset.id}`}>Edit</Link> 
         </div>
       </div>
     </div>

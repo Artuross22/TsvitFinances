@@ -17,8 +17,7 @@ export const createAsset = async (asset: Partial<Asset>) => {
       },
     });
 
-    revalidatePath("/investing");
-    return { message: "success" };
+    redirect(`/investing`);
   } catch (error) {
     console.log(error);
     return { message: "error" };
@@ -55,3 +54,12 @@ export const editAsset = async (formData: Asset): Promise<void> => {
 
   redirect(`/investing/ViewAsset/${formData.id}`);
 };
+
+export const deleteAsset = async (id: string) => {
+  await prisma.asset.delete({
+      where: { id },
+  });
+
+  revalidatePath("/investing"); 
+  redirect("/investing");
+}
