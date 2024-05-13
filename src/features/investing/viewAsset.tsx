@@ -40,7 +40,7 @@ const ViewAsset: React.FC<Asset> = async ({ id }) => {
         <p>Bought For: {asset.boughtFor}</p>
         <p>Profit: {asset.currentPrice - asset.boughtFor}</p>
         <p>Active: {asset.active ? "Yes" : "No"}</p>
-        <p>Closed At: {asset.closedAt.toLocaleString()}</p>
+        {!asset.active &&  <p>Closed At: {asset.closedAt.toLocaleString()}</p>}
         <div>
           <Link href={`/investing/EditAsset/${asset.id}`}>Edit</Link>
         </div>

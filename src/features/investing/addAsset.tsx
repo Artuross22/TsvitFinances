@@ -36,7 +36,7 @@ export default function AssetForm() {
           type="text"
           className="px-4 py-2 border rounded-md mb-4"
           placeholder="Asset name"
-          value={values.name}
+          value={values.name ?? ""}
           onChange={(e) => setValues({ ...values, name: e.target.value })}
           required
         />
@@ -44,7 +44,7 @@ export default function AssetForm() {
           type="number"
           className="px-4 py-2 border rounded-md mb-4"
           placeholder="Current price"
-          value={values.currentPrice}
+          defaultValue={values.currentPrice}
           onChange={(e) =>
             setValues({
               ...values,
@@ -57,7 +57,7 @@ export default function AssetForm() {
           type="number"
           className="px-4 py-2 border rounded-md mb-4"
           placeholder="Bought For"
-          value={values.boughtFor}
+          defaultValue={values.boughtFor}
           onChange={(e) =>
             setValues({
               ...values,

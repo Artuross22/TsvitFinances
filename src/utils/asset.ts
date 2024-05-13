@@ -49,6 +49,7 @@ export const editAsset = async (formData: Asset): Promise<void> => {
       boughtFor: formData.boughtFor,
       profi: formData.profi,
       active: formData.active,
+      closedAt: formData.active ? undefined : new Date(),
     },
   });
 

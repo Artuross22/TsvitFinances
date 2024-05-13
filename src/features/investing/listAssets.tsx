@@ -38,7 +38,7 @@ const ListAssets: React.FC = () => {
           <strong>List of Assets</strong>
         </h2>
       </div>
-      <ul style={{ display: "flex" }}>
+      <ul style={{ display: "flex", flexWrap: "wrap" }}>
         {assets.map(
           ({
             id,
@@ -56,6 +56,8 @@ const ListAssets: React.FC = () => {
                 border: "1px solid black",
                 margin: "5px",
                 padding: "10px",
+                width: "203px",
+                height: "250px",
                 backgroundColor:
                   currentPrice < boughtFor ? "lightcoral" : "lightgreen",
               }}
@@ -65,9 +67,9 @@ const ListAssets: React.FC = () => {
                 <p>Current Price: {currentPrice}</p>
                 <p>Added At: {new Date(addedAt).toLocaleDateString()}</p>
                 <p>Bought For: {boughtFor}</p>
-                <p>Profit: {profi}</p>
+                <p>Profit: {currentPrice - boughtFor}</p>
                 <p>Active: {active ? "Yes" : "No"}</p>
-                <p>Closed At: {new Date(closedAt).toLocaleDateString()}</p>
+                {!active && <p>Closed At: {closedAt.toLocaleDateString()}</p>}
                 <div>
                   <Link href={`/investing/ViewAsset/${id}`}>
                     <span className="text-white no-underline">Go In!</span>
