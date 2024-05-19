@@ -1,16 +1,25 @@
+"use client";
 import { getAsset } from "@/utils/asset";
 import Link from "next/link";
 import DeleteForm from "../components/DeleteForm";
+import { useEffect, useState } from "react";
+import { Asset } from "@/types/asset";
 
-interface Asset {
-  id: string;
-}
 
-const ViewAsset: React.FC<Asset> = async ({ id }) => {
-  const asset = await getAsset(id);
+const ViewAsset: React.FC<{ id: string }> = ({ id }) => {
+  const [asset, setAsset] = useState<Asset | null>(null);
+
+  useEffect(() => {
+    const fetchAsset = async () => {
+      const asset = await getAsset(id);
+      setAsset(asset);
+    };
+
+    fetchAsset();
+  }, [id]);
 
   if (!asset) {
-    return null; // or handle the case when props is null
+    return <div>Loading...</div>;
   }
 
   return (

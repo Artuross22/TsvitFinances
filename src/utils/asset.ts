@@ -3,6 +3,10 @@ import { Asset } from "@/types/asset";
 import prisma from "@/utils/db";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import axios from 'axios';
+
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+
 // import {z} from 'zod'
 
 export const createAsset = async (asset: Partial<Asset>) => {
@@ -32,11 +36,60 @@ export const getAllAsset = async () => {
   });
 };
 
-export const getAsset = async (id: string) => {
-  return await prisma.asset.findUnique({
-    where: { id },
-  });
+// export const getAllAsset = async () => {
+//   try {
+//     const response = await fetch('https://localhost:7095/api/Assets'); // Replace with your API endpoint
+//     const data = await response.json();
+//     console.log(data);
+//     return data;
+//   } catch (error) {
+//     console.error('Error:', error);
+//     throw error;
+//   }
+// };
+
+// export const getAllAsset = async (): Promise<Asset[]> => {
+//   try {
+//     const response = await fetch('https://localhost:7095/api/Assets'); // Replace with your API endpoint
+//     const data = await response.json();
+//     console.log(data);
+//     return data as Asset[];
+//   } catch (error) {
+//     console.error('Error:', error);
+//     throw error;
+//   }
+// };
+
+// export const getAsset = async (id: string): Promise<Asset> => {
+//   try {
+//     console.log("EbbDaaa");
+//     const response = await fetch(`https://localhost:7095/api/Assets/${id}`);
+//     const data = await response.json();
+//     console.log("Ebba");
+//     console.log(data);
+//     return data as Asset;
+//   } catch (error) {
+//     console.error('Error:', error);
+//     console.log("EbbDaaa1");
+//     throw error;
+    
+//   }
+// };
+
+export const getAsset = async (id: string): Promise<Asset> => {
+  try {
+    const response = await axios.get(`https://localhost:44309/api/Assets/`);
+    const data = response.data;
+    return data as Asset;
+  } catch (error) {
+
+    console.error('Error:', error);
+    throw error;
+  }
 };
+
+// const response = await axios.get(`https://localhost:44309/api/Assets/${id}`);
+
 
 export const editAsset = async (formData: Asset): Promise<void> => {
   await prisma.asset.update({
