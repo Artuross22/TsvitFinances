@@ -85,9 +85,9 @@ const AssetForm: React.FC<{ id: string }> = ({ id }) => {
           type="checkbox"
           className="px-4 py-2 border rounded-md mb-4"
           placeholder="Bought For"
-          checked={formAsset.active}
+          checked={formAsset.isActive}
           onChange={(e) =>
-            setFormAsset({ ...formAsset, active: e.target.checked })
+            setFormAsset({ ...formAsset, isActive: e.target.checked })
           }
         />
 

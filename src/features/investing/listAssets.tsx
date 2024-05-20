@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { getAllAsset } from "@/utils/asset";
+import { getAllAssets } from "@/utils/asset";
 import Link from "next/link";
 import { Asset } from "@/types/asset";
 
@@ -10,7 +10,7 @@ const ListAssets: React.FC = () => {
 
   useEffect(() => {
     const fetchAssets = async () => {
-      const fetchedAssets = await getAllAsset();
+      const fetchedAssets = await getAllAssets();
       setAssets(fetchedAssets);
     };
 
@@ -47,7 +47,7 @@ const ListAssets: React.FC = () => {
             addedAt,
             boughtFor,
             profi,
-            active,
+            isActive: active,
             closedAt,
           }) => (
             <div
@@ -69,7 +69,7 @@ const ListAssets: React.FC = () => {
                 <p>Bought For: {boughtFor}</p>
                 <p>Profit: {currentPrice - boughtFor}</p>
                 <p>Active: {active ? "Yes" : "No"}</p>
-                {!active && <p>Closed At: {closedAt.toLocaleDateString()}</p>}
+                {closedAt && !active && <p>Closed At: {new Date(closedAt).toLocaleDateString()}</p>}
                 <div>
                   <Link href={`/investing/ViewAsset/${id}`}>
                     <span className="text-white no-underline">Go In!</span>

@@ -6,7 +6,7 @@ import { Asset } from "@/types/asset";
 import Link from "next/link";
 
 const initialAsset: Partial<Asset> = {
-  active: true,
+  isActive: true,
 };
 
 export default function AssetForm() {

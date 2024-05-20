@@ -1,10 +1,11 @@
 export type Asset = {
   id: string;
+  publicId: string;
   name: string;
   currentPrice: number;
   addedAt: Date;
   boughtFor: number;
   profi: number;
-  active: boolean;
+  isActive: boolean;
   closedAt: Date;
 };

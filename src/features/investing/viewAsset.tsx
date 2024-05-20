@@ -48,8 +48,8 @@ const ViewAsset: React.FC<{ id: string }> = ({ id }) => {
         <p>Added At: {asset.addedAt.toLocaleString()}</p>
         <p>Bought For: {asset.boughtFor}</p>
         <p>Profit: {asset.currentPrice - asset.boughtFor}</p>
-        <p>Active: {asset.active ? "Yes" : "No"}</p>
-        {!asset.active &&  <p>Closed At: {asset.closedAt.toLocaleString()}</p>}
+        <p>Active: {asset.isActive ? "Yes" : "No"}</p>
+         {asset.closedAt && !asset.isActive && <p>Closed At: {asset.closedAt.toLocaleString()}</p>}
         <div>
           <Link href={`/investing/EditAsset/${asset.id}`}>Edit</Link>
         </div>
