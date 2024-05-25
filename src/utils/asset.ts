@@ -3,6 +3,7 @@ import { Asset } from "@/types/asset";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import axios from 'axios';
+import { handleError } from "@/helpers/ErrorHandler";
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
@@ -19,8 +20,7 @@ export const createAsset = async (asset: Partial<Asset>) => {
     } 
 
   } catch (error) {
-    console.log(error);
-    return { message: "error" };
+    handleError(error);
   }
 };
 
