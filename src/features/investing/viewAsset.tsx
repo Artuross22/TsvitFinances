@@ -5,7 +5,6 @@ import DeleteForm from "../components/DeleteForm";
 import { useEffect, useState } from "react";
 import { Asset } from "@/types/asset";
 
-
 const ViewAsset: React.FC<{ id: string }> = ({ id }) => {
   const [asset, setAsset] = useState<Asset | null>(null);
 
@@ -49,7 +48,9 @@ const ViewAsset: React.FC<{ id: string }> = ({ id }) => {
         <p>Bought For: {asset.boughtFor}</p>
         <p>Profit: {asset.currentPrice - asset.boughtFor}</p>
         <p>Active: {asset.isActive ? "Yes" : "No"}</p>
-         {asset.closedAt && !asset.isActive && <p>Closed At: {asset.closedAt.toLocaleString()}</p>}
+        {asset.closedAt && !asset.isActive && (
+          <p>Closed At: {asset.closedAt.toLocaleString()}</p>
+        )}
         <div>
           <Link href={`/investing/EditAsset/${asset.id}`}>Edit</Link>
         </div>

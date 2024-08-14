@@ -18,7 +18,19 @@ const ListAssets: React.FC = () => {
   }, []);
 
   if (assets.length === 0) {
-    return <h2 className="mt-8 font-medium text-lg">No assets to show...</h2>;
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="flex justify-between items-center w-64">
+          <h2 className="font-medium text-lg">No assets to show...</h2>
+          <Link
+            href={`/investing/AddAsset`}
+            className="bg-green-500 text-black px-4 py-2 rounded"
+          >
+            Create
+          </Link>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -69,7 +81,9 @@ const ListAssets: React.FC = () => {
                 <p>Bought For: {boughtFor}</p>
                 <p>Profit: {currentPrice - boughtFor}</p>
                 <p>Active: {active ? "Yes" : "No"}</p>
-                {closedAt && !active && <p>Closed At: {new Date(closedAt).toLocaleDateString()}</p>}
+                {closedAt && !active && (
+                  <p>Closed At: {new Date(closedAt).toLocaleDateString()}</p>
+                )}
                 <div>
                   <Link href={`/investing/ViewAsset/${id}`}>
                     <span className="text-white no-underline">Go In!</span>
