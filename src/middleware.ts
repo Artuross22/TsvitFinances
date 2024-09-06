@@ -1,14 +1,26 @@
-import type { NextRequest } from "next/server";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
+import { verifyAuth } from "./lib/auth";
 
-export function middleware(request: NextRequest) {
-  const isAbout = request.url.includes("/about");
-  if (isAbout) {
-    return NextResponse.redirect(new URL("/investing", request.url));
+export async function middleware(request : NextRequest) {
+  const token = request.cookies.get("user-token")?.value;
+
+  const verifiedToken = token && ( await verifyAuth(token).catch((err) => {
+    console.error(err);
+  })); 
+
+  if(request.nextUrl.pathname.startsWith("/login") && !verifiedToken) {
+    return
   }
-  return NextResponse.redirect(new URL("/", request.url));
+
+  if(request.url.includes("/login") && !verifiedToken) {
+    return NextResponse.redirect(new URL("/dashboard", request.url));
+  }
+
+  if(!verifiedToken) {
+   return NextResponse.redirect(new URL("/login", request.url));
+}
 }
 
 export const config = {
-  matcher: ["/services", "/dashboard/:path*"],
-};
+  matcher: ["/dashboard", "/login"],
+}
