@@ -10,12 +10,16 @@
     "prettier": "prettier -w ."
   },
   "dependencies": {
+    "@trpc/client": "^9.27.4",
+    "@trpc/react": "^9.27.4",
+    "@trpc/server": "^10.45.2",
     "axios": "^1.6.8",
     "jose": "^5.8.0",
-    "next": "14.1.4",
+    "next": "^14.1.4",
     "react": "^18",
     "react-dom": "^18",
-    "react-toastify": "^10.0.5"
+    "react-toastify": "^10.0.5",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@prisma/client": "^5.12.1",
