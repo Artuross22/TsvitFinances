@@ -1,9 +1,11 @@
 import Link from "next/link";
 import React from "react";
 
-type Props = {};
+type Props = {
+  userName: string;
+};
 
-function Navbar({}: Props) {
+function Navbar({ userName }: Props) {
   return (
     <header
       style={{
@@ -46,7 +48,7 @@ function Navbar({}: Props) {
           alignItems: "center",
         }}
       >
-        <span style={{ color: "white" }}>Tsvit</span>
+        <span style={{ color: "white" }}>Welcome {userName} to Tsvit</span>
       </div>
       <nav>
         <ul style={{ listStyle: "none", display: "flex", gap: "10px" }}>
