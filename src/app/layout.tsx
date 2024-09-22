@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Navbar from "../features/navbar/navbar";
 import { jwtVerify } from "jose";
-import { getJwtSecretKey, verifyAuth } from "@/lib/auth";
+import { getJwtSecretKey } from "@/lib/auth";
 import { cookies } from 'next/headers'
 
 interface UserJwtPayload {

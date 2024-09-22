@@ -3,7 +3,7 @@ import { Chart } from "./chart";
 export type Asset = {
   id: string;
   publicId: string;
-  AppUserId: string;
+  UserPublicId: string;
   name: string;
   ticker : string;
   currentPrice: number;

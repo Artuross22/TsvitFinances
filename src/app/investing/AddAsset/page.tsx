@@ -64,6 +64,13 @@ export default function AssetForm() {
               boughtFor: Number(e.target.value) || undefined,
             })
           }
+        />       
+        <input
+          type="text"
+          className="px-4 py-2 border rounded-md mb-4"
+          placeholder="Ticker"
+          defaultValue={values.ticker}
+          onChange={(e) => setValues({ ...values, ticker: e.target.value })}
         />
         <button
           type="submit"

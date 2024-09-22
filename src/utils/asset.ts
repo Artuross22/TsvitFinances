@@ -4,14 +4,31 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import axios from "axios";
 import { handleError } from "@/helpers/ErrorHandler";
+import { cookies } from 'next/headers'
+import { verifyAuth } from "@/lib/auth";
+
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+
+export const checkverify = async () => {
+  const cookieStore = cookies();
+  const token = cookieStore.get('jwtToken')!.value;
+
+  return (await verifyAuth(token));
+}
 
 const api = "https://localhost:44309/api/Assets/";
 
 export const createAsset = async (asset: Partial<Asset>) => {
   try {
-    const response = await axios.post<Asset>(api, asset);
+    asset.UserPublicId = await checkverify().then((data) => data.userPublicId); 
+    var token = await checkverify().then((data) => data.jti);
+
+    const response = await axios.post<Asset>(api, asset, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
 
     if (response.status === 200) {
       redirect(`/investing`);
@@ -25,7 +42,14 @@ export const createAsset = async (asset: Partial<Asset>) => {
 
 export const getAllAssets = async (): Promise<Asset[]> => {
   try {
-    const response = await axios.get<Asset[]>(api);
+
+    var token = await checkverify().then((data) => data.jti);
+    const response = await axios.get<Asset[]>(api, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+
     const data = response.data;
 
     return data;
