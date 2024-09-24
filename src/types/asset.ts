@@ -12,5 +12,6 @@ export type Asset = {
   profi: number;
   isActive: boolean;
   closedAt: Date;
+  soldFor : number;
   charts : Chart[];
 };

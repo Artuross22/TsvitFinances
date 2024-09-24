@@ -5,17 +5,23 @@ import { editAsset, getAsset } from "@/utils/asset";
 import { Asset } from "@/types/asset";
 import Link from "next/link";
 
-const AssetForm: React.FC<{ id: string }> = ({ id }) => {
+interface AssetProps {
+  params: {
+    id: string;
+  };
+}
+
+const AssetForm: React.FC<AssetProps> = ({ params }) => {
   const [formAsset, setFormAsset] = useState<Asset | null>(null);
 
   useEffect(() => {
     const fetchAsset = async () => {
-      const asset = await getAsset(id);
+      const asset = await getAsset(params.id);
       setFormAsset(asset);
     };
 
     fetchAsset();
-  }, [id]);
+  }, [params.id]);
 
   if (!formAsset) {
     return <div>Loading...</div>;
@@ -30,7 +36,7 @@ const AssetForm: React.FC<{ id: string }> = ({ id }) => {
     <div>
       <div className="flex bg-gray-200 justify-center mt-2">
         <Link
-          href={`/investing/ViewAsset/${id}`}
+          href={`/investing/ViewAsset/${params.id}`}
           className="absolute left-1 text-green"
         >
           Back
@@ -57,6 +63,15 @@ const AssetForm: React.FC<{ id: string }> = ({ id }) => {
         <input
           type="text"
           className="px-4 py-2 border rounded-md mb-4"
+          placeholder="Ticker name"
+          value={formAsset.ticker}
+          onChange={(e) => setFormAsset({ ...formAsset, ticker: e.target.value })}
+          required
+        />    
+
+        <input
+          type="number"
+          className="px-4 py-2 border rounded-md mb-4"
           placeholder="Current Price"
           value={formAsset.currentPrice || ""}
           onChange={(e) =>
@@ -68,7 +83,7 @@ const AssetForm: React.FC<{ id: string }> = ({ id }) => {
           required
         />
         <input
-          type="text"
+          type="number"
           className="px-4 py-2 border rounded-md mb-4"
           placeholder="Bought For"
           value={formAsset.boughtFor || ""}
@@ -80,17 +95,6 @@ const AssetForm: React.FC<{ id: string }> = ({ id }) => {
           }
           required
         />
-
-        <input
-          type="checkbox"
-          className="px-4 py-2 border rounded-md mb-4"
-          placeholder="Bought For"
-          checked={formAsset.isActive}
-          onChange={(e) =>
-            setFormAsset({ ...formAsset, isActive: e.target.checked })
-          }
-        />
-
         <button
           type="submit"
           className="px-4 py-2 bg-blue-500 text-white rounded-md"
