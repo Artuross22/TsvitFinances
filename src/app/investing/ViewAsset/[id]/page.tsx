@@ -30,18 +30,28 @@ const ViewAsset: React.FC<AssetProps> = ({ params }) => {
 
   return (
     <div>
-        <div className="flex bg-gray-200 justify-center mt-2 px-2">
-          <Link href={`/investing`} className="mr-auto text-green">
-            Back
-          </Link>
-          <h2>
-            <strong>{asset.name}</strong>
-          </h2>
-          <div className="ml-auto flex space-x-12 text-green">
-            <DeleteForm color="green" buttonName="Sell" root={"sellAsset"} id={params.id} />
-            <DeleteForm color="red" buttonName="Delete" root={"deleteAsset"} id={params.id} />
-          </div>
+      <div className="flex bg-gray-200 justify-center mt-2 px-2">
+        <Link href={`/investing`} className="mr-auto text-green">
+          Back
+        </Link>
+        <h2>
+          <strong>{asset.name}</strong>
+        </h2>
+        <div className="ml-auto flex space-x-12 text-green">
+          <DeleteForm
+            color="green"
+            buttonName="Sell"
+            root={"sellAsset"}
+            id={params.id}
+          />
+          <DeleteForm
+            color="red"
+            buttonName="Delete"
+            root={"deleteAsset"}
+            id={params.id}
+          />
         </div>
+      </div>
       <div
         style={{
           width: "50%",

@@ -65,9 +65,11 @@ const AssetForm: React.FC<AssetProps> = ({ params }) => {
           className="px-4 py-2 border rounded-md mb-4"
           placeholder="Ticker name"
           value={formAsset.ticker}
-          onChange={(e) => setFormAsset({ ...formAsset, ticker: e.target.value })}
+          onChange={(e) =>
+            setFormAsset({ ...formAsset, ticker: e.target.value })
+          }
           required
-        />    
+        />
 
         <input
           type="number"

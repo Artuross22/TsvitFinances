@@ -3,7 +3,7 @@ import "./globals.css";
 import Navbar from "../features/navbar/navbar";
 import { jwtVerify } from "jose";
 import { getJwtSecretKey } from "@/lib/auth";
-import { cookies } from 'next/headers'
+import { cookies } from "next/headers";
 
 interface UserJwtPayload {
   jti: string;
@@ -20,18 +20,20 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  
   const cookieStore = cookies();
-  const token = cookieStore.get('jwtToken')?.value;
+  const token = cookieStore.get("jwtToken")?.value;
 
   var name = "";
 
   if (token) {
-    const verified = await jwtVerify(token, new TextEncoder().encode(getJwtSecretKey()));
-    console.log("VERIFIED",verified);
+    const verified = await jwtVerify(
+      token,
+      new TextEncoder().encode(getJwtSecretKey()),
+    );
+    console.log("VERIFIED", verified);
     name = (verified.payload as UserJwtPayload).sub || "";
-  };
-  
+  }
+
   return (
     <html lang="en">
       <body>

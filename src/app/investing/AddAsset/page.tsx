@@ -64,7 +64,7 @@ export default function AssetForm() {
               boughtFor: Number(e.target.value) || undefined,
             })
           }
-        />       
+        />
         <input
           type="text"
           className="px-4 py-2 border rounded-md mb-4"

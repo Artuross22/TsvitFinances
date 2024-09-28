@@ -11,7 +11,13 @@ interface DeleteFormProps {
   color: string;
 }
 
-const SubmitButton = ({buttonName, color} : {buttonName : string, color : string}) => {
+const SubmitButton = ({
+  buttonName,
+  color,
+}: {
+  buttonName: string;
+  color: string;
+}) => {
   const { pending } = useFormStatus();
   return (
     <button
@@ -24,7 +30,7 @@ const SubmitButton = ({buttonName, color} : {buttonName : string, color : string
   );
 };
 
-const DeleteForm = ({root, id, buttonName, color}: DeleteFormProps) => {
+const DeleteForm = ({ root, id, buttonName, color }: DeleteFormProps) => {
   return (
     <form action={() => deleteAsset(root, id)}>
       <input type="hidden" name="id" value={id} />

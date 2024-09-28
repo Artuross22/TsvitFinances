@@ -5,13 +5,13 @@ export type Asset = {
   publicId: string;
   UserPublicId: string;
   name: string;
-  ticker : string;
+  ticker: string;
   currentPrice: number;
   addedAt: Date;
   boughtFor: number;
   profi: number;
   isActive: boolean;
   closedAt: Date;
-  soldFor : number;
-  charts : Chart[];
+  soldFor: number;
+  charts: Chart[];
 };

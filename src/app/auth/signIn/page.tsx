@@ -1,9 +1,9 @@
-'use client'
-import { Login } from '@/types/Login';
-import { signIn } from '@/utils/auth';
-import { ChangeEvent, FC, useState } from 'react';
+"use client";
+import { Login } from "@/types/Login";
+import { signIn } from "@/utils/auth";
+import { ChangeEvent, FC, useState } from "react";
 
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
 
 const LoginProps: FC<Login> = () => {
   const [input, setInput] = useState({
@@ -14,29 +14,49 @@ const LoginProps: FC<Login> = () => {
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
-  const handlerChange = (e : ChangeEvent<HTMLInputElement>) => {
+  const handlerChange = (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
-    const {name, value} = e.target;
-    setInput((prev) => ({...prev, [name]: value}));
-  }
+    const { name, value } = e.target;
+    setInput((prev) => ({ ...prev, [name]: value }));
+  };
 
   const handleSignIn = async () => {
     try {
-      const result = await signIn({ email: input.email, password: input.password });
+      const result = await signIn({
+        email: input.email,
+        password: input.password,
+      });
       console.log(result);
 
-      router.push('/'); 
+      router.push("/");
     } catch (error) {
-      setError('Failed to sign in. Please check your credentials and try again.'); 
+      setError(
+        "Failed to sign in. Please check your credentials and try again.",
+      );
     }
-  }
+  };
 
   return (
     <div>
-      <input placeholder="email" type="text" name="email" value={input.email} onChange={handlerChange} />
-      <input placeholder="password" type="password" name="password" value={input.password} onChange={handlerChange} />
-      <button type="button" onClick={handleSignIn}>Sign In</button>
-      {error && <p>{error}</p>}</div>
+      <input
+        placeholder="email"
+        type="text"
+        name="email"
+        value={input.email}
+        onChange={handlerChange}
+      />
+      <input
+        placeholder="password"
+        type="password"
+        name="password"
+        value={input.password}
+        onChange={handlerChange}
+      />
+      <button type="button" onClick={handleSignIn}>
+        Sign In
+      </button>
+      {error && <p>{error}</p>}
+    </div>
   );
 };
 

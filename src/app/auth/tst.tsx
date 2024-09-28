@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC } from "react";
 
 interface test {
   // Define your props here
@@ -8,7 +8,7 @@ interface test {
 const test: FC<test> = () => {
   return (
     <div>
-<h1>Hello</h1>
+      <h1>Hello</h1>
       {/* Rest of your component */}
     </div>
   );

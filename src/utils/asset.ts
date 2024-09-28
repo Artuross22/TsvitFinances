@@ -4,31 +4,29 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import axios from "axios";
 import { handleError } from "@/helpers/ErrorHandler";
-import { cookies } from 'next/headers'
+import { cookies } from "next/headers";
 import { verifyAuth } from "@/lib/auth";
-
-
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
 export const checkverify = async () => {
   const cookieStore = cookies();
-  const token = cookieStore.get('jwtToken')!.value;
+  const token = cookieStore.get("jwtToken")!.value;
 
-  return (await verifyAuth(token));
-}
+  return await verifyAuth(token);
+};
 
 const api = "https://localhost:44309/api/Assets/";
 
 export const createAsset = async (asset: Partial<Asset>) => {
   try {
-    asset.UserPublicId = await checkverify().then((data) => data.userPublicId); 
+    asset.UserPublicId = await checkverify().then((data) => data.userPublicId);
     var token = await checkverify().then((data) => data.jti);
 
     const response = await axios.post<Asset>(api, asset, {
       headers: {
-        Authorization: `Bearer ${token}`
-      }
+        Authorization: `Bearer ${token}`,
+      },
     });
 
     if (response.status === 200) {
@@ -44,11 +42,11 @@ export const createAsset = async (asset: Partial<Asset>) => {
 export const getAllAssets = async (): Promise<Asset[]> => {
   try {
     var token = await checkverify().then((data) => data.jti);
-    
+
     const response = await axios.get<Asset[]>(api, {
       headers: {
-        Authorization: `Bearer ${token}`
-      }
+        Authorization: `Bearer ${token}`,
+      },
     });
 
     const data = response.data;
@@ -88,20 +86,20 @@ export const editAsset = async (asset: Asset): Promise<void> => {
 };
 
 export const deleteAsset = async (root: string, id: string) => {
-    let response;
+  let response;
 
-    if (root === "deleteAsset") {
-      response = await axios.delete(`${api}${id}`);
-    } else if (root === "sellAsset") {
-      response = await axios.post(`${api}SellAsset/${id}`);
-    } else {
-      throw new Error("Invalid root parameter");
-    }
+  if (root === "deleteAsset") {
+    response = await axios.delete(`${api}${id}`);
+  } else if (root === "sellAsset") {
+    response = await axios.post(`${api}SellAsset/${id}`);
+  } else {
+    throw new Error("Invalid root parameter");
+  }
 
-    if (response.status === 200) {
-      redirect("/investing");
-    } else {
-      console.error("Unexpected response status:", response.status);
-      redirect("/");
-    }
+  if (response.status === 200) {
+    redirect("/investing");
+  } else {
+    console.error("Unexpected response status:", response.status);
+    redirect("/");
+  }
 };
