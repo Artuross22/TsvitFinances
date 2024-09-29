@@ -1,6 +1,5 @@
 "use server";
-import { Asset } from "@/types/asset";
-import { revalidatePath } from "next/cache";
+import { Asset, InvestmentTerm, Market, Sector } from "@/types/asset";
 import { redirect } from "next/navigation";
 import axios from "axios";
 import { handleError } from "@/helpers/ErrorHandler";
@@ -18,9 +17,30 @@ export const checkverify = async () => {
 
 const api = "https://localhost:44309/api/Assets/";
 
-export const createAsset = async (asset: Partial<Asset>) => {
+export interface AssetOptions {
+  sectors: Sector[];
+  markets: Market[];
+  investmentTerms: InvestmentTerm[];
+}
+
+export const createAssetGet = async (): Promise<AssetOptions> => {
   try {
-    asset.UserPublicId = await checkverify().then((data) => data.userPublicId);
+    const res = await axios.get(api + "AddAsset");
+    const data = res.data;
+    return {
+      sectors: data.sectors || [],
+      markets: data.markets || [],
+      investmentTerms: data.investmentTerms || [],
+    };
+  } catch (error) {
+    console.error('Error fetching asset options:', error);
+    throw error;
+  }
+};
+
+export const createAssetPost = async (asset: Partial<Asset>) => {
+  try {
+    asset.userPublicId = await checkverify().then((data) => data.userPublicId);
     var token = await checkverify().then((data) => data.jti);
 
     const response = await axios.post<Asset>(api, asset, {
@@ -71,7 +91,7 @@ export const getAsset = async (id: string): Promise<Asset> => {
 
 export const editAsset = async (asset: Asset): Promise<void> => {
   try {
-    asset.UserPublicId = await checkverify().then((data) => data.userPublicId!);
+    asset.userPublicId = await checkverify().then((data) => data.userPublicId!);
     const response = await axios.put<Asset>(api, asset);
 
     if (response.status === 200) {

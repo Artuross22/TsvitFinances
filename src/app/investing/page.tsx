@@ -58,7 +58,7 @@ const ListAssets: React.FC = () => {
             currentPrice,
             addedAt,
             boughtFor,
-            profi,
+            profit,
             isActive: active,
             closedAt,
           }) => (
