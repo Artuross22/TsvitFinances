@@ -61,6 +61,7 @@ const ListAssets: React.FC = () => {
             profit,
             isActive: active,
             closedAt,
+            quantity,
           }) => (
             <div
               key={id}
@@ -81,6 +82,10 @@ const ListAssets: React.FC = () => {
                 <p>Bought For: {boughtFor}</p>
                 <p>Profit: {currentPrice - boughtFor}</p>
                 <p>Active: {active ? "Yes" : "No"}</p>
+                <p>
+                  Percentage Profit: {
+                    ((currentPrice - boughtFor) * quantity) / (boughtFor * quantity) * 100}%
+                </p>
                 {closedAt && !active && (
                   <p>Closed At: {new Date(closedAt).toLocaleDateString()}</p>
                 )}

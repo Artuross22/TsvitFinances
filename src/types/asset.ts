@@ -14,7 +14,7 @@ export type Asset = {
   isActive: boolean;
   closedAt: Date;
   soldFor: number;
-  charts: Chart[];
+  files: File[]
 
     sectors: Sector[];  
     markets: Market[];

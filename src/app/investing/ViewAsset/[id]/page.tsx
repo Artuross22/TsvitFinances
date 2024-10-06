@@ -61,10 +61,16 @@ const ViewAsset: React.FC<AssetProps> = ({ params }) => {
         }}
       >
         <h1>{asset.name}</h1>
-        <p>Current Price: {asset.currentPrice}</p>
+        <p>Ticker: {asset.ticker}</p>
         <p>Added At: {asset.addedAt.toLocaleString()}</p>
+        <p>Current Price: {asset.currentPrice}</p>
         <p>Bought For: {asset.boughtFor}</p>
-        <p>Profit: {asset.currentPrice - asset.boughtFor}</p>
+        <p>Quantity: {asset.quantity}</p>
+        <p>Profit: {(asset.currentPrice - asset.boughtFor) * asset.quantity}</p>
+        <p>
+          Percentage Profit: {
+            ((asset.currentPrice - asset.boughtFor) * asset.quantity) / (asset.boughtFor * asset.quantity) * 100}%
+        </p>
         <p>Active: {asset.isActive ? "Yes" : "No"}</p>
         {asset.closedAt && !asset.isActive && (
           <p>Closed At: {asset.closedAt.toLocaleString()}</p>

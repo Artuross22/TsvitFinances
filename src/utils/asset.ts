@@ -38,12 +38,14 @@ export const createAssetGet = async (): Promise<AssetOptions> => {
   }
 };
 
-export const createAssetPost = async (asset: Partial<Asset>) => {
-  try {
-    asset.userPublicId = await checkverify().then((data) => data.userPublicId);
-    var token = await checkverify().then((data) => data.jti);
+ export async function createAssetPost(formData: FormData) {
 
-    const response = await axios.post<Asset>(api, asset, {
+  formData.append('userPublicId', await checkverify().then((data) => data.userPublicId!));
+
+  var token = await checkverify().then((data) => data.jti);
+  
+  try {
+  const response = await axios.post<Asset>(api, formData, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

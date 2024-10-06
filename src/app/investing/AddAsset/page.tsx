@@ -1,19 +1,26 @@
 "use client";
 
 import { AssetOptions, createAssetGet, createAssetPost } from "@/utils/asset";
-import React, { useEffect, useState } from "react";
-import { Asset } from "@/types/asset";
+import React, { ChangeEvent, useEffect, useState } from "react";
+import { Asset, Sector, Market, InvestmentTerm } from "@/types/asset";
 import Link from "next/link";
+
+type FormOptions = {
+  sectors: Sector[];
+  markets: Market[];
+  investmentTerms: InvestmentTerm[];
+};
 
 const initialAsset: Partial<Asset> = {};
 
 export default function AssetForm() {
   const [values, setValues] = useState<Partial<Asset>>(initialAsset);
-  const [options, setOptions] = useState<Partial<Asset>>({
+  const [options, setOptions] = useState<FormOptions>({
     sectors: [],
     markets: [],
     investmentTerms: [],
   });
+  const [previewUrls, setPreviewUrls] = useState<string[]>([]);
 
   useEffect(() => {
     const fetchOptions = async () => {
@@ -30,12 +37,61 @@ export default function AssetForm() {
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    createAssetPost(values);
+  
+    const formData = new FormData();
+  
+    (Object.keys(values) as Array<keyof Partial<Asset>>).forEach((key) => {
+      if (key === 'files') {
+        values.files?.forEach((file) => {
+          formData.append('files', file);
+        });
+      } else if (typeof values[key] === 'number') {
+        formData.append(key, values[key]!.toString());
+      } else if (values[key]) {
+        formData.append(key, values[key] as string);
+      }
+    });
+  
+    try {
+      await createAssetPost(formData);
+    } catch (error) {
+      console.error('Error in createAssetPost:', error);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setValues(prev => ({ ...prev, [name]: value }));
+    setValues(prev => ({
+      ...prev,
+      [name]: e.target.type === 'number' ? Number(value) : value
+    }));
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files?.length) return;
+
+    try {
+      const newFiles = Array.from(e.target.files);
+      setValues(prev => ({
+        ...prev,
+        files: [...(prev.files || []), ...newFiles]
+      }));
+      
+      const newPreviewUrls = newFiles.map(file => URL.createObjectURL(file));
+      setPreviewUrls(prevUrls => [...prevUrls, ...newPreviewUrls]);
+    } catch (error) {
+      console.error('Error in handleFileChange:', error);
+    }
+  };
+
+  const removeFile = (index: number) => {
+    setValues(prev => ({
+      ...prev,
+      files: prev.files?.filter((_, i) => i !== index)
+    }));
+    
+    URL.revokeObjectURL(previewUrls[index]);
+    setPreviewUrls(prevUrls => prevUrls.filter((_, i) => i !== index));
   };
 
   return (
@@ -49,14 +105,13 @@ export default function AssetForm() {
   
       <form
         onSubmit={handleSubmit}
-        className="flex flex-col items-center mx-auto mt-10 w-full max-w-md"
-      >
+        className="max-w-md mx-auto mt-8 p-6 bg-white rounded-lg shadow-md">
         <input
           type="text"
           name="name"
           className="w-full px-4 py-2 border rounded-md mb-4"
           placeholder="Asset name"
-          value={values.name || ""}
+          value={values.name}
           onChange={handleChange}
           required
         />
@@ -65,7 +120,7 @@ export default function AssetForm() {
           name="currentPrice"
           className="w-full px-4 py-2 border rounded-md mb-4"
           placeholder="Current price"
-          value={values.currentPrice || ""}
+          value={values.currentPrice || ''}
           onChange={handleChange}
           required
         />
@@ -74,7 +129,7 @@ export default function AssetForm() {
           name="boughtFor"
           className="w-full px-4 py-2 border rounded-md mb-4"
           placeholder="Bought For"
-          value={values.boughtFor || ""}
+          value={values.boughtFor || ''}
           onChange={handleChange}
         />
         <input
@@ -82,7 +137,7 @@ export default function AssetForm() {
           name="quantity"
           className="w-full px-4 py-2 border rounded-md mb-4"
           placeholder="Quantity"
-          value={values.quantity || ""}
+          value={values.quantity || ''}
           onChange={handleChange}
         />
         <input
@@ -90,10 +145,10 @@ export default function AssetForm() {
           name="ticker"
           className="w-full px-4 py-2 border rounded-md mb-4"
           placeholder="Ticker"
-          value={values.ticker || ""}
+          value={values.ticker}
           onChange={handleChange}
         />
-        <select
+         <select
           name="sector"
           className="w-full px-4 py-2 border rounded-md mb-4"
           onChange={handleChange}
@@ -132,6 +187,38 @@ export default function AssetForm() {
             </option>
           ))}
         </select>
+        
+        {/* File upload section */}
+        <div className="w-full mb-4">
+          <input
+            type="file"
+            name="files"
+            accept="image/jpeg,image/png"
+            className="w-full px-4 py-2 border rounded-md mb-2"
+            onChange={handleFileChange}
+            multiple
+          />
+          
+          <div className="grid grid-cols-2 gap-2">
+            {previewUrls.map((url, index) => (
+              <div key={index} className="relative">
+                <img
+                  src={url}
+                  alt={`Preview ${index + 1}`}
+                  className="w-full h-32 object-cover rounded"
+                />
+                <button
+                  type="button"
+                  onClick={() => removeFile(index)}
+                  className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center"
+                >
+                  ×
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+
         <button
           type="submit"
           className="w-full px-8 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
