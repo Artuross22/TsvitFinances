@@ -55,6 +55,7 @@ const ListAssets: React.FC = () => {
           ({
             id,
             name,
+            publicId,
             currentPrice,
             addedAt,
             boughtFor,
@@ -90,7 +91,7 @@ const ListAssets: React.FC = () => {
                   <p>Closed At: {new Date(closedAt).toLocaleDateString()}</p>
                 )}
                 <div>
-                  <Link href={`/investing/ViewAsset/${id}`}>
+                  <Link href={`/investing/ViewAsset/${publicId}`}>
                     <span className="text-white no-underline">Go In!</span>
                   </Link>
                 </div>

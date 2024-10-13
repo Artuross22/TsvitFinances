@@ -1,4 +1,3 @@
-import { Chart } from "./chart";
 
 export type Asset = {
   id: string;
@@ -14,7 +13,7 @@ export type Asset = {
   isActive: boolean;
   closedAt: Date;
   soldFor: number;
-  files: File[]
+  charts: File[]
 
     sectors: Sector[];  
     markets: Market[];

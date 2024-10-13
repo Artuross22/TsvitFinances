@@ -2,8 +2,8 @@
 
 import React, { useEffect, useState } from "react";
 import { editAsset, getAsset } from "@/utils/asset";
-import { Asset } from "@/types/asset";
 import Link from "next/link";
+import { ViewAssetDto } from "@/types/AssetsDto";
 
 interface AssetProps {
   params: {
@@ -12,7 +12,7 @@ interface AssetProps {
 }
 
 const AssetForm: React.FC<AssetProps> = ({ params }) => {
-  const [formAsset, setFormAsset] = useState<Asset | null>(null);
+  const [formAsset, setFormAsset] = useState<ViewAssetDto | null>(null);
 
   useEffect(() => {
     const fetchAsset = async () => {
@@ -49,7 +49,7 @@ const AssetForm: React.FC<AssetProps> = ({ params }) => {
         onSubmit={handleSubmit}
         className="flex flex-col items-center mx-auto mt-10"
       >
-        <input type="hidden" name="id" value={formAsset.id} />
+        <input type="hidden" name="id" value={formAsset.publicId} />
 
         <input
           type="text"
@@ -97,7 +97,8 @@ const AssetForm: React.FC<AssetProps> = ({ params }) => {
           }
           required
         />
-        <button
+      
+                    <button
           type="submit"
           className="px-4 py-2 bg-blue-500 text-white rounded-md"
         >

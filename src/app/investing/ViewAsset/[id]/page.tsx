@@ -3,8 +3,10 @@ import { getAsset } from "@/utils/asset";
 import Link from "next/link";
 import DeleteForm from "@/features/components/DeleteForm";
 import { useEffect, useState } from "react";
-import { Asset } from "@/types/asset";
 import React from "react";
+import { ViewAssetDto } from "@/types/AssetsDto";
+import Image from 'next/image';
+
 
 interface AssetProps {
   params: {
@@ -13,7 +15,7 @@ interface AssetProps {
 }
 
 const ViewAsset: React.FC<AssetProps> = ({ params }) => {
-  const [asset, setAsset] = useState<Asset | null>(null);
+  const [asset, setAsset] = useState<ViewAssetDto | null>(null);
 
   useEffect(() => {
     const fetchAsset = async () => {
@@ -71,13 +73,19 @@ const ViewAsset: React.FC<AssetProps> = ({ params }) => {
           Percentage Profit: {
             ((asset.currentPrice - asset.boughtFor) * asset.quantity) / (asset.boughtFor * asset.quantity) * 100}%
         </p>
-        <p>Active: {asset.isActive ? "Yes" : "No"}</p>
+        {/* <p>Active: {asset.isActive ? "Yes" : "No"}</p>
         {asset.closedAt && !asset.isActive && (
           <p>Closed At: {asset.closedAt.toLocaleString()}</p>
-        )}
+        )} */}
         <div>
-          <Link href={`/investing/EditAsset/${asset.id}`}>Edit</Link>
+          <Link href={`/investing/EditAsset/${asset.publicId}`}>Edit</Link>
         </div>
+
+        <div>
+        {asset?.chartsPath?.map((path, index) => (
+       <Image key={index} src={path} alt={`Chart ${index}`} width={500} height={300} />
+  ))}
+      </div>
       </div>
     </div>
   );

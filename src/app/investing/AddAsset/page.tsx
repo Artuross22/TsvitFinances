@@ -41,15 +41,17 @@ export default function AssetForm() {
     const formData = new FormData();
   
     (Object.keys(values) as Array<keyof Partial<Asset>>).forEach((key) => {
-      if (key === 'files') {
-        values.files?.forEach((file) => {
-          formData.append('files', file);
+      if (key === 'charts') {
+        values.charts?.forEach((file) => {
+          formData.append('charts', file);
         });
       } else if (typeof values[key] === 'number') {
         formData.append(key, values[key]!.toString());
       } else if (values[key]) {
         formData.append(key, values[key] as string);
       }
+      else if (typeof values[key] === 'number' && !Number.isInteger(values[key])) {
+        formData.append('key',  values[key]!.toString());}     
     });
   
     try {
@@ -74,7 +76,7 @@ export default function AssetForm() {
       const newFiles = Array.from(e.target.files);
       setValues(prev => ({
         ...prev,
-        files: [...(prev.files || []), ...newFiles]
+        charts: [...(prev.charts || []), ...newFiles]
       }));
       
       const newPreviewUrls = newFiles.map(file => URL.createObjectURL(file));
@@ -87,7 +89,7 @@ export default function AssetForm() {
   const removeFile = (index: number) => {
     setValues(prev => ({
       ...prev,
-      files: prev.files?.filter((_, i) => i !== index)
+      charts: prev.charts?.filter((_, i) => i !== index)
     }));
     
     URL.revokeObjectURL(previewUrls[index]);
@@ -116,7 +118,7 @@ export default function AssetForm() {
           required
         />
         <input
-          type="number"
+          type="float"
           name="currentPrice"
           className="w-full px-4 py-2 border rounded-md mb-4"
           placeholder="Current price"
@@ -125,7 +127,7 @@ export default function AssetForm() {
           required
         />
         <input
-          type="number"
+          type="float"
           name="boughtFor"
           className="w-full px-4 py-2 border rounded-md mb-4"
           placeholder="Bought For"
@@ -133,7 +135,7 @@ export default function AssetForm() {
           onChange={handleChange}
         />
         <input
-          type="number"
+          type="float"
           name="quantity"
           className="w-full px-4 py-2 border rounded-md mb-4"
           placeholder="Quantity"
@@ -192,7 +194,7 @@ export default function AssetForm() {
         <div className="w-full mb-4">
           <input
             type="file"
-            name="files"
+            name="charts"
             accept="image/jpeg,image/png"
             className="w-full px-4 py-2 border rounded-md mb-2"
             onChange={handleFileChange}
