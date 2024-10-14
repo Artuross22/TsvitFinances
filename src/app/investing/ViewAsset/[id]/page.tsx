@@ -32,36 +32,29 @@ const ViewAsset: React.FC<AssetProps> = ({ params }) => {
 
   return (
     <div>
-      <div className="flex bg-gray-200 justify-center mt-2 px-2">
+    <div className="flex bg-gray-200 justify-center mt-2 px-2">
         <Link href={`/investing`} className="mr-auto text-green">
-          Back
+            Back
         </Link>
         <h2>
-          <strong>{asset.name}</strong>
+            <strong>{asset.name}</strong>
         </h2>
         <div className="ml-auto flex space-x-12 text-green">
-          <DeleteForm
-            color="green"
-            buttonName="Sell"
-            root={"sellAsset"}
-            id={params.id}
-          />
-          <DeleteForm
-            color="red"
-            buttonName="Delete"
-            root={"deleteAsset"}
-            id={params.id}
-          />
+            <DeleteForm
+                color="green"
+                buttonName="Sell"
+                root={"sellAsset"}
+                id={params.id}
+            />
+            <DeleteForm
+                color="red"
+                buttonName="Delete"
+                root={"deleteAsset"}
+                id={params.id}
+            />
         </div>
-      </div>
-      <div
-        style={{
-          width: "50%",
-          backgroundColor: "lightgray",
-          margin: "1%",
-          padding: "2%",
-        }}
-      >
+    </div>
+    <div className="w-1/2 bg-gray-300 m-4 p-4">
         <h1>{asset.name}</h1>
         <p>Ticker: {asset.ticker}</p>
         <p>Added At: {asset.addedAt.toLocaleString()}</p>
@@ -70,24 +63,30 @@ const ViewAsset: React.FC<AssetProps> = ({ params }) => {
         <p>Quantity: {asset.quantity}</p>
         <p>Profit: {(asset.currentPrice - asset.boughtFor) * asset.quantity}</p>
         <p>
-          Percentage Profit: {
-            ((asset.currentPrice - asset.boughtFor) * asset.quantity) / (asset.boughtFor * asset.quantity) * 100}%
+            Percentage Profit: {
+                ((asset.currentPrice - asset.boughtFor) * asset.quantity) / (asset.boughtFor * asset.quantity) * 100}%
         </p>
-        {/* <p>Active: {asset.isActive ? "Yes" : "No"}</p>
-        {asset.closedAt && !asset.isActive && (
-          <p>Closed At: {asset.closedAt.toLocaleString()}</p>
-        )} */}
         <div>
-          <Link href={`/investing/EditAsset/${asset.publicId}`}>Edit</Link>
+            <Link href={`/investing/EditAsset/${asset.publicId}`}>Edit</Link>
         </div>
-
-        <div>
-        {asset?.chartsPath?.map((path, index) => (
-       <Image key={index} src={path} alt={`Chart ${index}`} width={500} height={300} />
-  ))}
-      </div>
-      </div>
     </div>
+    {asset?.charts && asset.charts.length > 0 &&  (
+      <div className="flex overflow-x-auto w-1/2 bg-gray-300 m-4 p-4">
+    {asset?.charts?.map((path, index) => (
+      <div key={index} className="flex-none w-1/3 px-4 mb-4 flex flex-col">
+          <p className="flex-grow">{path.name}</p>
+          <p className="flex-grow">{path.description}</p>
+          <div className="w-full h-64 relative">
+              <a href={path.chartsPath} target="_blank" rel="noopener noreferrer">
+                  <Image src={path.chartsPath} alt={`Chart ${index}`} layout="fill" objectFit="cover" />
+              </a>
+          </div>
+      </div>
+  ))}
+</div>
+    )}
+</div>
+    
   );
 };
 export default ViewAsset;

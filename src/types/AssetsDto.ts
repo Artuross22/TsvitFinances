@@ -1,18 +1,23 @@
 
-
-
 export type ViewAssetDto = {
   userPublicId : string;
   publicId: string;
-  addedAt: Date;
-  boughtFor: number;
-  currentPrice: number;
-  interestOnCurrentDeposit: number;
-  market: string;
   sector: string;
   term: string;
+  market: string;
   name: string;
   ticker: string;
+  currentPrice: number;
   quantity: number;
+  boughtFor: number;
+  addedAt: Date;
+  interestOnCurrentDeposit: number;
   chartsPath: string[];
-}
+  charts: Chart[];
+};
+
+export type Chart = {
+  name: string;
+  description: string;
+  chartsPath: string;
+};
