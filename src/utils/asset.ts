@@ -64,9 +64,6 @@ export const createAssetGet = async (): Promise<AssetOptions> => {
 export const getAllAssets = async (): Promise<Asset[]> => {
   try {
     var token = await checkverify().then((data) => data.jti);
-
-    console.log("CGC1");
-
     const response = await axios.get<Asset[]>(api, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -94,19 +91,23 @@ export const getAsset = async (id: string): Promise<ViewAssetDto> => {
 };
 
 export const editAsset = async (asset: ViewAssetDto): Promise<void> => {
-  try {
+  // try {
+    console.log("CGC2 Coll");
     asset.userPublicId = await checkverify().then((data) => data.userPublicId!);
-    const response = await axios.put<Asset>(api, asset);
 
-    if (response.status === 200) {
-      redirect(`/investing/ViewAsset/${asset.publicId}`);
-    } else {
-      redirect("/");
-    }
-  } catch (error) {
-    console.error("Error:", error);
-    throw error;
-  }
+    console.log(asset);
+   
+    const response = await axios.post<Asset>(api + "/UpdateAsset", asset);
+
+    // if (response.status === 200) {
+    //   redirect(`/investing/ViewAsset/${asset.publicId}`);
+    // } else {
+    //   redirect("/");
+    // }
+  // } catch (error) {
+  //   console.error("Error:", error);
+  //   throw error;
+  // }
 };
 
 export const deleteAsset = async (root: string, id: string) => {

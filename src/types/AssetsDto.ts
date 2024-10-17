@@ -12,7 +12,6 @@ export type ViewAssetDto = {
   boughtFor: number;
   addedAt: Date;
   interestOnCurrentDeposit: number;
-  chartsPath: string[];
   charts: Chart[];
 };
 
