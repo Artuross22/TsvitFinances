@@ -1,7 +1,7 @@
 "use client";
 
-import { AssetOptions, createAssetGet, createAssetPost } from "@/utils/asset";
-import React, { ChangeEvent, useEffect, useState } from "react";
+import { createAssetGet, createAssetPost } from "@/utils/asset";
+import React, { useEffect, useState } from "react";
 import { Asset, Sector, Market, InvestmentTerm } from "@/types/asset";
 import Link from "next/link";
 
@@ -28,7 +28,7 @@ export default function AssetForm() {
         const fetchedOptions = await createAssetGet();
         setOptions(fetchedOptions);
       } catch (error) {
-        console.error('Error fetching options:', error);
+        console.error("Error fetching options:", error);
       }
     };
 
@@ -37,35 +37,40 @@ export default function AssetForm() {
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-  
+
     const formData = new FormData();
-  
+
     (Object.keys(values) as Array<keyof Partial<Asset>>).forEach((key) => {
-      if (key === 'charts') {
+      if (key === "charts") {
         values.charts?.forEach((file) => {
-          formData.append('charts', file);
+          formData.append("charts", file);
         });
-      } else if (typeof values[key] === 'number') {
+      } else if (typeof values[key] === "number") {
         formData.append(key, values[key]!.toString());
       } else if (values[key]) {
         formData.append(key, values[key] as string);
+      } else if (
+        typeof values[key] === "number" &&
+        !Number.isInteger(values[key])
+      ) {
+        formData.append("key", values[key]!.toString());
       }
-      else if (typeof values[key] === 'number' && !Number.isInteger(values[key])) {
-        formData.append('key',  values[key]!.toString());}     
     });
-  
+
     try {
       await createAssetPost(formData);
     } catch (error) {
-      console.error('Error in createAssetPost:', error);
+      console.error("Error in createAssetPost:", error);
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+  ) => {
     const { name, value } = e.target;
-    setValues(prev => ({
+    setValues((prev) => ({
       ...prev,
-      [name]: e.target.type === 'number' ? Number(value) : value
+      [name]: e.target.type === "number" ? Number(value) : value,
     }));
   };
 
@@ -74,26 +79,26 @@ export default function AssetForm() {
 
     try {
       const newFiles = Array.from(e.target.files);
-      setValues(prev => ({
+      setValues((prev) => ({
         ...prev,
-        charts: [...(prev.charts || []), ...newFiles]
+        charts: [...(prev.charts || []), ...newFiles],
       }));
-      
-      const newPreviewUrls = newFiles.map(file => URL.createObjectURL(file));
-      setPreviewUrls(prevUrls => [...prevUrls, ...newPreviewUrls]);
+
+      const newPreviewUrls = newFiles.map((file) => URL.createObjectURL(file));
+      setPreviewUrls((prevUrls) => [...prevUrls, ...newPreviewUrls]);
     } catch (error) {
-      console.error('Error in handleFileChange:', error);
+      console.error("Error in handleFileChange:", error);
     }
   };
 
   const removeFile = (index: number) => {
-    setValues(prev => ({
+    setValues((prev) => ({
       ...prev,
-      charts: prev.charts?.filter((_, i) => i !== index)
+      charts: prev.charts?.filter((_, i) => i !== index),
     }));
-    
+
     URL.revokeObjectURL(previewUrls[index]);
-    setPreviewUrls(prevUrls => prevUrls.filter((_, i) => i !== index));
+    setPreviewUrls((prevUrls) => prevUrls.filter((_, i) => i !== index));
   };
 
   return (
@@ -104,10 +109,11 @@ export default function AssetForm() {
         </Link>
         <h2 className="font-bold">Create Asset</h2>
       </div>
-  
+
       <form
         onSubmit={handleSubmit}
-        className="max-w-md mx-auto mt-8 p-6 bg-white rounded-lg shadow-md">
+        className="max-w-md mx-auto mt-8 p-6 bg-white rounded-lg shadow-md"
+      >
         <input
           type="text"
           name="name"
@@ -122,7 +128,7 @@ export default function AssetForm() {
           name="currentPrice"
           className="w-full px-4 py-2 border rounded-md mb-4"
           placeholder="Current price"
-          value={values.currentPrice || ''}
+          value={values.currentPrice || ""}
           onChange={handleChange}
           required
         />
@@ -131,7 +137,7 @@ export default function AssetForm() {
           name="boughtFor"
           className="w-full px-4 py-2 border rounded-md mb-4"
           placeholder="Bought For"
-          value={values.boughtFor || ''}
+          value={values.boughtFor || ""}
           onChange={handleChange}
         />
         <input
@@ -139,7 +145,7 @@ export default function AssetForm() {
           name="quantity"
           className="w-full px-4 py-2 border rounded-md mb-4"
           placeholder="Quantity"
-          value={values.quantity || ''}
+          value={values.quantity || ""}
           onChange={handleChange}
         />
         <input
@@ -150,7 +156,7 @@ export default function AssetForm() {
           value={values.ticker}
           onChange={handleChange}
         />
-         <select
+        <select
           name="sector"
           className="w-full px-4 py-2 border rounded-md mb-4"
           onChange={handleChange}
@@ -189,7 +195,7 @@ export default function AssetForm() {
             </option>
           ))}
         </select>
-        
+
         {/* File upload section */}
         <div className="w-full mb-4">
           <input
@@ -200,7 +206,7 @@ export default function AssetForm() {
             onChange={handleFileChange}
             multiple
           />
-          
+
           <div className="grid grid-cols-2 gap-2">
             {previewUrls.map((url, index) => (
               <div key={index} className="relative">

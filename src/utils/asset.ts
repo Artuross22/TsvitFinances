@@ -1,6 +1,6 @@
 "use server";
 import { Asset, InvestmentTerm, Market, Sector } from "@/types/asset";
-import { ViewAssetDto } from "@/types/AssetsDto";
+import { EditAssetDto, ListCharts, SaveChart, ViewAssetDto } from "@/types/AssetsDto";
 import { redirect } from "next/navigation";
 import axios from "axios";
 import { handleError } from "@/helpers/ErrorHandler";
@@ -33,19 +33,21 @@ export const createAssetGet = async (): Promise<AssetOptions> => {
       investmentTerms: data.investmentTerms || [],
     };
   } catch (error) {
-    console.error('Error fetching asset options:', error);
+    console.error("Error fetching asset options:", error);
     throw error;
   }
 };
 
- export async function createAssetPost(formData: FormData) {
-
-  formData.append('userPublicId', await checkverify().then((data) => data.userPublicId!));
+export async function createAssetPost(formData: FormData) {
+  formData.append(
+    "userPublicId",
+    await checkverify().then((data) => data.userPublicId!),
+  );
 
   var token = await checkverify().then((data) => data.jti);
-  
+
   try {
-  const response = await axios.post<Asset>(api, formData, {
+    const response = await axios.post<Asset>(api, formData, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -59,7 +61,7 @@ export const createAssetGet = async (): Promise<AssetOptions> => {
   } catch (error) {
     handleError(error);
   }
-};
+}
 
 export const getAllAssets = async (): Promise<Asset[]> => {
   try {
@@ -83,6 +85,43 @@ export const getAsset = async (id: string): Promise<ViewAssetDto> => {
     const response = await axios.get(`${api}${id}`);
     const data = response.data;
     return data as ViewAssetDto;
+  } catch (error) {
+    console.error("Error:", error);
+    throw error;
+  }
+};
+
+export const getCharts = async (id: string): Promise<ListCharts> => {
+  try {
+    const response = await axios.get(`${api + "GetChartsByAssetId/"}${id}`);
+    const data = response.data;
+    return data as ListCharts;
+  } catch (error) {
+    console.error("Error:", error);
+    throw error;
+  }
+};
+
+export const deleteCharts = async (id: string, assetId : string): Promise<ListCharts> => {
+  try {
+    const response = await axios.delete(`${api + "DeleteChart/"}${id}/${assetId}`);
+    const data = response.data;
+    return data as ListCharts;
+  } catch (error) {
+    console.error("Error:", error);
+    throw error;
+  }
+};
+
+export const updateChart = async (model: SaveChart): Promise<boolean> => {
+  try {
+    const response = await axios.post<boolean>(api + "UpdateChart", model);
+
+    if (response.status === 200) {
+      return true;
+    }
+
+    return false;
 
   } catch (error) {
     console.error("Error:", error);
@@ -90,24 +129,31 @@ export const getAsset = async (id: string): Promise<ViewAssetDto> => {
   }
 };
 
-export const editAsset = async (asset: ViewAssetDto): Promise<void> => {
-  // try {
-    console.log("CGC2 Coll");
+export const editAssetGet = async (id: string): Promise<EditAssetDto> => {
+  try {
+    const response = await axios.get(`${api}${id}`);
+    const data = response.data;
+    return data as EditAssetDto;
+  } catch (error) {
+    console.error("Error:", error);
+    throw error;
+  }
+};
+
+export const editAsset = async (asset: EditAssetDto): Promise<void> => {
+  try {
     asset.userPublicId = await checkverify().then((data) => data.userPublicId!);
+    const response = await axios.put<EditAssetDto>(api, asset);
 
-    console.log(asset);
-   
-    const response = await axios.post<Asset>(api + "/UpdateAsset", asset);
-
-    // if (response.status === 200) {
-    //   redirect(`/investing/ViewAsset/${asset.publicId}`);
-    // } else {
-    //   redirect("/");
-    // }
-  // } catch (error) {
-  //   console.error("Error:", error);
-  //   throw error;
-  // }
+    if (response.status === 200) {
+      redirect(`/investing/ViewAsset/${asset.publicId}`);
+    } else {
+      redirect("/");
+    }
+  } catch (error) {
+    console.error("Error:", error);
+    throw error;
+  }
 };
 
 export const deleteAsset = async (root: string, id: string) => {

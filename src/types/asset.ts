@@ -1,4 +1,3 @@
-
 export type Asset = {
   id: string;
   publicId: string;
@@ -8,16 +7,16 @@ export type Asset = {
   currentPrice: number;
   addedAt: Date;
   boughtFor: number;
-  quantity : number;
+  quantity: number;
   profit: number;
   isActive: boolean;
   closedAt: Date;
   soldFor: number;
-  charts: File[]
+  charts: File[];
 
-    sectors: Sector[];  
-    markets: Market[];
-    investmentTerms: InvestmentTerm[];
+  sectors: Sector[];
+  markets: Market[];
+  investmentTerms: InvestmentTerm[];
 };
 
 export type Sector = {
