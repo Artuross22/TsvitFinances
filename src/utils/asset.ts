@@ -1,6 +1,6 @@
 "use server";
 import { Asset, InvestmentTerm, Market, Sector } from "@/types/asset";
-import { EditAssetDto, ListCharts, SaveChart, ViewAssetDto } from "@/types/AssetsDto";
+import { AddChart, EditAssetDto, ListCharts, UpdateChart, ViewAssetDto } from "@/types/AssetsDto";
 import { redirect } from "next/navigation";
 import axios from "axios";
 import { handleError } from "@/helpers/ErrorHandler";
@@ -113,7 +113,24 @@ export const deleteCharts = async (id: string, assetId : string): Promise<ListCh
   }
 };
 
-export const updateChart = async (model: SaveChart): Promise<boolean> => {
+export const addChart = async (model: AddChart): Promise<boolean> => {
+  try {
+
+    const response = await axios.put<boolean>(api + "AddChart", model);
+
+    if (response.status === 200) {
+      return true;
+    }
+
+    return false;
+
+  } catch (error) {
+    console.error("Error:", error);
+    throw error;
+  }
+};
+
+export const updateChart = async (model: UpdateChart): Promise<boolean> => {
   try {
     const response = await axios.post<boolean>(api + "UpdateChart", model);
 

@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { getCharts, updateChart, deleteCharts } from "@/utils/asset";
-import { ListCharts, _Chart, SaveChart } from "@/types/AssetsDto";
+import { ListCharts, _Chart, UpdateChart } from "@/types/AssetsDto";
 import Image from 'next/image';
 
 interface AssetProps {
@@ -85,7 +85,7 @@ const AssetForm: React.FC<AssetProps> = ({ params }) => {
     setError(null);
 
     try {
-      const saveChartModel: SaveChart = {
+      const saveChartModel: UpdateChart = {
         id: chart.id,
         assetId: params.id,
         name: editForm.name,

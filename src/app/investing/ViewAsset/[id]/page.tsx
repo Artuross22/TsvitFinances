@@ -78,6 +78,10 @@ const ViewAsset: React.FC<AssetProps> = ({ params }) => {
             <Link href={`/investing/Chart/ListCharts/${asset.publicId}`}>
               View
             </Link>
+            <br />
+            <Link href={`/investing/Chart/AddCharts/${asset.publicId}`}>
+              Add
+            </Link>
           </div>
           {asset?.charts?.map((path, index) => (
             <div

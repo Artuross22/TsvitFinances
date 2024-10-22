@@ -47,10 +47,21 @@ export interface _Chart {
   chartsPath: string;
 }
 
-export interface SaveChart {
+export interface UpdateChart {
   id: string;
   assetId: string;
   name: string;
   description: string | null;
 }
 
+export interface AddChart {
+  assetId: string;
+  charts: _addChart[];
+}
+
+export interface _addChart {
+  readonly id: string;
+  name: string;
+  description?: string;
+  file: File;
+}
