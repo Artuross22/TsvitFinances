@@ -113,17 +113,15 @@ export const deleteCharts = async (id: string, assetId : string): Promise<ListCh
   }
 };
 
-export const addChart = async (model: AddChart): Promise<boolean> => {
+export const addChart = async (formData: FormData): Promise<boolean> => {
   try {
+    const response = await axios.post<boolean>(api + "AddChart", formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      }
+    });
 
-    const response = await axios.put<boolean>(api + "AddChart", model);
-
-    if (response.status === 200) {
-      return true;
-    }
-
-    return false;
-
+    return response.status === 200;
   } catch (error) {
     console.error("Error:", error);
     throw error;
@@ -132,7 +130,7 @@ export const addChart = async (model: AddChart): Promise<boolean> => {
 
 export const updateChart = async (model: UpdateChart): Promise<boolean> => {
   try {
-    const response = await axios.post<boolean>(api + "UpdateChart", model);
+    const response = await axios.put<boolean>(api + "UpdateChart", model);
 
     if (response.status === 200) {
       return true;

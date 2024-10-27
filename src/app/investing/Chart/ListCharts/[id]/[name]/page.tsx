@@ -4,10 +4,12 @@ import React, { useEffect, useState } from "react";
 import { getCharts, updateChart, deleteCharts } from "@/utils/asset";
 import { ListCharts, _Chart, UpdateChart } from "@/types/AssetsDto";
 import Image from 'next/image';
+import Link from "next/link";
 
 interface AssetProps {
   params: {
     id: string;
+    name: string;
   };
 }
 
@@ -144,9 +146,17 @@ const AssetForm: React.FC<AssetProps> = ({ params }) => {
   }
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-6">Asset Charts</h1>
-      
+    <div>
+
+<div className="flex bg-gray-200 justify-center mt-2 px-2">
+        <Link href={`/investing/ViewAsset/${params.id}`} className="mr-auto text-green">
+          Back
+        </Link>
+        <h2 className="text-center flex-grow">
+          <strong>{params.name}</strong>
+        </h2>
+      </div>
+    <div className="container mx-auto p-4">      
       <div 
         id="successMessage" 
         className="hidden fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded shadow-lg z-50"
@@ -248,6 +258,7 @@ const AssetForm: React.FC<AssetProps> = ({ params }) => {
           </div>
         ))}
       </div>
+    </div>
     </div>
   );
 };

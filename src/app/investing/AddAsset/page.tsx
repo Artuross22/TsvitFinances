@@ -1,9 +1,9 @@
 "use client";
 
 import { createAssetGet, createAssetPost } from "@/utils/asset";
-import React, { useEffect, useState } from "react";
-import { Asset, Sector, Market, InvestmentTerm } from "@/types/asset";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { AddAsset, InvestmentTerm, Market, Sector, _addChart } from "@/types/AssetsDto";
 
 type FormOptions = {
   sectors: Sector[];
@@ -11,10 +11,13 @@ type FormOptions = {
   investmentTerms: InvestmentTerm[];
 };
 
-const initialAsset: Partial<Asset> = {};
+const initialAsset: Partial<AddAsset> = {
+  charts: [],  
+};
 
 export default function AssetForm() {
-  const [values, setValues] = useState<Partial<Asset>>(initialAsset);
+  const [values, setValues] = useState<Partial<AddAsset>>(initialAsset);
+  const [charts, setCharts] = useState<_addChart[]>([]);
   const [options, setOptions] = useState<FormOptions>({
     sectors: [],
     markets: [],
@@ -37,23 +40,19 @@ export default function AssetForm() {
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-
     const formData = new FormData();
 
-    (Object.keys(values) as Array<keyof Partial<Asset>>).forEach((key) => {
+    (Object.keys(values) as Array<keyof Partial<AddAsset>>).forEach((key) => {
       if (key === "charts") {
-        values.charts?.forEach((file) => {
-          formData.append("charts", file);
-        });
+          charts.forEach((chart, index) => {
+            formData.append(`charts[${index}].name`, chart.name);
+            formData.append(`charts[${index}].description`, chart.description || "");
+            formData.append(`charts[${index}].file`, chart.file);
+          });
       } else if (typeof values[key] === "number") {
         formData.append(key, values[key]!.toString());
       } else if (values[key]) {
         formData.append(key, values[key] as string);
-      } else if (
-        typeof values[key] === "number" &&
-        !Number.isInteger(values[key])
-      ) {
-        formData.append("key", values[key]!.toString());
       }
     });
 
@@ -73,23 +72,22 @@ export default function AssetForm() {
       [name]: e.target.type === "number" ? Number(value) : value,
     }));
   };
+  
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files?.length) return;
+  const handleFileChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(event.target.files || []);
+    if (!files.length) return;
 
-    try {
-      const newFiles = Array.from(e.target.files);
-      setValues((prev) => ({
-        ...prev,
-        charts: [...(prev.charts || []), ...newFiles],
-      }));
+    const newCharts = files.map((file) => ({
+      name: file.name,
+      description: "",
+      file,
+    }));
+    setCharts((prevCharts) => [...prevCharts, ...newCharts]);
 
-      const newPreviewUrls = newFiles.map((file) => URL.createObjectURL(file));
-      setPreviewUrls((prevUrls) => [...prevUrls, ...newPreviewUrls]);
-    } catch (error) {
-      console.error("Error in handleFileChange:", error);
-    }
-  };
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  }, []);
 
   const removeFile = (index: number) => {
     setValues((prev) => ({
@@ -119,12 +117,12 @@ export default function AssetForm() {
           name="name"
           className="w-full px-4 py-2 border rounded-md mb-4"
           placeholder="Asset name"
-          value={values.name}
+          value={values.name || ""}
           onChange={handleChange}
           required
         />
         <input
-          type="float"
+          type="number"
           name="currentPrice"
           className="w-full px-4 py-2 border rounded-md mb-4"
           placeholder="Current price"
@@ -133,7 +131,7 @@ export default function AssetForm() {
           required
         />
         <input
-          type="float"
+          type="number"
           name="boughtFor"
           className="w-full px-4 py-2 border rounded-md mb-4"
           placeholder="Bought For"
@@ -141,7 +139,7 @@ export default function AssetForm() {
           onChange={handleChange}
         />
         <input
-          type="float"
+          type="number"
           name="quantity"
           className="w-full px-4 py-2 border rounded-md mb-4"
           placeholder="Quantity"
@@ -153,7 +151,7 @@ export default function AssetForm() {
           name="ticker"
           className="w-full px-4 py-2 border rounded-md mb-4"
           placeholder="Ticker"
-          value={values.ticker}
+          value={values.ticker || ""}
           onChange={handleChange}
         />
         <select
@@ -196,7 +194,6 @@ export default function AssetForm() {
           ))}
         </select>
 
-        {/* File upload section */}
         <div className="w-full mb-4">
           <input
             type="file"
