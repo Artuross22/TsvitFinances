@@ -22,6 +22,16 @@ const initialAsset: Partial<AddAsset> = {
   charts: [],
 };
 
+const formatNumberInput = (value: string): string => {
+  const cleaned = value.replace(/[^\d.,]/g, '');
+  return cleaned.replace(',', '.');
+};
+
+const formatNumberForDisplay = (value: number | undefined): string => {
+  if (value === undefined) return '';
+  return value.toString().replace('.', ',');
+};
+
 export default function AssetForm() {
   const [values, setValues] = useState<Partial<AddAsset>>(initialAsset);
   const [chartFiles, setChartFiles] = useState<ChartFile[]>([]);
@@ -45,7 +55,6 @@ export default function AssetForm() {
     fetchOptions();
   }, []);
 
-  // Cleanup preview URLs when component unmounts
   useEffect(() => {
     return () => {
       chartFiles.forEach(chart => {
@@ -60,7 +69,6 @@ export default function AssetForm() {
     event.preventDefault();
     const formData = new FormData();
 
-    // Add all non-file form values
     (Object.keys(values) as Array<keyof Partial<AddAsset>>).forEach((key) => {
       if (key !== "charts" && values[key] !== undefined) {
         if (typeof values[key] === "number") {
@@ -94,10 +102,23 @@ export default function AssetForm() {
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
-    setValues((prev) => ({
-      ...prev,
-      [name]: e.target.type === "number" ? Number(value) : value,
-    }));
+    
+    if (e.target.type === "number") {
+      const formattedValue = formatNumberInput(value);
+      const numericValue = formattedValue ? parseFloat(formattedValue) : undefined;
+      
+      setValues((prev) => ({
+        ...prev,
+        [name]: numericValue,
+      }));
+      
+      e.target.value = value.replace('.', ',');
+    } else {
+      setValues((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
   };
 
   const handleFileChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
@@ -159,28 +180,31 @@ export default function AssetForm() {
           required
         />
         <input
-          type="number"
+          type="text"
+          inputMode="decimal"
           name="currentPrice"
           className="w-full px-4 py-2 border rounded-md mb-4"
           placeholder="Current price"
-          value={values.currentPrice || ""}
+          value={formatNumberForDisplay(values.currentPrice)}
           onChange={handleChange}
           required
         />
         <input
-          type="number"
+          type="text"
+          inputMode="decimal"
           name="boughtFor"
           className="w-full px-4 py-2 border rounded-md mb-4"
           placeholder="Bought For"
-          value={values.boughtFor || ""}
+          value={formatNumberForDisplay(values.boughtFor)}
           onChange={handleChange}
         />
         <input
-          type="number"
+          type="text"
+          inputMode="decimal"
           name="quantity"
           className="w-full px-4 py-2 border rounded-md mb-4"
           placeholder="Quantity"
-          value={values.quantity || ""}
+          value={formatNumberForDisplay(values.quantity)}
           onChange={handleChange}
         />
         <input
