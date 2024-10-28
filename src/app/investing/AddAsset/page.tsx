@@ -11,19 +11,26 @@ type FormOptions = {
   investmentTerms: InvestmentTerm[];
 };
 
+type ChartFile = {
+  name: string;
+  description: string;
+  file: File;
+  previewUrl: string;
+};
+
 const initialAsset: Partial<AddAsset> = {
-  charts: [],  
+  charts: [],
 };
 
 export default function AssetForm() {
   const [values, setValues] = useState<Partial<AddAsset>>(initialAsset);
-  const [charts, setCharts] = useState<_addChart[]>([]);
+  const [chartFiles, setChartFiles] = useState<ChartFile[]>([]);
   const [options, setOptions] = useState<FormOptions>({
     sectors: [],
     markets: [],
     investmentTerms: [],
   });
-  const [previewUrls, setPreviewUrls] = useState<string[]>([]);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const fetchOptions = async () => {
@@ -38,33 +45,53 @@ export default function AssetForm() {
     fetchOptions();
   }, []);
 
+  // Cleanup preview URLs when component unmounts
+  useEffect(() => {
+    return () => {
+      chartFiles.forEach(chart => {
+        if (chart.previewUrl) {
+          URL.revokeObjectURL(chart.previewUrl);
+        }
+      });
+    };
+  }, [chartFiles]);
+
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     const formData = new FormData();
 
+    // Add all non-file form values
     (Object.keys(values) as Array<keyof Partial<AddAsset>>).forEach((key) => {
-      if (key === "charts") {
-          charts.forEach((chart, index) => {
-            formData.append(`charts[${index}].name`, chart.name);
-            formData.append(`charts[${index}].description`, chart.description || "");
-            formData.append(`charts[${index}].file`, chart.file);
-          });
-      } else if (typeof values[key] === "number") {
-        formData.append(key, values[key]!.toString());
-      } else if (values[key]) {
-        formData.append(key, values[key] as string);
+      if (key !== "charts" && values[key] !== undefined) {
+        if (typeof values[key] === "number") {
+          formData.append(key, values[key]!.toString());
+        } else {
+          formData.append(key, values[key] as string);
+        }
       }
+    });
+
+    // Add chart files
+    chartFiles.forEach((chart, index) => {
+      formData.append(`charts[${index}].name`, chart.name);
+      formData.append(`charts[${index}].description`, chart.description);
+      formData.append(`charts[${index}].file`, chart.file);
     });
 
     try {
       await createAssetPost(formData);
+      setValues(initialAsset);
+      setChartFiles([]);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
     } catch (error) {
       console.error("Error in createAssetPost:", error);
     }
   };
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
     setValues((prev) => ({
@@ -72,31 +99,41 @@ export default function AssetForm() {
       [name]: e.target.type === "number" ? Number(value) : value,
     }));
   };
-  
-  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(event.target.files || []);
     if (!files.length) return;
 
-    const newCharts = files.map((file) => ({
+    const newChartFiles = files.map((file) => ({
       name: file.name,
       description: "",
-      file,
+      file: file,
+      previewUrl: URL.createObjectURL(file)
     }));
-    setCharts((prevCharts) => [...prevCharts, ...newCharts]);
 
-    if (fileInputRef.current) fileInputRef.current.value = "";
+    setChartFiles((prevCharts) => [...prevCharts, ...newChartFiles]);
+
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
   }, []);
 
-  const removeFile = (index: number) => {
-    setValues((prev) => ({
-      ...prev,
-      charts: prev.charts?.filter((_, i) => i !== index),
-    }));
+  const handleChartDescriptionChange = (index: number, description: string) => {
+    setChartFiles(prevCharts => 
+      prevCharts.map((chart, i) => 
+        i === index ? { ...chart, description } : chart
+      )
+    );
+  };
 
-    URL.revokeObjectURL(previewUrls[index]);
-    setPreviewUrls((prevUrls) => prevUrls.filter((_, i) => i !== index));
+  const removeFile = (index: number) => {
+    setChartFiles(prevCharts => {
+      const chartToRemove = prevCharts[index];
+      if (chartToRemove.previewUrl) {
+        URL.revokeObjectURL(chartToRemove.previewUrl);
+      }
+      return prevCharts.filter((_, i) => i !== index);
+    });
   };
 
   return (
@@ -196,6 +233,7 @@ export default function AssetForm() {
 
         <div className="w-full mb-4">
           <input
+            ref={fileInputRef}
             type="file"
             name="charts"
             accept="image/jpeg,image/png"
@@ -204,21 +242,30 @@ export default function AssetForm() {
             multiple
           />
 
-          <div className="grid grid-cols-2 gap-2">
-            {previewUrls.map((url, index) => (
-              <div key={index} className="relative">
-                <img
-                  src={url}
-                  alt={`Preview ${index + 1}`}
-                  className="w-full h-32 object-cover rounded"
+          <div className="space-y-4 mt-4">
+            {chartFiles.map((chart, index) => (
+              <div key={index} className="border rounded-lg p-4">
+                <div className="relative mb-2">
+                  <img
+                    src={chart.previewUrl}
+                    alt={`Preview ${index + 1}`}
+                    className="w-full h-48 object-cover rounded"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => removeFile(index)}
+                    className="absolute top-2 right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600"
+                  >
+                    ×
+                  </button>
+                </div>
+                <textarea
+                  placeholder="Chart description"
+                  value={chart.description}
+                  onChange={(e) => handleChartDescriptionChange(index, e.target.value)}
+                  className="w-full px-3 py-2 border rounded-md"
+                  rows={2}
                 />
-                <button
-                  type="button"
-                  onClick={() => removeFile(index)}
-                  className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center"
-                >
-                  ×
-                </button>
               </div>
             ))}
           </div>
