@@ -3,7 +3,7 @@
 import { createAssetGet, createAssetPost } from "@/utils/asset";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { AddAsset, InvestmentTerm, Market, Sector, _addChart } from "@/types/AssetsDto";
+import { AddAsset, InvestmentTerm, Market, Sector, _addChart } from "@/types/assetsDto";
 
 type FormOptions = {
   sectors: Sector[];
@@ -79,7 +79,6 @@ export default function AssetForm() {
       }
     });
 
-    // Add chart files
     chartFiles.forEach((chart, index) => {
       formData.append(`charts[${index}].name`, chart.name);
       formData.append(`charts[${index}].description`, chart.description);

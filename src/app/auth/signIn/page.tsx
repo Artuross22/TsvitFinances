@@ -1,5 +1,5 @@
 "use client";
-import { Login } from "@/types/Login";
+import { Login } from "@/types/login";
 import { signIn } from "@/utils/auth";
 import { ChangeEvent, FC, useState } from "react";
 

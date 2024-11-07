@@ -1,4 +1,4 @@
-import { Login } from "@/types/Login";
+import { Login } from "@/types/login";
 import axios from "axios";
 import Cookies from "js-cookie";
 
