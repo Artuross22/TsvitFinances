@@ -1,6 +1,6 @@
 "use server";
 import { Asset, InvestmentTerm, Market, Sector } from "@/types/asset";
-import { AddChart, EditAssetDto, ListCharts, UpdateChart, ViewAssetDto } from "@/types/AssetsDto";
+import { AddChart, EditAssetDto, ListCharts, UpdateChart, ViewAssetDto } from "@/types/assetsDto";
 import { redirect } from "next/navigation";
 import axios from "axios";
 import { handleError } from "@/helpers/ErrorHandler";

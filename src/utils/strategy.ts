@@ -1,14 +1,16 @@
+
 "use server";
 
-import { handleError } from "@/helpers/ErrorHandler";
 import { verifyAuth } from "@/lib/auth";
-import { AddStragy } from "@/types/strategy";
+import { AddStragy, ListStrategies, GetStrategy } from "@/types/strategy";
 import axios from "axios";
+import { UUID } from "crypto";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
-const api = "https://localhost:44309/api/strategies";
+const api = "https://localhost:44309/api/strategies/";
 
 export const checkverify = async () => {
     const cookieStore = cookies();
@@ -17,15 +19,33 @@ export const checkverify = async () => {
     return await verifyAuth(token);
   };
 
-export async function createStrategy(formData: Partial<AddStragy>) {
+  export async function getUserId()
+  {
+     return await checkverify().then((data) => data.userPublicId!);
+  }
 
-     formData.userPublicId = await checkverify().then((data) => data.userPublicId!);
+export const listStrategies = async (): Promise<ListStrategies[]> => {
+  try {
+    const response = await axios.get(`${api}${await getUserId()}`);    
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching strategies:", error);
+    return [];
+  }
+};
 
-     console.log(formData);
+export const getStrategy = async (publicId: UUID): Promise<GetStrategy> => {
+    let userId = await getUserId();
+    const response = await axios.get(api + publicId + "/" + userId);
+    const data = response.data;
+    return data as GetStrategy;
+};
 
-      const response = await axios.post<boolean>(api + "/AddStrategy", formData);
+export async function createStrategy(stragy: Partial<AddStragy>) {
+      stragy.userPublicId = await checkverify().then((data) => data.userPublicId!);
+      const response = await axios.post<boolean>(api, stragy);
       if (response.status === 200) {
-        redirect(`/investing`);
+        redirect(`/strategy`);
       } else {
         redirect("/");
       }

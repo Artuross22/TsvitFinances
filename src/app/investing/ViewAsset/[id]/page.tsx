@@ -4,7 +4,7 @@ import Link from "next/link";
 import DeleteForm from "@/features/components/DeleteForm";
 import { useEffect, useState } from "react";
 import React from "react";
-import { ViewAssetDto } from "@/types/AssetsDto";
+import { ViewAssetDto } from "@/types/assetsDto";
 import Image from "next/image";
 
 interface AssetProps {

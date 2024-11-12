@@ -4,11 +4,12 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { createStrategy } from '@/utils/strategy';
 import { AddStragy } from '@/types/strategy';
+import Link from 'next/link';
 
 const initialStragy: Partial<AddStragy> = {
 };
 
-export default function AddStrategyPage() {
+export default function AddStrategy() {
   const router = useRouter();
   const [formData, setFormData] = useState<Partial<AddStragy>>(initialStragy);
   const [isLoading, setIsLoading] = useState(false);
@@ -39,6 +40,15 @@ export default function AddStrategyPage() {
   };
 
   return (
+    <div>
+    <div className="flex bg-gray-200 justify-center mt-2">
+    <Link href={`/strategy`} className="absolute left-1 text-green">
+      Back
+    </Link>
+    <h2>
+      <strong>Create Strategies</strong>
+    </h2>
+  </div>
     <div className="max-w-4xl mx-auto p-6">
       <div className="bg-white shadow-md rounded-lg p-6">
         <h1 className="text-2xl font-bold mb-6">Add New Strategy</h1>
@@ -85,6 +95,7 @@ export default function AddStrategyPage() {
           </button>
         </form>
       </div>
+    </div>
     </div>
   );
 }

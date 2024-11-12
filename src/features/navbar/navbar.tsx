@@ -60,6 +60,13 @@ function Navbar({ userName }: Props) {
             </Link>
           </li>
           <li>
+            <Link href="/strategy" passHref>
+              <span style={{ color: "white", textDecoration: "none" }}>
+                Strategy
+              </span>
+            </Link>
+          </li>
+          <li>
             <Link href="/contact" passHref>
               <span style={{ color: "white", textDecoration: "none" }}>
                 Treading
