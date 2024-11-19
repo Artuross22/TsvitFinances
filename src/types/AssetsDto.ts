@@ -100,4 +100,3 @@ export type InvestmentTerm = {
   value: number;
   text: string;
 };
-

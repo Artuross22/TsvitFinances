@@ -1,9 +1,9 @@
-'use client'
+"use client";
 
 import React, { useEffect, useState } from "react";
 import { getCharts, updateChart, deleteCharts } from "@/utils/asset";
 import { ListCharts, _Chart, UpdateChart } from "@/types/AssetsDto";
-import Image from 'next/image';
+import Image from "next/image";
 import Link from "next/link";
 
 interface AssetProps {
@@ -34,8 +34,8 @@ const AssetForm: React.FC<AssetProps> = ({ params }) => {
       const asset = await getCharts(params.id);
       setFormAsset(asset);
     } catch (error) {
-      setError('Error loading assets');
-      console.error('Error fetching asset:', error);
+      setError("Error loading assets");
+      console.error("Error fetching asset:", error);
     } finally {
       setLoading(false);
     }
@@ -50,8 +50,8 @@ const AssetForm: React.FC<AssetProps> = ({ params }) => {
     setError(null);
   };
 
-  const handleDelete = async (chartId: string, assetId : string)  => {
-    if (!confirm('Are you sure you want to delete this chart?')) {
+  const handleDelete = async (chartId: string, assetId: string) => {
+    if (!confirm("Are you sure you want to delete this chart?")) {
       return;
     }
 
@@ -60,21 +60,22 @@ const AssetForm: React.FC<AssetProps> = ({ params }) => {
 
     try {
       await deleteCharts(chartId, assetId);
-      
-      await fetchAsset(); 
 
-      const successMessage = document.getElementById('successMessage');
+      await fetchAsset();
+
+      const successMessage = document.getElementById("successMessage");
       if (successMessage) {
-        successMessage.textContent = 'Chart deleted successfully';
-        successMessage.classList.remove('hidden');
+        successMessage.textContent = "Chart deleted successfully";
+        successMessage.classList.remove("hidden");
         setTimeout(() => {
-          successMessage.classList.add('hidden');
+          successMessage.classList.add("hidden");
         }, 3000);
       }
-
     } catch (error) {
-      console.error('Error deleting chart:', error);
-      setError(error instanceof Error ? error.message : 'Failed to delete chart');
+      console.error("Error deleting chart:", error);
+      setError(
+        error instanceof Error ? error.message : "Failed to delete chart",
+      );
     } finally {
       setDeleting(null);
     }
@@ -82,7 +83,7 @@ const AssetForm: React.FC<AssetProps> = ({ params }) => {
 
   const handleSave = async (chart: _Chart) => {
     if (!editForm || !asset) return;
-    
+
     setSaving(true);
     setError(null);
 
@@ -96,26 +97,25 @@ const AssetForm: React.FC<AssetProps> = ({ params }) => {
 
       await updateChart(saveChartModel);
 
-      const updatedCharts = asset.charts.map(c => 
-        c.id === chart.id 
-          ? { ...c, ...editForm }
-          : c
+      const updatedCharts = asset.charts.map((c) =>
+        c.id === chart.id ? { ...c, ...editForm } : c,
       );
 
       setFormAsset({ ...asset, charts: updatedCharts });
 
-      const successMessage = document.getElementById('successMessage');
+      const successMessage = document.getElementById("successMessage");
       if (successMessage) {
-        successMessage.textContent = 'Changes saved successfully!';
-        successMessage.classList.remove('hidden');
+        successMessage.textContent = "Changes saved successfully!";
+        successMessage.classList.remove("hidden");
         setTimeout(() => {
-          successMessage.classList.add('hidden');
+          successMessage.classList.add("hidden");
         }, 3000);
       }
-
     } catch (error) {
-      console.error('Error saving chart:', error);
-      setError(error instanceof Error ? error.message : 'Failed to save changes');
+      console.error("Error saving chart:", error);
+      setError(
+        error instanceof Error ? error.message : "Failed to save changes",
+      );
     } finally {
       setSaving(false);
       setEditingChart(null);
@@ -138,127 +138,137 @@ const AssetForm: React.FC<AssetProps> = ({ params }) => {
   }
 
   if (!asset) {
-    return (
-      <div className="text-center p-4">
-        No asset data available.
-      </div>
-    );
+    return <div className="text-center p-4">No asset data available.</div>;
   }
 
   return (
     <div>
-
-<div className="flex bg-gray-200 justify-center mt-2 px-2">
-        <Link href={`/investing/ViewAsset/${params.id}`} className="mr-auto text-green">
+      <div className="flex bg-gray-200 justify-center mt-2 px-2">
+        <Link
+          href={`/investing/ViewAsset/${params.id}`}
+          className="mr-auto text-green"
+        >
           Back
         </Link>
         <h2 className="text-center flex-grow">
           <strong>{params.name}</strong>
         </h2>
       </div>
-    <div className="container mx-auto p-4">      
-      <div 
-        id="successMessage" 
-        className="hidden fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded shadow-lg z-50"
-      >
-        Changes saved successfully!
-      </div>
-
-      {error && (
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-          {error}
+      <div className="container mx-auto p-4">
+        <div
+          id="successMessage"
+          className="hidden fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded shadow-lg z-50"
+        >
+          Changes saved successfully!
         </div>
-      )}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {asset.charts.map((chart) => (
-          <div 
-            key={chart.id} 
-            className="border rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow"
-          >
-            <div className="p-4">
-              {editingChart === chart.id ? (
-                <div className="space-y-4">
-                  <input
-                    type="text"
-                    value={editForm?.name || ''}
-                    onChange={(e) => setEditForm(prev => ({ ...prev!, name: e.target.value }))}
-                    className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="Chart name"
-                  />
-                  <textarea
-                    value={editForm?.description || ''}
-                    onChange={(e) => setEditForm(prev => ({ ...prev!, description: e.target.value }))}
-                    className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    rows={3}
-                    placeholder="Chart description"
-                  />
-                  <div className="flex gap-2">
-                    <button
-                      onClick={() => handleSave(chart)}
-                      disabled={saving}
-                      className={`px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 
-                        ${saving ? 'opacity-50 cursor-not-allowed' : ''}`}
-                    >
-                      {saving ? 'Saving...' : 'Save'}
-                    </button>
-                    <button
-                      onClick={handleCancel}
-                      disabled={saving}
-                      className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
-                    >
-                      Cancel
-                    </button>
-                  </div>
-                </div>
-              ) : (
-                <>
-                  <div className="flex justify-between items-center mb-2">
-                    <h2 className="text-lg font-semibold">{chart.name}</h2>
+        {error && (
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+            {error}
+          </div>
+        )}
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {asset.charts.map((chart) => (
+            <div
+              key={chart.id}
+              className="border rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow"
+            >
+              <div className="p-4">
+                {editingChart === chart.id ? (
+                  <div className="space-y-4">
+                    <input
+                      type="text"
+                      value={editForm?.name || ""}
+                      onChange={(e) =>
+                        setEditForm((prev) => ({
+                          ...prev!,
+                          name: e.target.value,
+                        }))
+                      }
+                      className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      placeholder="Chart name"
+                    />
+                    <textarea
+                      value={editForm?.description || ""}
+                      onChange={(e) =>
+                        setEditForm((prev) => ({
+                          ...prev!,
+                          description: e.target.value,
+                        }))
+                      }
+                      className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      rows={3}
+                      placeholder="Chart description"
+                    />
                     <div className="flex gap-2">
                       <button
-                        onClick={() => handleEdit(chart)}
-                        className="p-2 hover:bg-gray-100 rounded"
-                        title="Edit"
+                        onClick={() => handleSave(chart)}
+                        disabled={saving}
+                        className={`px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 
+                        ${saving ? "opacity-50 cursor-not-allowed" : ""}`}
                       >
-                        ✏️
+                        {saving ? "Saving..." : "Save"}
                       </button>
                       <button
-                        onClick={() => handleDelete(chart.id, asset.assetPublicId)}
-                        disabled={deleting === chart.id}
-                        className={`p-2 hover:bg-red-100 rounded text-red-600
-                          ${deleting === chart.id ? 'opacity-50 cursor-not-allowed' : ''}`}
-                        title="Delete"
+                        onClick={handleCancel}
+                        disabled={saving}
+                        className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
                       >
-                        {deleting === chart.id ? '⏳' : '🗑️'}
+                        Cancel
                       </button>
                     </div>
                   </div>
-                  <p className="text-gray-600 mb-4">{chart.description}</p>
-                </>
-              )}
-              <div className="relative h-48 w-full">
-                <a
-                  href={chart.chartsPath}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="block"
-                >
-                  <Image
-                    src={chart.chartsPath}
-                    alt={chart.name}
-                    fill
-                    className="object-cover rounded"
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    priority={false}
-                  />
-                </a>
+                ) : (
+                  <>
+                    <div className="flex justify-between items-center mb-2">
+                      <h2 className="text-lg font-semibold">{chart.name}</h2>
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => handleEdit(chart)}
+                          className="p-2 hover:bg-gray-100 rounded"
+                          title="Edit"
+                        >
+                          ✏️
+                        </button>
+                        <button
+                          onClick={() =>
+                            handleDelete(chart.id, asset.assetPublicId)
+                          }
+                          disabled={deleting === chart.id}
+                          className={`p-2 hover:bg-red-100 rounded text-red-600
+                          ${deleting === chart.id ? "opacity-50 cursor-not-allowed" : ""}`}
+                          title="Delete"
+                        >
+                          {deleting === chart.id ? "⏳" : "🗑️"}
+                        </button>
+                      </div>
+                    </div>
+                    <p className="text-gray-600 mb-4">{chart.description}</p>
+                  </>
+                )}
+                <div className="relative h-48 w-full">
+                  <a
+                    href={chart.chartsPath}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block"
+                  >
+                    <Image
+                      src={chart.chartsPath}
+                      alt={chart.name}
+                      fill
+                      className="object-cover rounded"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      priority={false}
+                    />
+                  </a>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
-    </div>
     </div>
   );
 };

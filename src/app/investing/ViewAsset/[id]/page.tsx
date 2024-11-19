@@ -75,11 +75,15 @@ const ViewAsset: React.FC<AssetProps> = ({ params }) => {
       {asset?.charts && asset.charts.length > 0 && (
         <div className="flex overflow-x-auto w-1/2 bg-gray-300 m-4 p-4">
           <div>
-            <Link href={`/investing/Chart/ListCharts/${asset.publicId}/${asset.name}`}>
+            <Link
+              href={`/investing/Chart/ListCharts/${asset.publicId}/${asset.name}`}
+            >
               View
             </Link>
             <br />
-            <Link href={`/investing/Chart/AddCharts/${asset.publicId}/${asset.name}`}>
+            <Link
+              href={`/investing/Chart/AddCharts/${asset.publicId}/${asset.name}`}
+            >
               Add
             </Link>
           </div>

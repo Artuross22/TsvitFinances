@@ -1,50 +1,48 @@
 export type AddStragy = {
-    id: number;
-    publicId: string;
-    userPublicId: string;
-    name: string;
+  id: number;
+  publicId: string;
+  userPublicId: string;
+  name: string;
 };
 
 export type ListStrategies = {
-    publiceId: string;
-    name: string;
+  publiceId: string;
+  name: string;
 };
 
 export type GetStrategy = {
-    [x: string]: any;
-    name: string;
-    riskManagement: RiskManagement | null;
+  name: string;
+  riskManagement: RiskManagement | null;
+  positionManagement: PositionManagement | null;
 };
 
 export type RiskManagement = {
-    id: number;
-    publicId: string;
-    name: string;
-    category: RiskCategory;
-    positionManagement: PositionManagement;
-    baseRiskPercentage: number;
-    riskToRewardRatio: number;
-    hedgeId: number;
-    hedge: Hedge | null;
+  id: number;
+  publicId: string;
+  name: string;
+  category: RiskCategory;
+  baseRiskPercentage: number;
+  riskToRewardRatio: number;
+  hedgeId: number;
+  hedge: Hedge | null;
 };
 
 export type PositionManagement = {
-    id: number;
-    scalingOut: number | null;
-    scalingIn: number | null;
-    averageLevel: number;
+  id: number;
+  publicId: string;
+  scalingOut: number | null;
+  scalingIn: number | null;
+  averageLevel: number;
 };
 
 export type RiskCategory = {
-    name: string;
+  name: string;
 };
 
 export type Diversification = {
-    name: string;
+  name: string;
 };
 
 export type Hedge = {
-    name: string;
+  name: string;
 };
-
-

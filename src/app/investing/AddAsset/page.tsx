@@ -3,7 +3,13 @@
 import { createAssetGet, createAssetPost } from "@/utils/asset";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { AddAsset, InvestmentTerm, Market, Sector, _addChart } from "@/types/assetsDto";
+import {
+  AddAsset,
+  InvestmentTerm,
+  Market,
+  Sector,
+  _addChart,
+} from "@/types/assetsDto";
 
 type FormOptions = {
   sectors: Sector[];
@@ -23,13 +29,13 @@ const initialAsset: Partial<AddAsset> = {
 };
 
 const formatNumberInput = (value: string): string => {
-  const cleaned = value.replace(/[^\d.,]/g, '');
-  return cleaned.replace(',', '.');
+  const cleaned = value.replace(/[^\d.,]/g, "");
+  return cleaned.replace(",", ".");
 };
 
 const formatNumberForDisplay = (value: number | undefined): string => {
-  if (value === undefined) return '';
-  return value.toString().replace('.', ',');
+  if (value === undefined) return "";
+  return value.toString().replace(".", ",");
 };
 
 export default function AssetForm() {
@@ -57,7 +63,7 @@ export default function AssetForm() {
 
   useEffect(() => {
     return () => {
-      chartFiles.forEach(chart => {
+      chartFiles.forEach((chart) => {
         if (chart.previewUrl) {
           URL.revokeObjectURL(chart.previewUrl);
         }
@@ -98,20 +104,24 @@ export default function AssetForm() {
   };
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >,
   ) => {
     const { name, value } = e.target;
-    
+
     if (e.target.type === "number") {
       const formattedValue = formatNumberInput(value);
-      const numericValue = formattedValue ? parseFloat(formattedValue) : undefined;
-      
+      const numericValue = formattedValue
+        ? parseFloat(formattedValue)
+        : undefined;
+
       setValues((prev) => ({
         ...prev,
         [name]: numericValue,
       }));
-      
-      e.target.value = value.replace('.', ',');
+
+      e.target.value = value.replace(".", ",");
     } else {
       setValues((prev) => ({
         ...prev,
@@ -120,34 +130,37 @@ export default function AssetForm() {
     }
   };
 
-  const handleFileChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(event.target.files || []);
-    if (!files.length) return;
+  const handleFileChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      const files = Array.from(event.target.files || []);
+      if (!files.length) return;
 
-    const newChartFiles = files.map((file) => ({
-      name: file.name,
-      description: "",
-      file: file,
-      previewUrl: URL.createObjectURL(file)
-    }));
+      const newChartFiles = files.map((file) => ({
+        name: file.name,
+        description: "",
+        file: file,
+        previewUrl: URL.createObjectURL(file),
+      }));
 
-    setChartFiles((prevCharts) => [...prevCharts, ...newChartFiles]);
+      setChartFiles((prevCharts) => [...prevCharts, ...newChartFiles]);
 
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
-    }
-  }, []);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+    },
+    [],
+  );
 
   const handleChartDescriptionChange = (index: number, description: string) => {
-    setChartFiles(prevCharts => 
-      prevCharts.map((chart, i) => 
-        i === index ? { ...chart, description } : chart
-      )
+    setChartFiles((prevCharts) =>
+      prevCharts.map((chart, i) =>
+        i === index ? { ...chart, description } : chart,
+      ),
     );
   };
 
   const removeFile = (index: number) => {
-    setChartFiles(prevCharts => {
+    setChartFiles((prevCharts) => {
       const chartToRemove = prevCharts[index];
       if (chartToRemove.previewUrl) {
         URL.revokeObjectURL(chartToRemove.previewUrl);
@@ -285,7 +298,9 @@ export default function AssetForm() {
                 <textarea
                   placeholder="Chart description"
                   value={chart.description}
-                  onChange={(e) => handleChartDescriptionChange(index, e.target.value)}
+                  onChange={(e) =>
+                    handleChartDescriptionChange(index, e.target.value)
+                  }
                   className="w-full px-3 py-2 border rounded-md"
                   rows={2}
                 />

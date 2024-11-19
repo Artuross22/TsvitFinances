@@ -1,6 +1,12 @@
 "use server";
 import { Asset, InvestmentTerm, Market, Sector } from "@/types/asset";
-import { AddChart, EditAssetDto, ListCharts, UpdateChart, ViewAssetDto } from "@/types/assetsDto";
+import {
+  AddChart,
+  EditAssetDto,
+  ListCharts,
+  UpdateChart,
+  ViewAssetDto,
+} from "@/types/assetsDto";
 import { redirect } from "next/navigation";
 import axios from "axios";
 import { handleError } from "@/helpers/ErrorHandler";
@@ -102,9 +108,14 @@ export const getCharts = async (id: string): Promise<ListCharts> => {
   }
 };
 
-export const deleteCharts = async (id: string, assetId : string): Promise<ListCharts> => {
+export const deleteCharts = async (
+  id: string,
+  assetId: string,
+): Promise<ListCharts> => {
   try {
-    const response = await axios.delete(`${api + "DeleteChart/"}${id}/${assetId}`);
+    const response = await axios.delete(
+      `${api + "DeleteChart/"}${id}/${assetId}`,
+    );
     const data = response.data;
     return data as ListCharts;
   } catch (error) {
@@ -117,8 +128,8 @@ export const addChart = async (formData: FormData): Promise<boolean> => {
   try {
     const response = await axios.post<boolean>(api + "AddChart", formData, {
       headers: {
-        'Content-Type': 'multipart/form-data',
-      }
+        "Content-Type": "multipart/form-data",
+      },
     });
 
     return response.status === 200;
@@ -137,7 +148,6 @@ export const updateChart = async (model: UpdateChart): Promise<boolean> => {
     }
 
     return false;
-
   } catch (error) {
     console.error("Error:", error);
     throw error;

@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { editAsset, editAssetGet } from "@/utils/asset";
 import Link from "next/link";
-import { EditAssetDto, ViewAssetDto } from "@/types/AssetsDto";
+import { EditAssetDto, ViewAssetDto } from "@/types/assetsDto";
 
 interface AssetProps {
   params: {
