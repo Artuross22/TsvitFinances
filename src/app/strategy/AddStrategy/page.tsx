@@ -51,7 +51,6 @@ export default function AddStrategy() {
       <div className="max-w-4xl mx-auto p-6">
         <div className="bg-white shadow-md rounded-lg p-6">
           <h1 className="text-2xl font-bold mb-6">Add New Strategy</h1>
-
           {message && (
             <div
               className={`p-4 mb-4 rounded ${

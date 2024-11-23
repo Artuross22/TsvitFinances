@@ -74,6 +74,13 @@ const ViewStrategy: React.FC<Props> = ({ params }) => {
           </div>
 
           <div className="bg-white rounded-lg shadow-md">
+          <div className="flex justify-end mt-4">
+            <Link href={`/strategy/EditPositionManagement/${strategy.positionManagement?.publicId}`}>
+              <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                Edit
+              </button>
+            </Link>
+          </div>
             <div className="p-6 border-b border-gray-100">
               <h2 className="text-lg font-semibold">Position Management</h2>
             </div>

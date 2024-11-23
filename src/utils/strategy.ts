@@ -1,7 +1,8 @@
 "use server";
 
+import { EditPositionManagement } from "@/app/strategy/EditPositionManagement/[publicId]/page";
 import { verifyAuth } from "@/lib/auth";
-import { AddStragy, ListStrategies, GetStrategy } from "@/types/strategy";
+import { AddStragy, ListStrategies, GetStrategy, PositionManagement } from "@/types/strategy";
 import axios from "axios";
 import { UUID } from "crypto";
 import { cookies } from "next/headers";
@@ -47,4 +48,26 @@ export async function createStrategy(stragy: Partial<AddStragy>) {
   } else {
     redirect("/");
   }
-}
+};
+
+export const editPositionManagementGet = async (publicId: string): Promise<EditPositionManagement> => {
+  try {
+    const response = await axios.get(`${api}GetPositionManagement/${publicId}`);
+    const data = response.data;
+    return data as EditPositionManagement;
+  } catch (error) {
+    console.error("Error:", error);
+    throw error;
+  }
+};
+
+export const editPositionManagementPost = async (model: EditPositionManagement): Promise<boolean> => {
+
+    const response = await axios.put<boolean>(`${api}PutPositionManagement/`, model);
+
+    if (response.status === 200) {
+      return true;
+    }
+
+    return false;
+};
