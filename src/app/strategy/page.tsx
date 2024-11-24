@@ -1,9 +1,13 @@
 "use client";
 
-import { ListStrategies } from "@/types/strategy";
 import { listStrategies } from "@/utils/strategy";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+
+export type ListStrategies = {
+  publiceId: string;
+  name: string;
+};
 
 export default function ListStrategies() {
   const [strategies, setStrategies] = useState<ListStrategies[]>([]);

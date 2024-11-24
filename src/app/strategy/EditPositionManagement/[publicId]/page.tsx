@@ -3,7 +3,6 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { editPositionManagementGet, editPositionManagementPost } from "@/utils/strategy";
-// import { PositionManagement } from "@/types/strategy";
 
 interface Props {
   params: {
@@ -71,7 +70,7 @@ const PositionManagement: React.FC<Props> = ({ params }) => {
 
   return (
     <div>
-
+      
     <div className="flex bg-gray-200 justify-center mt-2">
         <Link href={`/strategy/View/${positionManagement.strategyPublicId}`} className="absolute left-1 text-green">
           Back

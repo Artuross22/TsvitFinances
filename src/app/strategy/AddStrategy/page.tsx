@@ -3,8 +3,14 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createStrategy } from "@/utils/strategy";
-import { AddStragy } from "@/types/strategy";
 import Link from "next/link";
+
+export type AddStragy = {
+  id: number;
+  publicId: string;
+  userPublicId: string;
+  name: string;
+};
 
 const initialStragy: Partial<AddStragy> = {};
 

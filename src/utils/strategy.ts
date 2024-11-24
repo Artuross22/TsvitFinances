@@ -1,8 +1,11 @@
 "use server";
 
+import { AddStragy } from "@/app/strategy/AddStrategy/page";
 import { EditPositionManagement } from "@/app/strategy/EditPositionManagement/[publicId]/page";
+import { EditRiskManagement } from "@/app/strategy/EditRiskManagement/[publicId]/page";
+import { GetStrategy } from "@/app/strategy/View/[publicId]/page";
+import { ListStrategies } from "@/app/strategy/page";
 import { verifyAuth } from "@/lib/auth";
-import { AddStragy, ListStrategies, GetStrategy, PositionManagement } from "@/types/strategy";
 import axios from "axios";
 import { UUID } from "crypto";
 import { cookies } from "next/headers";
@@ -36,6 +39,8 @@ export const listStrategies = async (): Promise<ListStrategies[]> => {
 export const getStrategy = async (publicId: UUID): Promise<GetStrategy> => {
   let userId = await getUserId();
   const response = await axios.get(api + publicId + "/" + userId);
+
+  console.log("RESPONSEGG", response);
   const data = response.data;
   return data as GetStrategy;
 };
@@ -50,6 +55,25 @@ export async function createStrategy(stragy: Partial<AddStragy>) {
   }
 };
 
+export const editEditRiskManagementGet = async (publicId: string): Promise<EditRiskManagement> => {
+  try {
+    const response = await axios.get(`${api}GetRiskManagement/${publicId}`);
+    const data = response.data;
+    return data as EditRiskManagement;
+  } catch (error) {
+    console.error("Error:", error);
+    throw error;
+  }
+};
+
+export const editRiskManagementPost = async (model: EditRiskManagement): Promise<boolean> => {
+  const response = await axios.put<boolean>(`${api}PutRiskManagement/`, model);
+  if (response.status === 200) {
+    return true;
+  }
+  return false;
+};
+
 export const editPositionManagementGet = async (publicId: string): Promise<EditPositionManagement> => {
   try {
     const response = await axios.get(`${api}GetPositionManagement/${publicId}`);
@@ -62,12 +86,9 @@ export const editPositionManagementGet = async (publicId: string): Promise<EditP
 };
 
 export const editPositionManagementPost = async (model: EditPositionManagement): Promise<boolean> => {
-
     const response = await axios.put<boolean>(`${api}PutPositionManagement/`, model);
-
     if (response.status === 200) {
       return true;
     }
-
     return false;
 };
