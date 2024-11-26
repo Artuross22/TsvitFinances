@@ -1,5 +1,7 @@
 export type ViewAssetDto = {
   userPublicId: string;
+  strategyPublicId : string | null; 
+  strategyName : string | null;
   publicId: string;
   sector: string;
   term: string;
@@ -18,21 +20,6 @@ export type ViewChart = {
   name: string;
   description: string;
   chartsPath: string;
-};
-
-export type EditAssetDto = {
-  userPublicId: string;
-  publicId: string;
-  sector: string;
-  term: string;
-  market: string;
-  name: string;
-  ticker: string;
-  currentPrice: number;
-  quantity: number;
-  boughtFor: number;
-  addedAt: Date;
-  interestOnCurrentDeposit: number;
 };
 
 export interface ListCharts {

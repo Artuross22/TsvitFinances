@@ -3,7 +3,16 @@
 import React, { useEffect, useState } from "react";
 import { editAsset, editAssetGet } from "@/utils/asset";
 import Link from "next/link";
-import { EditAssetDto, ViewAssetDto } from "@/types/assetsDto";
+
+export type EditAssetDto = {
+  userPublicId: string;
+  publicId: string;
+  name: string;
+  ticker: string;
+  currentPrice: number;
+  quantity: number;
+  boughtFor: number;
+};
 
 interface AssetProps {
   params: {

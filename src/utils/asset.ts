@@ -1,8 +1,6 @@
 "use server";
 import { Asset, InvestmentTerm, Market, Sector } from "@/types/asset";
 import {
-  AddChart,
-  EditAssetDto,
   ListCharts,
   UpdateChart,
   ViewAssetDto,
@@ -12,6 +10,7 @@ import axios from "axios";
 import { handleError } from "@/helpers/ErrorHandler";
 import { cookies } from "next/headers";
 import { verifyAuth } from "@/lib/auth";
+import { EditAssetDto } from "@/app/investing/EditAsset/[id]/page";
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
 export const checkverify = async () => {
@@ -156,7 +155,7 @@ export const updateChart = async (model: UpdateChart): Promise<boolean> => {
 
 export const editAssetGet = async (id: string): Promise<EditAssetDto> => {
   try {
-    const response = await axios.get(`${api}${id}`);
+    const response = await axios.get(`${api}EditAssetGet/${id}`);
     const data = response.data;
     return data as EditAssetDto;
   } catch (error) {
@@ -166,8 +165,10 @@ export const editAssetGet = async (id: string): Promise<EditAssetDto> => {
 };
 
 export const editAsset = async (asset: EditAssetDto): Promise<void> => {
-  try {
     asset.userPublicId = await checkverify().then((data) => data.userPublicId!);
+
+    console.log("GFRF123", asset);
+
     const response = await axios.put<EditAssetDto>(api, asset);
 
     if (response.status === 200) {
@@ -175,10 +176,6 @@ export const editAsset = async (asset: EditAssetDto): Promise<void> => {
     } else {
       redirect("/");
     }
-  } catch (error) {
-    console.error("Error:", error);
-    throw error;
-  }
 };
 
 export const deleteAsset = async (root: string, id: string) => {
