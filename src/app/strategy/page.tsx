@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export type ListStrategies = {
-  publiceId: string;
+  publicId: string;
   name: string;
 };
 
@@ -64,7 +64,7 @@ export default function ListStrategies() {
                 {strategy.name}
               </h3>
               <div className="flex flex-col space-y-2">
-                <Link href={`/strategy/View/${strategy.publiceId}`}>
+                <Link href={`/strategy/View/${strategy.publicId}`}>
                   <span className="w-full px-4 py-2 text-sm border rounded-md hover:bg-gray-50">
                     Go In!
                   </span>

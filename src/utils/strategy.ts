@@ -1,6 +1,7 @@
 "use server";
 
 import { AddStragy } from "@/app/strategy/AddStrategy/page";
+import { AddToStrategy, ListStrategiesForAsset } from "@/app/strategy/AddStrategyToAsset/[publicId]/page";
 import { EditPositionManagement } from "@/app/strategy/EditPositionManagement/[publicId]/page";
 import { EditRiskManagement } from "@/app/strategy/EditRiskManagement/[publicId]/page";
 import { GetStrategy } from "@/app/strategy/View/[publicId]/page";
@@ -34,6 +35,33 @@ export const listStrategies = async (): Promise<ListStrategies[]> => {
     console.error("Error fetching strategies:", error);
     return [];
   }
+};
+
+export const listStrategiesForAsset = async (): Promise<ListStrategiesForAsset[]> => {
+  try {
+    const response = await axios.get(`${api}${await getUserId()}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching strategies:", error);
+    return [];
+  }
+};
+
+export const addStragyToAsset = async (addToStrategy : AddToStrategy ): Promise<boolean> => {
+  try {
+
+    const response = await axios.post<boolean>(api + "AddStrategyToAsset/", addToStrategy);
+
+    if (response.status === 200) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  } catch (error) {
+    console.error("Error adding strategy to asset:", error);
+    return false;
+}
 };
 
 export const getStrategy = async (publicId: UUID): Promise<GetStrategy> => {
