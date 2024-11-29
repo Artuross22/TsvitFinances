@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 export type ListStrategiesForAsset = {
   publicId: string;
   name: string;
+  isSetToCurrentAsset : boolean;
 };
 
 export type AddToStrategy = {
@@ -21,7 +22,7 @@ interface Props {
   };
 }
  
-const AddStrategyToAsset: React.FC<Props> = ({ params }) => {
+const addStrategyToAsset: React.FC<Props> = ({ params }) => {
   const [strategies, setStrategies] = useState<ListStrategiesForAsset[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -29,7 +30,7 @@ const AddStrategyToAsset: React.FC<Props> = ({ params }) => {
   useEffect(() => {
     const fetchStrategies = async () => {
       try {
-        const fetchedStrategies = await listStrategiesForAsset();
+        const fetchedStrategies = await listStrategiesForAsset(params.publicId);
         setStrategies(fetchedStrategies);
       } catch (error) {
         console.error("Error:", error);
@@ -99,6 +100,8 @@ const AddStrategyToAsset: React.FC<Props> = ({ params }) => {
       <div className="w-full p-4 border rounded-lg shadow-sm">
         <div className="grid grid-cols-6 gap-4">
           {strategies.map((strategy) => (
+
+
             <div
               key={strategy.publicId}
               className="p-4 border rounded-lg flex flex-col justify-between bg-white hover:shadow-md transition-shadow"
@@ -113,11 +116,15 @@ const AddStrategyToAsset: React.FC<Props> = ({ params }) => {
                   </span>
                 </Link>
                 <button 
-                  className="w-full px-4 py-2 text-sm border rounded-md hover:bg-gray-50" 
-                  onClick={() => handleAddStrategy(strategy.publicId)}
-                >
-                  Add Strategy
-                </button>
+                        className={`w-full px-4 py-2 text-sm border rounded-md 
+                            ${strategy.isSetToCurrentAsset 
+                                ? 'bg-blue-100 text-blue-800 cursor-default' 
+                                : 'hover:bg-gray-50'}`}
+                        onClick={() => !strategy.isSetToCurrentAsset && handleAddStrategy(strategy.publicId)}
+                        disabled={strategy.isSetToCurrentAsset}
+                    >
+                        {strategy.isSetToCurrentAsset ? 'Selected' : 'Add Strategy'}
+                    </button>
               </div>
             </div>
           ))}
@@ -127,4 +134,4 @@ const AddStrategyToAsset: React.FC<Props> = ({ params }) => {
   );
 }
 
-export default AddStrategyToAsset;
+export default addStrategyToAsset;

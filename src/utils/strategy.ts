@@ -37,9 +37,10 @@ export const listStrategies = async (): Promise<ListStrategies[]> => {
   }
 };
 
-export const listStrategiesForAsset = async (): Promise<ListStrategiesForAsset[]> => {
+export const listStrategiesForAsset = async (assetPublicId : UUID): Promise<ListStrategiesForAsset[]> => {
   try {
-    const response = await axios.get(`${api}${await getUserId()}`);
+    const userId = await getUserId();
+    const response = await axios.get(`${api}GetStrategies/${userId}/${assetPublicId}`);    
     return response.data;
   } catch (error) {
     console.error("Error fetching strategies:", error);

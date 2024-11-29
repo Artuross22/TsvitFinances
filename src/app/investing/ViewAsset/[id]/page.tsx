@@ -63,7 +63,7 @@ const ViewAsset: React.FC<AssetProps> = ({ params }) => {
         <strong>
               {asset.strategyName ? (
                   <Link 
-                  href="/investing" 
+                  href={`/strategy/AddStrategyToAsset/${asset.publicId}`}
                   className="text-green-500 hover:underline font-medium"
                 >
                   Change  Strategy →
