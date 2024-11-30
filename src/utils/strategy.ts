@@ -1,7 +1,10 @@
 "use server";
 
 import { AddStragy } from "@/app/strategy/AddStrategy/page";
-import { AddToStrategy, ListStrategiesForAsset } from "@/app/strategy/AddStrategyToAsset/[publicId]/page";
+import {
+  AddToStrategy,
+  ListStrategiesForAsset,
+} from "@/app/strategy/AddStrategyToAsset/[publicId]/page";
 import { EditPositionManagement } from "@/app/strategy/EditPositionManagement/[publicId]/page";
 import { EditRiskManagement } from "@/app/strategy/EditRiskManagement/[publicId]/page";
 import { GetStrategy } from "@/app/strategy/View/[publicId]/page";
@@ -37,10 +40,14 @@ export const listStrategies = async (): Promise<ListStrategies[]> => {
   }
 };
 
-export const listStrategiesForAsset = async (assetPublicId : UUID): Promise<ListStrategiesForAsset[]> => {
+export const listStrategiesForAsset = async (
+  assetPublicId: UUID,
+): Promise<ListStrategiesForAsset[]> => {
   try {
     const userId = await getUserId();
-    const response = await axios.get(`${api}GetStrategies/${userId}/${assetPublicId}`);    
+    const response = await axios.get(
+      `${api}GetStrategies/${userId}/${assetPublicId}`,
+    );
     return response.data;
   } catch (error) {
     console.error("Error fetching strategies:", error);
@@ -48,21 +55,24 @@ export const listStrategiesForAsset = async (assetPublicId : UUID): Promise<List
   }
 };
 
-export const addStragyToAsset = async (addToStrategy : AddToStrategy ): Promise<boolean> => {
+export const addStragyToAsset = async (
+  addToStrategy: AddToStrategy,
+): Promise<boolean> => {
   try {
-
-    const response = await axios.post<boolean>(api + "AddStrategyToAsset/", addToStrategy);
+    const response = await axios.post<boolean>(
+      api + "AddStrategyToAsset/",
+      addToStrategy,
+    );
 
     if (response.status === 200) {
       return true;
-    }
-    else {
+    } else {
       return false;
     }
   } catch (error) {
     console.error("Error adding strategy to asset:", error);
     return false;
-}
+  }
 };
 
 export const getStrategy = async (publicId: UUID): Promise<GetStrategy> => {
@@ -82,9 +92,11 @@ export async function createStrategy(stragy: Partial<AddStragy>) {
   } else {
     redirect("/");
   }
-};
+}
 
-export const editEditRiskManagementGet = async (publicId: string): Promise<EditRiskManagement> => {
+export const editEditRiskManagementGet = async (
+  publicId: string,
+): Promise<EditRiskManagement> => {
   try {
     const response = await axios.get(`${api}GetRiskManagement/${publicId}`);
     const data = response.data;
@@ -95,7 +107,9 @@ export const editEditRiskManagementGet = async (publicId: string): Promise<EditR
   }
 };
 
-export const editRiskManagementPost = async (model: EditRiskManagement): Promise<boolean> => {
+export const editRiskManagementPost = async (
+  model: EditRiskManagement,
+): Promise<boolean> => {
   const response = await axios.put<boolean>(`${api}PutRiskManagement/`, model);
   if (response.status === 200) {
     return true;
@@ -103,7 +117,9 @@ export const editRiskManagementPost = async (model: EditRiskManagement): Promise
   return false;
 };
 
-export const editPositionManagementGet = async (publicId: string): Promise<EditPositionManagement> => {
+export const editPositionManagementGet = async (
+  publicId: string,
+): Promise<EditPositionManagement> => {
   try {
     const response = await axios.get(`${api}GetPositionManagement/${publicId}`);
     const data = response.data;
@@ -114,10 +130,15 @@ export const editPositionManagementGet = async (publicId: string): Promise<EditP
   }
 };
 
-export const editPositionManagementPost = async (model: EditPositionManagement): Promise<boolean> => {
-    const response = await axios.put<boolean>(`${api}PutPositionManagement/`, model);
-    if (response.status === 200) {
-      return true;
-    }
-    return false;
+export const editPositionManagementPost = async (
+  model: EditPositionManagement,
+): Promise<boolean> => {
+  const response = await axios.put<boolean>(
+    `${api}PutPositionManagement/`,
+    model,
+  );
+  if (response.status === 200) {
+    return true;
+  }
+  return false;
 };

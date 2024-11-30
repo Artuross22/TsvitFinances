@@ -2,7 +2,10 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { editEditRiskManagementGet, editRiskManagementPost } from "@/utils/strategy";
+import {
+  editEditRiskManagementGet,
+  editRiskManagementPost,
+} from "@/utils/strategy";
 import { RiskCategory } from "@/types/strategy";
 
 export interface EditRiskManagement {
@@ -28,7 +31,8 @@ type Hedge = {
 };
 
 const RiskManagementForm = ({ params }: RiskManagementFormProps) => {
-  const [riskManagement, setRiskManagement] = useState<EditRiskManagement | null>(null);
+  const [riskManagement, setRiskManagement] =
+    useState<EditRiskManagement | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -51,11 +55,11 @@ const RiskManagementForm = ({ params }: RiskManagementFormProps) => {
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
-    field: keyof EditRiskManagement
+    field: keyof EditRiskManagement,
   ) => {
     if (!riskManagement) return;
 
-    if (field === 'category') {
+    if (field === "category") {
       setRiskManagement({
         ...riskManagement,
         [field]: parseInt(e.target.value),
@@ -108,7 +112,10 @@ const RiskManagementForm = ({ params }: RiskManagementFormProps) => {
   return (
     <div>
       <div className="flex bg-gray-200 justify-center mt-2">
-        <Link href={`/strategy/View/${riskManagement.strategyPublicId}`} className="absolute left-1 text-green">
+        <Link
+          href={`/strategy/View/${riskManagement.strategyPublicId}`}
+          className="absolute left-1 text-green"
+        >
           Back
         </Link>
         <h2>
@@ -124,10 +131,13 @@ const RiskManagementForm = ({ params }: RiskManagementFormProps) => {
           )}
 
           <form onSubmit={handleSubmit} className="space-y-6">
-          <input type="hidden" name="id" value={riskManagement.publicId} />
+            <input type="hidden" name="id" value={riskManagement.publicId} />
 
             <div className="space-y-2">
-              <label htmlFor="baseRiskPercentage" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="baseRiskPercentage"
+                className="block text-sm font-medium text-gray-700"
+              >
                 Base Risk Percentage
               </label>
               <input
@@ -142,7 +152,10 @@ const RiskManagementForm = ({ params }: RiskManagementFormProps) => {
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="riskToRewardRatio" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="riskToRewardRatio"
+                className="block text-sm font-medium text-gray-700"
+              >
                 Risk to Reward Ratio
               </label>
               <input
@@ -157,7 +170,10 @@ const RiskManagementForm = ({ params }: RiskManagementFormProps) => {
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="category" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="category"
+                className="block text-sm font-medium text-gray-700"
+              >
                 Risk Category
               </label>
               <select

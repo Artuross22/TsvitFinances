@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 export type ListStrategiesForAsset = {
   publicId: string;
   name: string;
-  isSetToCurrentAsset : boolean;
+  isSetToCurrentAsset: boolean;
 };
 
 export type AddToStrategy = {
@@ -21,7 +21,7 @@ interface Props {
     publicId: UUID;
   };
 }
- 
+
 const addStrategyToAsset: React.FC<Props> = ({ params }) => {
   const [strategies, setStrategies] = useState<ListStrategiesForAsset[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -45,10 +45,9 @@ const addStrategyToAsset: React.FC<Props> = ({ params }) => {
 
   const handleAddStrategy = async (strategyPublicId: string) => {
     try {
-        
       const addToStrategyPayload: AddToStrategy = {
         assetPublicId: params.publicId,
-        strategyPublicId: strategyPublicId
+        strategyPublicId: strategyPublicId,
       };
 
       const success = await addStragyToAsset(addToStrategyPayload);
@@ -83,7 +82,10 @@ const addStrategyToAsset: React.FC<Props> = ({ params }) => {
   return (
     <div>
       <div className="flex bg-gray-200 justify-center mt-2">
-        <Link href={`/investing/ViewAsset/${params.publicId}`} className="absolute left-1 text-green">
+        <Link
+          href={`/investing/ViewAsset/${params.publicId}`}
+          className="absolute left-1 text-green"
+        >
           Back
         </Link>
 
@@ -100,8 +102,6 @@ const addStrategyToAsset: React.FC<Props> = ({ params }) => {
       <div className="w-full p-4 border rounded-lg shadow-sm">
         <div className="grid grid-cols-6 gap-4">
           {strategies.map((strategy) => (
-
-
             <div
               key={strategy.publicId}
               className="p-4 border rounded-lg flex flex-col justify-between bg-white hover:shadow-md transition-shadow"
@@ -115,16 +115,21 @@ const addStrategyToAsset: React.FC<Props> = ({ params }) => {
                     Go In!
                   </span>
                 </Link>
-                <button 
-                        className={`w-full px-4 py-2 text-sm border rounded-md 
-                            ${strategy.isSetToCurrentAsset 
-                                ? 'bg-blue-100 text-blue-800 cursor-default' 
-                                : 'hover:bg-gray-50'}`}
-                        onClick={() => !strategy.isSetToCurrentAsset && handleAddStrategy(strategy.publicId)}
-                        disabled={strategy.isSetToCurrentAsset}
-                    >
-                        {strategy.isSetToCurrentAsset ? 'Selected' : 'Add Strategy'}
-                    </button>
+                <button
+                  className={`w-full px-4 py-2 text-sm border rounded-md 
+                            ${
+                              strategy.isSetToCurrentAsset
+                                ? "bg-blue-100 text-blue-800 cursor-default"
+                                : "hover:bg-gray-50"
+                            }`}
+                  onClick={() =>
+                    !strategy.isSetToCurrentAsset &&
+                    handleAddStrategy(strategy.publicId)
+                  }
+                  disabled={strategy.isSetToCurrentAsset}
+                >
+                  {strategy.isSetToCurrentAsset ? "Selected" : "Add Strategy"}
+                </button>
               </div>
             </div>
           ))}
@@ -132,6 +137,6 @@ const addStrategyToAsset: React.FC<Props> = ({ params }) => {
       </div>
     </div>
   );
-}
+};
 
 export default addStrategyToAsset;

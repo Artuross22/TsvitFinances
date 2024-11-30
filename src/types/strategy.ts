@@ -3,5 +3,5 @@ export enum RiskCategory {
   Low = 1,
   Medium,
   MediumHigh,
-  High
+  High,
 }

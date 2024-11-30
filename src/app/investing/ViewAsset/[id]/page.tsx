@@ -39,10 +39,8 @@ const ViewAsset: React.FC<AssetProps> = ({ params }) => {
           <strong>{asset.name}</strong>
         </h2>
         <div className="ml-auto flex space-x-12 text-green">
-       <p>
-  
-       </p>
-      </div>
+          <p></p>
+        </div>
         <div className="ml-auto flex space-x-12 text-green">
           <DeleteForm
             color="green"
@@ -59,23 +57,23 @@ const ViewAsset: React.FC<AssetProps> = ({ params }) => {
         </div>
       </div>
       <div className="w-1/2 bg-gray-300 m-4 p-4">
-       {asset.strategyName && <p>StrategyName: {asset.strategyName}</p>}
+        {asset.strategyName && <p>StrategyName: {asset.strategyName}</p>}
         <strong>
-              {asset.strategyName ? (
-                  <Link 
-                  href={`/strategy/AddStrategyToAsset/${asset.publicId}`}
-                  className="text-green-500 hover:underline font-medium"
-                >
-                  Change  Strategy →
-                </Link>
-              ) : (
-                <Link 
-                  href={`/strategy/AddStrategyToAsset/${asset.publicId}`}
-                  className="text-green-500 hover:underline font-medium"
-                >
-                  Add Strategy →
-                </Link>
-              )}
+          {asset.strategyName ? (
+            <Link
+              href={`/strategy/AddStrategyToAsset/${asset.publicId}`}
+              className="text-green-500 hover:underline font-medium"
+            >
+              Change Strategy →
+            </Link>
+          ) : (
+            <Link
+              href={`/strategy/AddStrategyToAsset/${asset.publicId}`}
+              className="text-green-500 hover:underline font-medium"
+            >
+              Add Strategy →
+            </Link>
+          )}
         </strong>
       </div>
       <div className="w-1/2 bg-gray-300 m-4 p-4">

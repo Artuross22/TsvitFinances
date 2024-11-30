@@ -1,7 +1,7 @@
 export type ViewAssetDto = {
   userPublicId: string;
-  strategyPublicId : string | null; 
-  strategyName : string | null;
+  strategyPublicId: string | null;
+  strategyName: string | null;
   publicId: string;
   sector: string;
   term: string;

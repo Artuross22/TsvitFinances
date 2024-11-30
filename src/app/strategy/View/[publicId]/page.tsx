@@ -31,7 +31,6 @@ export type PositionManagement = {
   averageLevel: number;
 };
 
-
 export type Diversification = {
   name: string;
 };
@@ -75,8 +74,8 @@ const ViewStrategy: React.FC<Props> = ({ params }) => {
           <div className="flex justify-between items-center">
             <h1 className="text-2xl font-bold">{strategy.name}</h1>
             <span className="bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-sm">
-            {strategy.riskManagement?.category && 
-              RiskCategory[strategy.riskManagement.category]}
+              {strategy.riskManagement?.category &&
+                RiskCategory[strategy.riskManagement.category]}
             </span>
           </div>
         </div>
@@ -88,7 +87,9 @@ const ViewStrategy: React.FC<Props> = ({ params }) => {
                 <h2 className="text-lg font-medium text-gray-900">
                   Risk Management
                 </h2>
-                <Link href={`/strategy/EditRiskManagement/${strategy.riskManagement?.publicId}`}>
+                <Link
+                  href={`/strategy/EditRiskManagement/${strategy.riskManagement?.publicId}`}
+                >
                   <button className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
                     Edit
                   </button>
@@ -129,7 +130,9 @@ const ViewStrategy: React.FC<Props> = ({ params }) => {
                 <h2 className="text-lg font-medium text-gray-900">
                   Position Management
                 </h2>
-                <Link href={`/strategy/EditPositionManagement/${strategy.positionManagement?.publicId}`}>
+                <Link
+                  href={`/strategy/EditPositionManagement/${strategy.positionManagement?.publicId}`}
+                >
                   <button className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
                     Edit
                   </button>
@@ -157,12 +160,12 @@ const ViewStrategy: React.FC<Props> = ({ params }) => {
                 <p className="font-medium">
                   {strategy.positionManagement?.averageLevel}%
                 </p>
-              </div>       
+              </div>
             </div>
           </div>
         </div>
       </div>
-      </div>
+    </div>
   );
 };
 export default ViewStrategy;

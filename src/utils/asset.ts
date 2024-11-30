@@ -1,10 +1,6 @@
 "use server";
 import { Asset, InvestmentTerm, Market, Sector } from "@/types/asset";
-import {
-  ListCharts,
-  UpdateChart,
-  ViewAssetDto,
-} from "@/types/assetsDto";
+import { ListCharts, UpdateChart, ViewAssetDto } from "@/types/assetsDto";
 import { redirect } from "next/navigation";
 import axios from "axios";
 import { handleError } from "@/helpers/ErrorHandler";
@@ -165,17 +161,17 @@ export const editAssetGet = async (id: string): Promise<EditAssetDto> => {
 };
 
 export const editAsset = async (asset: EditAssetDto): Promise<void> => {
-    asset.userPublicId = await checkverify().then((data) => data.userPublicId!);
+  asset.userPublicId = await checkverify().then((data) => data.userPublicId!);
 
-    console.log("GFRF123", asset);
+  console.log("GFRF123", asset);
 
-    const response = await axios.put<EditAssetDto>(api, asset);
+  const response = await axios.put<EditAssetDto>(api, asset);
 
-    if (response.status === 200) {
-      redirect(`/investing/ViewAsset/${asset.publicId}`);
-    } else {
-      redirect("/");
-    }
+  if (response.status === 200) {
+    redirect(`/investing/ViewAsset/${asset.publicId}`);
+  } else {
+    redirect("/");
+  }
 };
 
 export const deleteAsset = async (root: string, id: string) => {
