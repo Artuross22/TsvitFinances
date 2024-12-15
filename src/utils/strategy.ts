@@ -17,7 +17,7 @@ import { redirect } from "next/navigation";
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
-const api = "https://localhost:44309/api/strategies/";
+const api = "https://localhost:44309/api/";
 
 export const checkverify = async () => {
   const cookieStore = cookies();
@@ -32,7 +32,7 @@ export async function getUserId() {
 
 export const listStrategies = async (): Promise<ListStrategies[]> => {
   try {
-    const response = await axios.get(`${api}${await getUserId()}`);
+    const response = await axios.get(`${api}ListStrategy/${await getUserId()}`);
     return response.data;
   } catch (error) {
     console.error("Error fetching strategies:", error);
@@ -46,7 +46,7 @@ export const listStrategiesForAsset = async (
   try {
     const userId = await getUserId();
     const response = await axios.get(
-      `${api}GetStrategies/${userId}/${assetPublicId}`,
+      `${api}AddStrategyToAsset/${userId}/${assetPublicId}`,
     );
     return response.data;
   } catch (error) {
@@ -60,7 +60,7 @@ export const addStragyToAsset = async (
 ): Promise<boolean> => {
   try {
     const response = await axios.post<boolean>(
-      api + "AddStrategyToAsset/",
+      api + "AddStrategyToAsset",
       addToStrategy,
     );
 
@@ -77,16 +77,16 @@ export const addStragyToAsset = async (
 
 export const getStrategy = async (publicId: UUID): Promise<GetStrategy> => {
   let userId = await getUserId();
-  const response = await axios.get(api + publicId + "/" + userId);
+  const response = await axios.get(`${api}GetStrategy/${publicId}/${userId}`);
 
-  console.log("RESPONSEGG", response);
   const data = response.data;
   return data as GetStrategy;
 };
 
 export async function createStrategy(stragy: Partial<AddStragy>) {
   stragy.userPublicId = await checkverify().then((data) => data.userPublicId!);
-  const response = await axios.post<boolean>(api, stragy);
+
+  const response = await axios.post<boolean>(`${api}AddStrategies`, stragy);
   if (response.status === 200) {
     redirect(`/strategy`);
   } else {
