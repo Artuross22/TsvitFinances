@@ -16,7 +16,7 @@ export const checkverify = async () => {
   return await verifyAuth(token);
 };
 
-const api = "https://localhost:44309/api/Assets/";
+const api = "https://localhost:44309/api/";
 
 export interface AssetOptions {
   sectors: Sector[];
@@ -26,7 +26,7 @@ export interface AssetOptions {
 
 export const createAssetGet = async (): Promise<AssetOptions> => {
   try {
-    const res = await axios.get(api + "AddAsset");
+    const res = await axios.get(`${api}AddAssets`);
     const data = res.data;
     return {
       sectors: data.sectors || [],
@@ -48,7 +48,7 @@ export async function createAssetPost(formData: FormData) {
   var token = await checkverify().then((data) => data.jti);
 
   try {
-    const response = await axios.post<Asset>(api, formData, {
+    const response = await axios.post<Asset>(`${api}AddAssets`, formData, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -67,7 +67,7 @@ export async function createAssetPost(formData: FormData) {
 export const getAllAssets = async (): Promise<Asset[]> => {
   try {
     var token = await checkverify().then((data) => data.jti);
-    const response = await axios.get<Asset[]>(api, {
+    const response = await axios.get<Asset[]>(`${api}ListAssets`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -83,7 +83,7 @@ export const getAllAssets = async (): Promise<Asset[]> => {
 
 export const getAsset = async (id: string): Promise<ViewAssetDto> => {
   try {
-    const response = await axios.get(`${api}${id}`);
+    const response = await axios.get(`${api}ViewAsset/${id}`);
     const data = response.data;
     return data as ViewAssetDto;
   } catch (error) {
@@ -94,7 +94,7 @@ export const getAsset = async (id: string): Promise<ViewAssetDto> => {
 
 export const getCharts = async (id: string): Promise<ListCharts> => {
   try {
-    const response = await axios.get(`${api + "GetChartsByAssetId/"}${id}`);
+    const response = await axios.get(`${api}GetChartsByAsset/${id}`);
     const data = response.data;
     return data as ListCharts;
   } catch (error) {
@@ -109,7 +109,7 @@ export const deleteCharts = async (
 ): Promise<ListCharts> => {
   try {
     const response = await axios.delete(
-      `${api + "DeleteChart/"}${id}/${assetId}`,
+      `${api}DeleteCharts/${id}/${assetId}`,
     );
     const data = response.data;
     return data as ListCharts;
@@ -121,7 +121,7 @@ export const deleteCharts = async (
 
 export const addChart = async (formData: FormData): Promise<boolean> => {
   try {
-    const response = await axios.post<boolean>(api + "AddChart", formData, {
+    const response = await axios.post<boolean>(`${api}AddCharts`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -136,7 +136,7 @@ export const addChart = async (formData: FormData): Promise<boolean> => {
 
 export const updateChart = async (model: UpdateChart): Promise<boolean> => {
   try {
-    const response = await axios.put<boolean>(api + "UpdateChart", model);
+    const response = await axios.put<boolean>(`${api}UpdateCharts`, model);
 
     if (response.status === 200) {
       return true;
@@ -151,7 +151,7 @@ export const updateChart = async (model: UpdateChart): Promise<boolean> => {
 
 export const editAssetGet = async (id: string): Promise<EditAssetDto> => {
   try {
-    const response = await axios.get(`${api}EditAssetGet/${id}`);
+    const response = await axios.get(`${api}UpdateAssets/${id}`);
     const data = response.data;
     return data as EditAssetDto;
   } catch (error) {
@@ -163,9 +163,7 @@ export const editAssetGet = async (id: string): Promise<EditAssetDto> => {
 export const editAsset = async (asset: EditAssetDto): Promise<void> => {
   asset.userPublicId = await checkverify().then((data) => data.userPublicId!);
 
-  console.log("GFRF123", asset);
-
-  const response = await axios.put<EditAssetDto>(api, asset);
+  const response = await axios.put<EditAssetDto>(`${api}UpdateAssets`, asset);
 
   if (response.status === 200) {
     redirect(`/investing/ViewAsset/${asset.publicId}`);
@@ -178,9 +176,9 @@ export const deleteAsset = async (root: string, id: string) => {
   let response;
 
   if (root === "deleteAsset") {
-    response = await axios.delete(`${api}${id}`);
+    response = await axios.delete(`${api}DeleteAssets/${id}`);
   } else if (root === "sellAsset") {
-    response = await axios.post(`${api}SellAsset/${id}`);
+    response = await axios.post(`${api}SellAssets/${id}`);
   } else {
     throw new Error("Invalid root parameter");
   }
