@@ -5,6 +5,8 @@ import { getStrategy } from "@/utils/strategy";
 import { UUID } from "crypto";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { useRouter } from 'next/navigation';
+
 
 export type GetStrategy = {
   name: string;
@@ -47,6 +49,8 @@ interface Props {
 const ViewStrategy: React.FC<Props> = ({ params }) => {
   const [strategy, setStrategy] = useState<GetStrategy | null>(null);
 
+  const router = useRouter();
+
   useEffect(() => {
     const fetchAsset = async () => {
       const strategy = await getStrategy(params.publicId);
@@ -63,9 +67,9 @@ const ViewStrategy: React.FC<Props> = ({ params }) => {
   return (
     <div>
       <div className="flex bg-gray-200 justify-center mt-2 px-2">
-        <Link href={`/strategy`} className="mr-auto text-green">
-          Back
-        </Link>
+        <button onClick={() => router.back()} className="mr-auto text-green">
+        Back
+      </button>
         <div className="ml-auto flex space-x-12 text-green"></div>
       </div>
 

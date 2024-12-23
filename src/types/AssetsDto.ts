@@ -1,21 +1,3 @@
-export type ViewAssetDto = {
-  userPublicId: string;
-  strategyPublicId: string | null;
-  strategyName: string | null;
-  publicId: string;
-  sector: string;
-  term: string;
-  market: string;
-  name: string;
-  ticker: string;
-  currentPrice: number;
-  quantity: number;
-  boughtFor: number;
-  addedAt: Date;
-  interestOnCurrentDeposit: number;
-  charts: ViewChart[];
-};
-
 export type ViewChart = {
   name: string;
   description: string;

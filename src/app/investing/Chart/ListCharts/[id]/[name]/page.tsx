@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { getCharts, updateChart, deleteCharts } from "@/utils/asset";
-import { ListCharts, _Chart, UpdateChart } from "@/types/AssetsDto";
+import { ListCharts, _Chart, UpdateChart } from "@/types/assetsDto";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -143,17 +143,24 @@ const AssetForm: React.FC<AssetProps> = ({ params }) => {
 
   return (
     <div>
-      <div className="flex bg-gray-200 justify-center mt-2 px-2">
-        <Link
-          href={`/investing/ViewAsset/${params.id}`}
-          className="mr-auto text-green"
-        >
+
+<div className="flex bg-gray-200 justify-center mt-2">
+        <Link href={`/investing/ViewAsset/${params.id}`} className="absolute left-1 text-green">
           Back
         </Link>
-        <h2 className="text-center flex-grow">
+
+        <Link
+          href={`/investing/Chart/AddCharts/${params.id}/${params.name}`}
+          className="absolute right-1 text-green"
+        >
+          Add
+        </Link>
+        <h2>
           <strong>{params.name}</strong>
         </h2>
       </div>
+
+
       <div className="container mx-auto p-4">
         <div
           id="successMessage"

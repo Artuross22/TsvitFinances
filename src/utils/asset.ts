@@ -1,12 +1,13 @@
 "use server";
 import { Asset, InvestmentTerm, Market, Sector } from "@/types/asset";
-import { ListCharts, UpdateChart, ViewAssetDto } from "@/types/assetsDto";
+import { ListCharts, UpdateChart } from "@/types/assetsDto";
 import { redirect } from "next/navigation";
 import axios from "axios";
-import { handleError } from "@/helpers/ErrorHandler";
 import { cookies } from "next/headers";
 import { verifyAuth } from "@/lib/auth";
 import { EditAssetDto } from "@/app/investing/EditAsset/[id]/page";
+import { ViewAssetDto } from "@/app/investing/ViewAsset/[id]/page";
+
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
 export const checkverify = async () => {
@@ -46,8 +47,6 @@ export async function createAssetPost(formData: FormData) {
   );
 
   var token = await checkverify().then((data) => data.jti);
-
-  try {
     const response = await axios.post<Asset>(`${api}AddAssets`, formData, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -59,9 +58,6 @@ export async function createAssetPost(formData: FormData) {
     } else {
       redirect("/");
     }
-  } catch (error) {
-    handleError(error);
-  }
 }
 
 export const getAllAssets = async (): Promise<Asset[]> => {

@@ -4,8 +4,28 @@ import Link from "next/link";
 import DeleteForm from "@/features/components/DeleteForm";
 import { useEffect, useState } from "react";
 import React from "react";
-import { ViewAssetDto } from "@/types/assetsDto";
+import { ViewChart } from "@/types/assetsDto";
 import Image from "next/image";
+
+export type ViewAssetDto = {
+  userPublicId: string;
+  strategyPublicId: string | null;
+  strategyName: string | null;
+  publicId: string;
+  sector: string;
+  term: string;
+  market: string;
+  name: string;
+  ticker: string;
+  currentPrice: number;
+  quantity: number;
+  boughtFor: number;
+  percentageProfit: number;
+  profit: number;
+  addedAt: Date;
+  interestOnCurrentDeposit: number;
+  charts: ViewChart[];
+};
 
 interface AssetProps {
   params: {
@@ -83,14 +103,8 @@ const ViewAsset: React.FC<AssetProps> = ({ params }) => {
         <p>Current Price: {asset.currentPrice}</p>
         <p>Bought For: {asset.boughtFor}</p>
         <p>Quantity: {asset.quantity}</p>
-        <p>Profit: {(asset.currentPrice - asset.boughtFor) * asset.quantity}</p>
-        <p>
-          Percentage Profit:{" "}
-          {(((asset.currentPrice - asset.boughtFor) * asset.quantity) /
-            (asset.boughtFor * asset.quantity)) *
-            100}
-          %
-        </p>
+        <p>Profit: {asset.profit} </p>
+        <p>Percentage Profit: {asset.percentageProfit}%</p>
         <div>
           <Link href={`/investing/EditAsset/${asset.publicId}`}>Edit</Link>
         </div>
