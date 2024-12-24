@@ -143,9 +143,11 @@ const AssetForm: React.FC<AssetProps> = ({ params }) => {
 
   return (
     <div>
-
-<div className="flex bg-gray-200 justify-center mt-2">
-        <Link href={`/investing/ViewAsset/${params.id}`} className="absolute left-1 text-green">
+      <div className="flex bg-gray-200 justify-center mt-2">
+        <Link
+          href={`/investing/ViewAsset/${params.id}`}
+          className="absolute left-1 text-green"
+        >
           Back
         </Link>
 
@@ -159,7 +161,6 @@ const AssetForm: React.FC<AssetProps> = ({ params }) => {
           <strong>{params.name}</strong>
         </h2>
       </div>
-
 
       <div className="container mx-auto p-4">
         <div

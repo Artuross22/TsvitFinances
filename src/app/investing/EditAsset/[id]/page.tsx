@@ -83,6 +83,20 @@ const AssetForm: React.FC<AssetProps> = ({ params }) => {
         <input
           type="number"
           className="px-4 py-2 border rounded-md mb-4"
+          placeholder="quantity"
+          value={formAsset.quantity || ""}
+          onChange={(e) =>
+            setFormAsset({
+              ...formAsset,
+              quantity: parseFloat(e.target.value),
+            })
+          }
+          required
+        />
+
+        <input
+          type="number"
+          className="px-4 py-2 border rounded-md mb-4"
           placeholder="Current Price"
           value={formAsset.currentPrice || ""}
           onChange={(e) =>

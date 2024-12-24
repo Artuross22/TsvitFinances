@@ -47,17 +47,17 @@ export async function createAssetPost(formData: FormData) {
   );
 
   var token = await checkverify().then((data) => data.jti);
-    const response = await axios.post<Asset>(`${api}AddAssets`, formData, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+  const response = await axios.post<Asset>(`${api}AddAssets`, formData, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
 
-    if (response.status === 200) {
-      redirect(`/investing`);
-    } else {
-      redirect("/");
-    }
+  if (response.status === 200) {
+    redirect(`/investing`);
+  } else {
+    redirect("/");
+  }
 }
 
 export const getAllAssets = async (): Promise<Asset[]> => {
@@ -104,9 +104,7 @@ export const deleteCharts = async (
   assetId: string,
 ): Promise<ListCharts> => {
   try {
-    const response = await axios.delete(
-      `${api}DeleteCharts/${id}/${assetId}`,
-    );
+    const response = await axios.delete(`${api}DeleteCharts/${id}/${assetId}`);
     const data = response.data;
     return data as ListCharts;
   } catch (error) {

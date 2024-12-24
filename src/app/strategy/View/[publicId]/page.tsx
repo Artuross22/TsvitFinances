@@ -5,8 +5,7 @@ import { getStrategy } from "@/utils/strategy";
 import { UUID } from "crypto";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { useRouter } from 'next/navigation';
-
+import { useRouter } from "next/navigation";
 
 export type GetStrategy = {
   name: string;
@@ -68,8 +67,8 @@ const ViewStrategy: React.FC<Props> = ({ params }) => {
     <div>
       <div className="flex bg-gray-200 justify-center mt-2 px-2">
         <button onClick={() => router.back()} className="mr-auto text-green">
-        Back
-      </button>
+          Back
+        </button>
         <div className="ml-auto flex space-x-12 text-green"></div>
       </div>
 
