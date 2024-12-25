@@ -9,6 +9,7 @@ import { EditPositionManagement } from "@/app/strategy/EditPositionManagement/[p
 import { EditRiskManagement } from "@/app/strategy/EditRiskManagement/[publicId]/page";
 import { GetStrategy } from "@/app/strategy/View/[publicId]/page";
 import { ListStrategies } from "@/app/strategy/page";
+import { Diversification, InputModel } from "@/features/components/asset/viewAsset/AssetTargets";
 import { verifyAuth } from "@/lib/auth";
 import axios from "axios";
 import { UUID } from "crypto";
@@ -74,6 +75,13 @@ export const addStragyToAsset = async (
     return false;
   }
 };
+
+export const applaStrategy = async (publicId: UUID): Promise<InputModel> => {
+  let userId = await getUserId();
+  const response = await axios.get(`${api}ApplyStrategies/${publicId}/${userId}`);
+  const data = response.data;
+  return data as InputModel;
+}
 
 export const getStrategy = async (publicId: UUID): Promise<GetStrategy> => {
   let userId = await getUserId();

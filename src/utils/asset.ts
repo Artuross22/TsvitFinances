@@ -6,7 +6,7 @@ import axios from "axios";
 import { cookies } from "next/headers";
 import { verifyAuth } from "@/lib/auth";
 import { EditAssetDto } from "@/app/investing/EditAsset/[id]/page";
-import { ViewAssetDto } from "@/app/investing/ViewAsset/[id]/page";
+import { ViewAssetDto } from "@/features/components/asset/viewAsset/AssetDetails";
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
