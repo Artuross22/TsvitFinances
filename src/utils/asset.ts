@@ -7,6 +7,7 @@ import { cookies } from "next/headers";
 import { verifyAuth } from "@/lib/auth";
 import { EditAssetDto } from "@/app/investing/EditAsset/[id]/page";
 import { ViewAssetDto } from "@/features/components/asset/viewAsset/AssetDetails";
+import { AddTarget } from "@/app/investing/Target/addTargets/[publicId]/[assetPublicId]/page";
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
@@ -23,6 +24,11 @@ export interface AssetOptions {
   sectors: Sector[];
   markets: Market[];
   investmentTerms: InvestmentTerm[];
+}
+
+export const addTargets = async (model: AddTarget): Promise<boolean> => {
+  const res = await axios.post(`${api}AddTargets`, model);
+  return res.status === 200;
 }
 
 export const createAssetGet = async (): Promise<AssetOptions> => {

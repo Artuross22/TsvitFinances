@@ -2,10 +2,12 @@
 
 import { applaStrategy } from "@/utils/strategy";
 import { UUID } from "crypto";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 interface Props {
-    publicId: UUID;
+    publicId: string;
+    strategyPublicId: string | null;
   }
 
 export interface InputModel {
@@ -41,21 +43,26 @@ export interface _Risk {
     diversifications: Diversification[];
 }
 
-  const AssetTargets = ({publicId }: Props) => {
+  const AssetTargets = ({publicId, strategyPublicId }: Props) => {
 
-    const [strategy, setStrategies] = useState<InputModel>([]);
+    const [strategy, setStrategies] = useState<InputModel>();
 
-    useEffect(() => {
-      const fetchAssets = async () => {
-        const fetchedAssets = await applaStrategy(publicId);
-        setStrategies(fetchedAssets);
-      };
+    // useEffect(() => {
+    //   const fetchAssets = async () => {
+    //     const fetchedAssets = await applaStrategy(publicId);
+    //     setStrategies(fetchedAssets);
+    //   };
   
-      fetchAssets();
-    }, []);
+    //   fetchAssets();
+    // }, []);
   
     return (
         <div className="bg-gray-300 m-2 p-2"> 
+
+        <Link
+          href={`/investing/Target/addTargets/${strategyPublicId}/${publicId}`}
+          className="text-green-500 hover:underline font-medium" >Hoi
+        </Link>
    
         </div>
     );

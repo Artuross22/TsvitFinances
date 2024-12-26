@@ -76,7 +76,7 @@ export const addStragyToAsset = async (
   }
 };
 
-export const applaStrategy = async (publicId: UUID): Promise<InputModel> => {
+export const applaStrategy = async (publicId: string): Promise<InputModel> => {
   let userId = await getUserId();
   const response = await axios.get(`${api}ApplyStrategies/${publicId}/${userId}`);
   const data = response.data;
