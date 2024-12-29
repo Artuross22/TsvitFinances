@@ -9,10 +9,12 @@ import { EditPositionManagement } from "@/app/strategy/EditPositionManagement/[p
 import { EditRiskManagement } from "@/app/strategy/EditRiskManagement/[publicId]/page";
 import { GetStrategy } from "@/app/strategy/View/[publicId]/page";
 import { ListStrategies } from "@/app/strategy/page";
-import { Diversification, InputModel } from "@/features/components/asset/viewAsset/AssetTargets";
+import { TargetLevels } from "@/features/components/asset/viewAsset/AssetTargets";
+// import { Diversification, InputModel } from "@/features/components/asset/viewAsset/AssetTargets";
 import { verifyAuth } from "@/lib/auth";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import { UUID } from "crypto";
+import { Response } from "express";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -76,11 +78,25 @@ export const addStragyToAsset = async (
   }
 };
 
-export const applaStrategy = async (publicId: string): Promise<InputModel> => {
-  let userId = await getUserId();
-  const response = await axios.get(`${api}ApplyStrategies/${publicId}/${userId}`);
+// export const applaStrategy = async (publicId: string): Promise<InputModel> => {
+//   let userId = await getUserId();
+//   const response = await axios.get(`${api}ApplyStrategies/${publicId}/${userId}`);
+//   const data = response.data;
+//   return data as InputModel;
+// }
+
+export const listTargets = async (publicId: string): Promise<TargetLevels> => {
+  const response = await axios.get(`${api}ListTargets/${publicId}`);
   const data = response.data;
-  return data as InputModel;
+  return data as TargetLevels;
+}
+
+export const deleteTarget = async (publicId: UUID, name: string): Promise<boolean> => {
+  const response = await axios.delete(`${api}DeleteTarget/${publicId}/${name}`);
+  if (response.status === 200) {
+    return true;
+  }
+  return false;
 }
 
 export const getStrategy = async (publicId: UUID): Promise<GetStrategy> => {

@@ -32,7 +32,7 @@ interface Props {
 
 export default function AddTarget({ params }: Props) {
   const [targets, setTargets] = useState<AddTarget>({
-      publicId : params.publicId,
+      publicId : params.assetPublicId,
       BuyLevels: [{
       description: '',
       averageLevel: null
