@@ -78,7 +78,6 @@ import { UUID } from 'crypto';
 
 interface AssetTargetsProps {
     publicId: string;
-    strategyPublicId: string;
 }
 
 export interface TargetLevels {
@@ -101,10 +100,7 @@ interface BuyLevels {
     averageLevel: number | null;
 }
 
-const AssetTargets: React.FC<AssetTargetsProps> = ({ 
-    publicId, 
-    strategyPublicId 
-}) => {
+const AssetTargets: React.FC<AssetTargetsProps> = ({publicId}) => {
     const [strategy, setStrategy] = useState<TargetLevels | undefined>();
     const [error, setError] = useState<string | null>(null);
     const [successMessage, setSuccessMessage] = useState<string | null>(null);
@@ -128,7 +124,7 @@ const AssetTargets: React.FC<AssetTargetsProps> = ({
     };
 
     const handleEdit = (publicId: UUID) => {
-        window.location.href = `/investing/Target/editTarget/${strategyPublicId}/${publicId}/${publicId}`;
+        window.location.href = `/investing/Target/editTarget/${publicId}`;
     };
 
     const handleDelete = async (publicId: UUID, level: string) => {
@@ -186,7 +182,7 @@ const AssetTargets: React.FC<AssetTargetsProps> = ({
             <div className="flex justify-between items-center">
                 <h1 className="text-2xl font-bold text-gray-800">Asset Targets</h1>
                 <Link
-                    href={`/investing/Target/addTargets/${strategyPublicId}/${publicId}`}
+                    href={`/investing/Target/addTargets/${publicId}`}
                     className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition-colors"
                 >
                     Add New Target

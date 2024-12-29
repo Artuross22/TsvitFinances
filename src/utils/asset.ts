@@ -7,7 +7,7 @@ import { cookies } from "next/headers";
 import { verifyAuth } from "@/lib/auth";
 import { EditAssetDto } from "@/app/investing/EditAsset/[id]/page";
 import { ViewAssetDto } from "@/features/components/asset/viewAsset/AssetDetails";
-import { AddTarget } from "@/app/investing/Target/addTargets/[publicId]/[assetPublicId]/page";
+import { AddTarget } from "@/app/investing/Target/addTargets/[assetPublicId]/page";
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
