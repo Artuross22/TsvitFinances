@@ -41,10 +41,8 @@ const ViewAsset = ({ params }: AssetProps) => {
     </div>
 
     <div className="overflow-x-auto w-1/2 m-4 p-4">
-
         <AssetTargets publicId={asset.publicId}/>
-
-</div>
+    </div>
     </div>
     </div>
   );

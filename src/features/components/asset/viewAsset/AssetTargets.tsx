@@ -123,8 +123,8 @@ const AssetTargets: React.FC<AssetTargetsProps> = ({publicId}) => {
         }
     };
 
-    const handleEdit = (publicId: UUID) => {
-        window.location.href = `/investing/Target/editTarget/${publicId}`;
+    const handleEdit = (publicId: UUID, nameLevel : string) => {
+        window.location.href = `/investing/Target/editTarget/${publicId}/${nameLevel}`;
     };
 
     const handleDelete = async (publicId: UUID, level: string) => {
@@ -154,7 +154,8 @@ const AssetTargets: React.FC<AssetTargetsProps> = ({publicId}) => {
     }
 
     return (
-        <div className="p-4 space-y-6 bg-gray-100">
+        
+        <div className="bg-gray-300 m-2 p-2">
             {successMessage && (
                 <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4">
                     <span className="block sm:inline">{successMessage}</span>
@@ -179,11 +180,11 @@ const AssetTargets: React.FC<AssetTargetsProps> = ({publicId}) => {
                 </div>
             )}
 
-            <div className="flex justify-between items-center">
+            <div className="flex justify-between items-center py-3">
                 <h1 className="text-2xl font-bold text-gray-800">Asset Targets</h1>
                 <Link
                     href={`/investing/Target/addTargets/${publicId}`}
-                    className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition-colors"
+                    className="bg-green-500 text-white px-3 py- rounded-md hover:bg-green-600 transition-colors"
                 >
                     Add New Target
                 </Link>
@@ -227,13 +228,13 @@ const AssetTargets: React.FC<AssetTargetsProps> = ({publicId}) => {
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap text-sm space-x-2">
                                                 <button
-                                                    onClick={() => handleEdit(level.publicId)}
+                                                    onClick={() => handleEdit(level.publicId, "PurchaseLevels") }
                                                     className="text-blue-600 hover:text-blue-800 bg-blue-50 px-3 py-1 rounded-md hover:bg-blue-100 transition-colors"
                                                 >
                                                     Edit
                                                 </button>
                                                 <button
-                                                    onClick={() => handleDelete(level.publicId, "buyLevel")}
+                                                    onClick={() => handleDelete(level.publicId, "PurchaseLevels")}
                                                     disabled={isDeleting === level.publicId}
                                                     className="text-red-600 hover:text-red-800 bg-red-50 px-3 py-1 rounded-md hover:bg-red-100 transition-colors disabled:opacity-50"
                                                 >
@@ -283,13 +284,13 @@ const AssetTargets: React.FC<AssetTargetsProps> = ({publicId}) => {
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap text-sm space-x-2">
                                                 <button
-                                                    onClick={() => handleEdit(level.publicId)}
+                                                    onClick={() => handleEdit(level.publicId, "SaleLevels")}
                                                     className="text-blue-600 hover:text-blue-800 bg-blue-50 px-3 py-1 rounded-md hover:bg-blue-100 transition-colors"
                                                 >
                                                     Edit
                                                 </button>
                                                 <button
-                                                    onClick={() => handleDelete(level.publicId, "saleLevel")}
+                                                    onClick={() => handleDelete(level.publicId, "SaleLevels")}
                                                     disabled={isDeleting === level.publicId}
                                                     className="text-red-600 hover:text-red-800 bg-red-50 px-3 py-1 rounded-md hover:bg-red-100 transition-colors disabled:opacity-50"
                                                 >
