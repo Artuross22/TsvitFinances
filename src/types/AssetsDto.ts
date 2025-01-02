@@ -17,10 +17,11 @@ export interface _Chart {
 }
 
 export interface UpdateChart {
-  id: string;
+  id: number;
   assetId: string;
   name: string;
   description: string | null;
+  positionEntryId : string;
 }
 
 export interface AddChart {

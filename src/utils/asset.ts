@@ -1,6 +1,5 @@
 "use server";
 import { Asset, InvestmentTerm, Market, Sector } from "@/types/asset";
-import { ListCharts, UpdateChart } from "@/types/assetsDto";
 import { redirect } from "next/navigation";
 import axios from "axios";
 import { cookies } from "next/headers";
@@ -9,6 +8,10 @@ import { EditAssetDto } from "@/app/investing/EditAsset/[id]/page";
 import { ViewAssetDto } from "@/features/components/asset/viewAsset/AssetDetails";
 import { AddTarget } from "@/app/investing/Target/addTargets/[assetPublicId]/page";
 import { EditTarget } from "@/app/investing/Target/editTarget/[publicId]/[name]/page";
+import { AddPositionEntryNotesProps } from "@/features/components/asset/positionEntryNotes/addPositionEntryNotes";
+import { PositionEntryModel } from "@/app/investing/Chart/ListCharts/[id]/[name]/page";
+import { ListCharts, UpdateChart } from "@/types/assetsDto";
+// import { ListCharts, UpdateChart } from "@/app/investing/Chart/ListCharts/[id]/[name]/page";
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
@@ -105,11 +108,11 @@ export const getAsset = async (id: string): Promise<ViewAssetDto> => {
   }
 };
 
-export const getCharts = async (id: string): Promise<ListCharts> => {
+export const getCharts = async (id: string): Promise<PositionEntryModel> => {
   try {
     const response = await axios.get(`${api}GetChartsByAsset/${id}`);
     const data = response.data;
-    return data as ListCharts;
+    return data as PositionEntryModel;
   } catch (error) {
     console.error("Error:", error);
     throw error;
@@ -124,6 +127,16 @@ export const deleteCharts = async (
     const response = await axios.delete(`${api}DeleteCharts/${id}/${assetId}`);
     const data = response.data;
     return data as ListCharts;
+  } catch (error) {
+    console.error("Error:", error);
+    throw error;
+  }
+};
+
+export const addNote = async (formData: AddPositionEntryNotesProps): Promise<boolean> => {
+  try {
+    const response = await axios.post<boolean>(`${api}AddCharts`, formData);
+    return response.status === 200;
   } catch (error) {
     console.error("Error:", error);
     throw error;

@@ -2,9 +2,9 @@
 
 import React, { useEffect, useState } from "react";
 import { getCharts, updateChart, deleteCharts } from "@/utils/asset";
-import { ListCharts, _Chart, UpdateChart } from "@/types/assetsDto";
 import Image from "next/image";
 import Link from "next/link";
+import { UpdateChart } from "@/types/assetsDto";
 
 interface AssetProps {
   params: {
@@ -13,8 +13,26 @@ interface AssetProps {
   };
 }
 
+export interface PositionEntryModel {
+  assetPublicId: string;
+  positionEntries?: PositionEntry[];
+}
+
+export interface PositionEntry {
+  publicId: string;
+  note?: string;
+  charts?: _Chart[];
+}
+
+export interface _Chart {
+  id: number;
+  name: string;
+  description?: string;
+  chartsPath: string;
+}
+
 const AssetForm: React.FC<AssetProps> = ({ params }) => {
-  const [asset, setFormAsset] = useState<ListCharts | null>(null);
+  const [asset, setFormAsset] = useState<PositionEntryModel | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState<string | null>(null);
@@ -42,10 +60,10 @@ const AssetForm: React.FC<AssetProps> = ({ params }) => {
   };
 
   const handleEdit = (chart: _Chart) => {
-    setEditingChart(chart.id);
+    setEditingChart(chart.id.toString());
     setEditForm({
       name: chart.name,
-      description: chart.description,
+      description: chart.description || "",
     });
     setError(null);
   };
@@ -60,7 +78,6 @@ const AssetForm: React.FC<AssetProps> = ({ params }) => {
 
     try {
       await deleteCharts(chartId, assetId);
-
       await fetchAsset();
 
       const successMessage = document.getElementById("successMessage");
@@ -74,14 +91,14 @@ const AssetForm: React.FC<AssetProps> = ({ params }) => {
     } catch (error) {
       console.error("Error deleting chart:", error);
       setError(
-        error instanceof Error ? error.message : "Failed to delete chart",
+        error instanceof Error ? error.message : "Failed to delete chart"
       );
     } finally {
       setDeleting(null);
     }
   };
 
-  const handleSave = async (chart: _Chart) => {
+  const handleSave = async (chart: _Chart, positionEntryId: string) => {
     if (!editForm || !asset) return;
 
     setSaving(true);
@@ -93,15 +110,22 @@ const AssetForm: React.FC<AssetProps> = ({ params }) => {
         assetId: params.id,
         name: editForm.name,
         description: editForm.description,
+        positionEntryId
       };
 
       await updateChart(saveChartModel);
 
-      const updatedCharts = asset.charts.map((c) =>
-        c.id === chart.id ? { ...c, ...editForm } : c,
-      );
+      const updatedAsset = {
+        ...asset,
+        positionEntries: asset.positionEntries?.map(position => ({
+          ...position,
+          charts: position.charts?.map(c =>
+            c.id === chart.id ? { ...c, ...editForm } : c
+          )
+        }))
+      };
 
-      setFormAsset({ ...asset, charts: updatedCharts });
+      setFormAsset(updatedAsset);
 
       const successMessage = document.getElementById("successMessage");
       if (successMessage) {
@@ -114,7 +138,7 @@ const AssetForm: React.FC<AssetProps> = ({ params }) => {
     } catch (error) {
       console.error("Error saving chart:", error);
       setError(
-        error instanceof Error ? error.message : "Failed to save changes",
+        error instanceof Error ? error.message : "Failed to save changes"
       );
     } finally {
       setSaving(false);
@@ -150,7 +174,6 @@ const AssetForm: React.FC<AssetProps> = ({ params }) => {
         >
           Back
         </Link>
-
         <Link
           href={`/investing/Chart/AddCharts/${params.id}/${params.name}`}
           className="absolute right-1 text-green"
@@ -176,106 +199,136 @@ const AssetForm: React.FC<AssetProps> = ({ params }) => {
           </div>
         )}
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {asset.charts.map((chart) => (
-            <div
-              key={chart.id}
-              className="border rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow"
-            >
-              <div className="p-4">
-                {editingChart === chart.id ? (
-                  <div className="space-y-4">
-                    <input
-                      type="text"
-                      value={editForm?.name || ""}
-                      onChange={(e) =>
-                        setEditForm((prev) => ({
-                          ...prev!,
-                          name: e.target.value,
-                        }))
-                      }
-                      className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      placeholder="Chart name"
-                    />
-                    <textarea
-                      value={editForm?.description || ""}
-                      onChange={(e) =>
-                        setEditForm((prev) => ({
-                          ...prev!,
-                          description: e.target.value,
-                        }))
-                      }
-                      className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      rows={3}
-                      placeholder="Chart description"
-                    />
-                    <div className="flex gap-2">
-                      <button
-                        onClick={() => handleSave(chart)}
-                        disabled={saving}
-                        className={`px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 
-                        ${saving ? "opacity-50 cursor-not-allowed" : ""}`}
+        {asset.positionEntries?.map((position) => (
+          <div key={position.publicId} className="mb-8">
+            {position.note && (
+              <div className="mb-6 overflow-x-auto">
+                <div className="flex gap-6 min-w-0 pb-4">
+                  {position.note.split('\n\n').map((noteSection, index) => (
+                    noteSection.trim() && (
+                      <div 
+                        key={index}
+                        className="border rounded-lg shadow-sm hover:shadow-md transition-shadow flex-none w-full md:w-1/2 lg:w-1/3"
                       >
-                        {saving ? "Saving..." : "Save"}
-                      </button>
-                      <button
-                        onClick={handleCancel}
-                        disabled={saving}
-                        className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                  </div>
-                ) : (
-                  <>
-                    <div className="flex justify-between items-center mb-2">
-                      <h2 className="text-lg font-semibold">{chart.name}</h2>
-                      <div className="flex gap-2">
-                        <button
-                          onClick={() => handleEdit(chart)}
-                          className="p-2 hover:bg-gray-100 rounded"
-                          title="Edit"
-                        >
-                          ✏️
-                        </button>
-                        <button
-                          onClick={() =>
-                            handleDelete(chart.id, asset.assetPublicId)
-                          }
-                          disabled={deleting === chart.id}
-                          className={`p-2 hover:bg-red-100 rounded text-red-600
-                          ${deleting === chart.id ? "opacity-50 cursor-not-allowed" : ""}`}
-                          title="Delete"
-                        >
-                          {deleting === chart.id ? "⏳" : "🗑️"}
-                        </button>
+                        <div className="p-4">
+                          <div className="flex justify-between items-center mb-2">
+                            <h2 className="text-lg font-semibold">Note {index + 1}</h2>
+                          </div>
+                          <div className="bg-gray-50 p-4 rounded-lg h-48 overflow-y-auto">
+                            <p className="text-gray-600 whitespace-pre-wrap break-words">
+                              {noteSection.trim()}
+                            </p>
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                    <p className="text-gray-600 mb-4">{chart.description}</p>
-                  </>
-                )}
-                <div className="relative h-48 w-full">
-                  <a
-                    href={chart.chartsPath}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="block"
-                  >
-                    <Image
-                      src={chart.chartsPath}
-                      alt={chart.name}
-                      fill
-                      className="object-cover rounded"
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                      priority={false}
-                    />
-                  </a>
+                    )
+                  )).filter(Boolean).slice(0, 3)}
                 </div>
               </div>
+            )}
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {position.charts?.map((chart) => (
+                <div
+                  key={chart.id}
+                  className="border rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow"
+                >
+                  <div className="p-4">
+                    {editingChart === chart.id.toString() ? (
+                      <div className="space-y-4">
+                        <input
+                          type="text"
+                          value={editForm?.name || ""}
+                          onChange={(e) =>
+                            setEditForm((prev) => ({
+                              ...prev!,
+                              name: e.target.value,
+                            }))
+                          }
+                          className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          placeholder="Chart name"
+                        />
+                        <textarea
+                          value={editForm?.description || ""}
+                          onChange={(e) =>
+                            setEditForm((prev) => ({
+                              ...prev!,
+                              description: e.target.value,
+                            }))
+                          }
+                          className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          rows={3}
+                          placeholder="Chart description"
+                        />
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() => handleSave(chart, position.publicId)}
+                            disabled={saving}
+                            className={`px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 
+                            ${saving ? "opacity-50 cursor-not-allowed" : ""}`}
+                          >
+                            {saving ? "Saving..." : "Save"}
+                          </button>
+                          <button
+                            onClick={handleCancel}
+                            disabled={saving}
+                            className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <>
+                        <div className="flex justify-between items-center mb-2">
+                          <h2 className="text-lg font-semibold">{chart.name}</h2>
+                          <div className="flex gap-2">
+                            <button
+                              onClick={() => handleEdit(chart)}
+                              className="p-2 hover:bg-gray-100 rounded"
+                              title="Edit"
+                            >
+                              ✏️
+                            </button>
+                            <button
+                              onClick={() =>
+                                handleDelete(chart.id.toString(), asset.assetPublicId)
+                              }
+                              disabled={deleting === chart.id.toString()}
+                              className={`p-2 hover:bg-red-100 rounded text-red-600
+                              ${deleting === chart.id.toString() ? "opacity-50 cursor-not-allowed" : ""}`}
+                              title="Delete"
+                            >
+                              {deleting === chart.id.toString() ? "⏳" : "🗑️"}
+                            </button>
+                          </div>
+                        </div>
+                        <p className="text-gray-600 mb-4">{chart.description}</p>
+                        <div className="relative h-48 w-full">
+                          <a
+                            href={chart.chartsPath}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="block"
+                          >
+                            <Image
+                              src={chart.chartsPath}
+                              alt={chart.name}
+                              fill
+                              className="object-cover rounded"
+                              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                              priority={false}
+                            />
+                          </a>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
+          </div>
+        ))}
       </div>
     </div>
   );
