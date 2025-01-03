@@ -3,14 +3,27 @@
 import { addChart } from "@/utils/asset";
 import React, { useCallback, useRef, useState } from "react";
 import Link from "next/link";
-import { _addChart } from "@/types/assetsDto";
 
 interface AssetProps {
   params: { id: string; name: string };
 }
 
+export interface PositionEntry {
+  publicId: string;
+  note: string;
+  charts?: _Chart[];
+}
+
+export interface _Chart {
+  id: number;
+  name: string;
+  description?: string;
+  chartsPath: string;
+}
+
 const AddPositionEntryChart: React.FC<AssetProps> = ({ params }) => {
-  const [charts, setCharts] = useState<_addChart[]>([]);
+  const [note, setNote] = useState<string>("");
+  const [charts, setCharts] = useState<Omit<_Chart, 'id' | 'chartsPath'>[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [notification, setNotification] = useState({
     show: false,
@@ -55,18 +68,20 @@ const AddPositionEntryChart: React.FC<AssetProps> = ({ params }) => {
       try {
         const formData = new FormData();
         formData.append("assetId", params.id);
+        formData.append("note", note);
         charts.forEach((chart, index) => {
           formData.append(`charts[${index}].name`, chart.name);
           formData.append(
             `charts[${index}].description`,
             chart.description || "",
           );
-          formData.append(`charts[${index}].file`, chart.file);
+          formData.append(`charts[${index}].file`, (chart as any).file);
         });
 
         await addChart(formData);
         showNotification("Charts uploaded successfully", "success");
         setCharts([]);
+        setNote("");
       } catch (error) {
         console.error("Error uploading charts:", error);
         showNotification("Failed to upload charts. Please try again.", "error");
@@ -74,7 +89,7 @@ const AddPositionEntryChart: React.FC<AssetProps> = ({ params }) => {
         setIsSubmitting(false);
       }
     },
-    [charts, params.id, showNotification],
+    [charts, note, params.id, showNotification],
   );
 
   const removeFile = useCallback((index: number) => {
@@ -123,6 +138,18 @@ const AddPositionEntryChart: React.FC<AssetProps> = ({ params }) => {
         >
           <div className="mb-6">
             <label className="block text-gray-700 font-medium mb-2">
+              Note
+            </label>
+            <textarea
+              value={note}
+              onChange={(e) => setNote(e.target.value)}
+              placeholder="Enter your note here..."
+              className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-[100px]"
+            />
+          </div>
+
+          <div className="mb-6">
+            <label className="block text-gray-700 font-medium mb-2">
               Upload Charts
             </label>
             <input
@@ -141,7 +168,7 @@ const AddPositionEntryChart: React.FC<AssetProps> = ({ params }) => {
                   className="relative border rounded-lg p-2 bg-gray-50"
                 >
                   <img
-                    src={URL.createObjectURL(chart.file)}
+                    src={URL.createObjectURL((chart as any).file)}
                     alt={`Preview ${index + 1}`}
                     className="w-full h-40 object-cover rounded-md mb-2"
                   />

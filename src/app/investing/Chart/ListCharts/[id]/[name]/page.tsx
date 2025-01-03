@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { getCharts, updateChart, deleteCharts } from "@/utils/asset";
 import Image from "next/image";
 import Link from "next/link";
-import { UpdateChart } from "@/types/assetsDto";
+
 
 interface AssetProps {
   params: {
@@ -37,10 +37,12 @@ const AssetForm: React.FC<AssetProps> = ({ params }) => {
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState<string | null>(null);
   const [editingChart, setEditingChart] = useState<string | null>(null);
+  const [editingNote, setEditingNote] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [editForm, setEditForm] = useState<{
-    name: string;
-    description: string;
+    name?: string;
+    description?: string;
+    note?: string;
   } | null>(null);
 
   useEffect(() => {
@@ -59,6 +61,93 @@ const AssetForm: React.FC<AssetProps> = ({ params }) => {
     }
   };
 
+  const showSuccessMessage = (message: string) => {
+    const successMessage = document.getElementById("successMessage");
+    if (successMessage) {
+      successMessage.textContent = message;
+      successMessage.classList.remove("hidden");
+      setTimeout(() => {
+        successMessage.classList.add("hidden");
+      }, 3000);
+    }
+  };
+
+  // Note handlers
+  const handleEditNote = (note: string, positionId: string) => {
+    setEditingNote(positionId);
+    setEditForm({
+      note: note
+    });
+    setError(null);
+  };
+
+  const handleSaveNote = async (positionId: string) => {
+    if (!editForm?.note || !asset) return;
+
+    setSaving(true);
+    setError(null);
+
+    try {
+      // const saveNoteModel: UpdateNote = {
+      //   assetId: params.id,
+      //   positionEntryId: positionId,
+      //   note: editForm.note
+      // };
+
+      // await updateNote(saveNoteModel);
+
+      const updatedAsset = {
+        ...asset,
+        positionEntries: asset.positionEntries?.map(position => 
+          position.publicId === positionId
+            ? { ...position, note: editForm.note }
+            : position
+        )
+      };
+
+      setFormAsset(updatedAsset);
+      showSuccessMessage("Note updated successfully!");
+    } catch (error) {
+      console.error("Error saving note:", error);
+      setError(error instanceof Error ? error.message : "Failed to save note");
+    } finally {
+      setSaving(false);
+      setEditingNote(null);
+      setEditForm(null);
+    }
+  };
+
+  const handleDeleteNote = async (positionId: string) => {
+    if (!confirm("Are you sure you want to delete this note?")) {
+      return;
+    }
+
+    setDeleting(positionId);
+    setError(null);
+
+    try {
+      // await deleteNote(params.id, positionId);
+      
+      const updatedAsset = {
+        ...asset!,
+        positionEntries: asset!.positionEntries?.map(position => 
+          position.publicId === positionId
+            ? { ...position, note: undefined }
+            : position
+        )
+      };
+
+      setFormAsset(updatedAsset);
+      showSuccessMessage("Note deleted successfully!");
+    } catch (error) {
+      console.error("Error deleting note:", error);
+      setError(error instanceof Error ? error.message : "Failed to delete note");
+    } finally {
+      setDeleting(null);
+    }
+  };
+
+  // Chart handlers
   const handleEdit = (chart: _Chart) => {
     setEditingChart(chart.id.toString());
     setEditForm({
@@ -66,6 +155,45 @@ const AssetForm: React.FC<AssetProps> = ({ params }) => {
       description: chart.description || "",
     });
     setError(null);
+  };
+
+  const handleSave = async (chart: _Chart, positionEntryId: string) => {
+    if (!editForm || !asset) return;
+
+    setSaving(true);
+    setError(null);
+
+    try {
+      // const saveChartModel: UpdateChart = {
+      //   id: chart.id,
+      //   assetId: params.id,
+      //   name: editForm.name!,
+      //   description: editForm.description,
+      //   positionEntryId
+      // };
+
+      // await updateChart(saveChartModel);
+
+      const updatedAsset = {
+        ...asset,
+        positionEntries: asset.positionEntries?.map(position => ({
+          ...position,
+          charts: position.charts?.map(c =>
+            c.id === chart.id ? { ...c, ...editForm } : c
+          )
+        }))
+      };
+
+      setFormAsset(updatedAsset);
+      showSuccessMessage("Chart updated successfully!");
+    } catch (error) {
+      console.error("Error saving chart:", error);
+      setError(error instanceof Error ? error.message : "Failed to save changes");
+    } finally {
+      setSaving(false);
+      setEditingChart(null);
+      setEditForm(null);
+    }
   };
 
   const handleDelete = async (chartId: string, assetId: string) => {
@@ -79,76 +207,18 @@ const AssetForm: React.FC<AssetProps> = ({ params }) => {
     try {
       await deleteCharts(chartId, assetId);
       await fetchAsset();
-
-      const successMessage = document.getElementById("successMessage");
-      if (successMessage) {
-        successMessage.textContent = "Chart deleted successfully";
-        successMessage.classList.remove("hidden");
-        setTimeout(() => {
-          successMessage.classList.add("hidden");
-        }, 3000);
-      }
+      showSuccessMessage("Chart deleted successfully!");
     } catch (error) {
       console.error("Error deleting chart:", error);
-      setError(
-        error instanceof Error ? error.message : "Failed to delete chart"
-      );
+      setError(error instanceof Error ? error.message : "Failed to delete chart");
     } finally {
       setDeleting(null);
     }
   };
 
-  const handleSave = async (chart: _Chart, positionEntryId: string) => {
-    if (!editForm || !asset) return;
-
-    setSaving(true);
-    setError(null);
-
-    try {
-      const saveChartModel: UpdateChart = {
-        id: chart.id,
-        assetId: params.id,
-        name: editForm.name,
-        description: editForm.description,
-        positionEntryId
-      };
-
-      await updateChart(saveChartModel);
-
-      const updatedAsset = {
-        ...asset,
-        positionEntries: asset.positionEntries?.map(position => ({
-          ...position,
-          charts: position.charts?.map(c =>
-            c.id === chart.id ? { ...c, ...editForm } : c
-          )
-        }))
-      };
-
-      setFormAsset(updatedAsset);
-
-      const successMessage = document.getElementById("successMessage");
-      if (successMessage) {
-        successMessage.textContent = "Changes saved successfully!";
-        successMessage.classList.remove("hidden");
-        setTimeout(() => {
-          successMessage.classList.add("hidden");
-        }, 3000);
-      }
-    } catch (error) {
-      console.error("Error saving chart:", error);
-      setError(
-        error instanceof Error ? error.message : "Failed to save changes"
-      );
-    } finally {
-      setSaving(false);
-      setEditingChart(null);
-      setEditForm(null);
-    }
-  };
-
   const handleCancel = () => {
     setEditingChart(null);
+    setEditingNote(null);
     setEditForm(null);
     setError(null);
   };
@@ -167,31 +237,27 @@ const AssetForm: React.FC<AssetProps> = ({ params }) => {
 
   return (
     <div>
-      <div className="flex bg-gray-200 justify-center mt-2">
+      <div className="flex bg-gray-200 justify-center mt-2 p-4 relative">
         <Link
           href={`/investing/ViewAsset/${params.id}`}
-          className="absolute left-1 text-green"
+          className="absolute left-4 text-green-600 hover:text-green-700"
         >
           Back
         </Link>
+        <h2 className="font-bold text-xl">{params.name}</h2>
         <Link
           href={`/investing/Chart/AddCharts/${params.id}/${params.name}`}
-          className="absolute right-1 text-green"
+          className="absolute right-4 text-green-600 hover:text-green-700"
         >
           Add
         </Link>
-        <h2>
-          <strong>{params.name}</strong>
-        </h2>
       </div>
 
       <div className="container mx-auto p-4">
         <div
           id="successMessage"
           className="hidden fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded shadow-lg z-50"
-        >
-          Changes saved successfully!
-        </div>
+        />
 
         {error && (
           <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
@@ -201,37 +267,84 @@ const AssetForm: React.FC<AssetProps> = ({ params }) => {
 
         {asset.positionEntries?.map((position) => (
           <div key={position.publicId} className="mb-8">
-            {position.note && (
-              <div className="mb-6 overflow-x-auto">
-                <div className="flex gap-6 min-w-0 pb-4">
-                  {position.note.split('\n\n').map((noteSection, index) => (
-                    noteSection.trim() && (
-                      <div 
-                        key={index}
-                        className="border rounded-lg shadow-sm hover:shadow-md transition-shadow flex-none w-full md:w-1/2 lg:w-1/3"
-                      >
-                        <div className="p-4">
-                          <div className="flex justify-between items-center mb-2">
-                            <h2 className="text-lg font-semibold">Note {index + 1}</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {/* Note Card */}
+              {position.note && (
+                <div className="border rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow bg-white">
+                  <div className="p-4">
+                    {editingNote === position.publicId ? (
+                      <div className="space-y-4">
+                        <textarea
+                          value={editForm?.note || ""}
+                          onChange={(e) =>
+                            setEditForm((prev) => ({
+                              ...prev!,
+                              note: e.target.value,
+                            }))
+                          }
+                          className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          rows={3}
+                          placeholder="Note content"
+                        />
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() => handleSaveNote(position.publicId)}
+                            disabled={saving}
+                            className={`px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 
+                            ${saving ? "opacity-50 cursor-not-allowed" : ""}`}
+                          >
+                            {saving ? "Saving..." : "Save"}
+                          </button>
+                          <button
+                            onClick={handleCancel}
+                            disabled={saving}
+                            className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <>
+                        <div className="flex justify-between items-center mb-2">
+                          <h2 className="text-lg font-semibold">Notes</h2>
+                          <div className="flex gap-2">
+                            <button
+                              onClick={() => handleEditNote(position.note!, position.publicId)}
+                              className="p-2 hover:bg-gray-100 rounded"
+                              title="Edit"
+                            >
+                              ✏️
+                            </button>
+                            <button
+                              onClick={() => handleDeleteNote(position.publicId)}
+                              disabled={deleting === position.publicId}
+                              className={`p-2 hover:bg-red-100 rounded text-red-600
+                              ${deleting === position.publicId ? "opacity-50 cursor-not-allowed" : ""}`}
+                              title="Delete"
+                            >
+                              {deleting === position.publicId ? "⏳" : "🗑️"}
+                            </button>
                           </div>
-                          <div className="bg-gray-50 p-4 rounded-lg h-48 overflow-y-auto">
+                        </div>
+                        <div className="relative h-48 w-full bg-gray-50 rounded overflow-y-auto">
+                          <div className="p-4">
                             <p className="text-gray-600 whitespace-pre-wrap break-words">
-                              {noteSection.trim()}
+                              {position.note}
                             </p>
                           </div>
                         </div>
-                      </div>
-                    )
-                  )).filter(Boolean).slice(0, 3)}
+                      </>
+                    )}
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {/* Charts */}
               {position.charts?.map((chart) => (
                 <div
                   key={chart.id}
-                  className="border rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow"
+                  className="border rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow bg-white"
                 >
                   <div className="p-4">
                     {editingChart === chart.id.toString() ? (
@@ -332,6 +445,5 @@ const AssetForm: React.FC<AssetProps> = ({ params }) => {
       </div>
     </div>
   );
-};
-
+}
 export default AssetForm;
