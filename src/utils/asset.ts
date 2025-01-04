@@ -1,4 +1,5 @@
 "use server";
+
 import { Asset, InvestmentTerm, Market, Sector } from "@/types/asset";
 import { redirect } from "next/navigation";
 import axios from "axios";
@@ -143,7 +144,7 @@ export const updateNote = async (updateNote: UpdateNote): Promise<boolean> => {
 
 export const addChartToNote = async (formData: FormData): Promise<boolean> => {
   try {
-    const response = await axios.post<boolean>(`${api}AddCharts`, formData);
+    const response = await axios.post<boolean>(`${api}AddChartToPositionEntry`, formData);
     return response.status === 200;
   } catch (error) {
     console.error("Error:", error);

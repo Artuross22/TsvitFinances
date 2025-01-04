@@ -1,4 +1,5 @@
 "use client";
+
 import { addChartToNote } from "@/utils/asset";
 import React, { useCallback, useRef, useState } from "react";
 import { _addChart } from "@/types/assetsDto";
@@ -45,7 +46,7 @@ const AddChartToPositionEntry: React.FC<AssetProps> = ({ params }) => {
       setIsSubmitting(true);
       try {
         const formData = new FormData();
-        formData.append("assetId", params.publicId);
+        formData.append("publicId", params.publicId);
         charts.forEach((chart, index) => {
           formData.append(`charts[${index}].name`, chart.name);
           formData.append(

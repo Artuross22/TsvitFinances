@@ -354,6 +354,13 @@ const ListPositionEntry: React.FC<AssetProps> = ({ params }) => {
                         </button>
                       </div>
                     </div>
+                    <div className="relative h-48 w-full bg-gray-50 rounded overflow-y-auto">
+                          <div className="p-4">
+                            <p className="text-gray-600 whitespace-pre-wrap break-words">
+                              {position.note}
+                            </p>
+                          </div>
+                        </div>
                       </>
                     )}
                   </div>
