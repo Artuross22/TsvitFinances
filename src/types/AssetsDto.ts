@@ -16,14 +16,6 @@ export interface _Chart {
   chartsPath: string;
 }
 
-export interface UpdateChart {
-  id: number;
-  assetId: string;
-  name: string;
-  description: string | null;
-  positionEntryId : string;
-}
-
 export interface AddChart {
   assetId: string;
   charts: _addChart[];

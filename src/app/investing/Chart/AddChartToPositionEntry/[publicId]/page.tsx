@@ -1,29 +1,13 @@
 "use client";
-
-import { addChart } from "@/utils/asset";
+import { addChartToNote } from "@/utils/asset";
 import React, { useCallback, useRef, useState } from "react";
+import { _addChart } from "@/types/assetsDto";
 import BackLink from "@/features/components/useful/BackLink";
-
 interface AssetProps {
-  params: { id: string; name: string };
+  params: { publicId: string};
 }
-
-export interface PositionEntry {
-  publicId: string;
-  note: string;
-  charts?: _Chart[];
-}
-
-export interface _Chart {
-  id: number;
-  name: string;
-  description?: string;
-  chartsPath: string;
-}
-
-const AddPositionEntryChart: React.FC<AssetProps> = ({ params }) => {
-  const [note, setNote] = useState<string>("");
-  const [charts, setCharts] = useState<Omit<_Chart, 'id' | 'chartsPath'>[]>([]);
+const AddChartToPositionEntry: React.FC<AssetProps> = ({ params }) => {
+  const [charts, setCharts] = useState<_addChart[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [notification, setNotification] = useState({
     show: false,
@@ -31,24 +15,20 @@ const AddPositionEntryChart: React.FC<AssetProps> = ({ params }) => {
     type: "success" as "success" | "error",
   });
   const fileInputRef = useRef<HTMLInputElement>(null);
-
   const handleFileChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       const files = Array.from(event.target.files || []);
       if (!files.length) return;
-
       const newCharts = files.map((file) => ({
         name: file.name,
         description: "",
         file,
       }));
       setCharts((prevCharts) => [...prevCharts, ...newCharts]);
-
       if (fileInputRef.current) fileInputRef.current.value = "";
     },
     [],
   );
-
   const showNotification = useCallback(
     (message: string, type: "success" | "error") => {
       setNotification({ show: true, message, type });
@@ -59,29 +39,24 @@ const AddPositionEntryChart: React.FC<AssetProps> = ({ params }) => {
     },
     [],
   );
-
   const handleSubmit = useCallback(
     async (event: React.FormEvent) => {
       event.preventDefault();
       setIsSubmitting(true);
-
       try {
         const formData = new FormData();
-        formData.append("assetId", params.id);
-        formData.append("note", note);
+        formData.append("assetId", params.publicId);
         charts.forEach((chart, index) => {
           formData.append(`charts[${index}].name`, chart.name);
           formData.append(
             `charts[${index}].description`,
             chart.description || "",
           );
-          formData.append(`charts[${index}].file`, (chart as any).file);
+          formData.append(`charts[${index}].file`, chart.file);
         });
-
-        await addChart(formData);
+        await addChartToNote(formData);
         showNotification("Charts uploaded successfully", "success");
         setCharts([]);
-        setNote("");
       } catch (error) {
         console.error("Error uploading charts:", error);
         showNotification("Failed to upload charts. Please try again.", "error");
@@ -89,13 +64,11 @@ const AddPositionEntryChart: React.FC<AssetProps> = ({ params }) => {
         setIsSubmitting(false);
       }
     },
-    [charts, note, params.id, showNotification],
+    [charts, params.publicId, showNotification],
   );
-
   const removeFile = useCallback((index: number) => {
     setCharts((prevCharts) => prevCharts.filter((_, i) => i !== index));
   }, []);
-
   const updateDescription = useCallback(
     (index: number, description: string) => {
       setCharts((prevCharts) => {
@@ -106,18 +79,11 @@ const AddPositionEntryChart: React.FC<AssetProps> = ({ params }) => {
     },
     [],
   );
-
   return (
     <div>
       <div className="flex bg-gray-200 justify-center mt-2 px-2">
-      <div className="absolute left-4 text-green-600 hover:text-green-700">
-        <BackLink/>
+      <BackLink/>
       </div>
-        <h2 className="text-center flex-grow">
-          <strong>{params.name}</strong>
-        </h2>
-      </div>
-
       <div className="container mx-auto px-4 py-8">
         {notification.show && (
           <div
@@ -128,23 +94,10 @@ const AddPositionEntryChart: React.FC<AssetProps> = ({ params }) => {
             {notification.message}
           </div>
         )}
-
         <form
           onSubmit={handleSubmit}
           className="max-w-2xl mx-auto bg-white rounded-lg shadow-md p-6"
         >
-          <div className="mb-6">
-            <label className="block text-gray-700 font-medium mb-2">
-              Note
-            </label>
-            <textarea
-              value={note}
-              onChange={(e) => setNote(e.target.value)}
-              placeholder="Enter your note here..."
-              className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-[100px]"
-            />
-          </div>
-
           <div className="mb-6">
             <label className="block text-gray-700 font-medium mb-2">
               Upload Charts
@@ -157,7 +110,6 @@ const AddPositionEntryChart: React.FC<AssetProps> = ({ params }) => {
               accept="image/*"
               className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
-
             <div className="grid grid-cols-2 gap-4 mt-6">
               {charts.map((chart, index) => (
                 <div
@@ -165,7 +117,7 @@ const AddPositionEntryChart: React.FC<AssetProps> = ({ params }) => {
                   className="relative border rounded-lg p-2 bg-gray-50"
                 >
                   <img
-                    src={URL.createObjectURL((chart as any).file)}
+                    src={URL.createObjectURL(chart.file)}
                     alt={`Preview ${index + 1}`}
                     className="w-full h-40 object-cover rounded-md mb-2"
                   />
@@ -187,7 +139,6 @@ const AddPositionEntryChart: React.FC<AssetProps> = ({ params }) => {
               ))}
             </div>
           </div>
-
           <button
             type="submit"
             disabled={!charts.length || isSubmitting}
@@ -204,5 +155,4 @@ const AddPositionEntryChart: React.FC<AssetProps> = ({ params }) => {
     </div>
   );
 };
-
-export default AddPositionEntryChart;
+export default AddChartToPositionEntry;

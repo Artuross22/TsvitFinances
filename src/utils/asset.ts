@@ -8,10 +8,8 @@ import { EditAssetDto } from "@/app/investing/EditAsset/[id]/page";
 import { ViewAssetDto } from "@/features/components/asset/viewAsset/AssetDetails";
 import { AddTarget } from "@/app/investing/Target/addTargets/[assetPublicId]/page";
 import { EditTarget } from "@/app/investing/Target/editTarget/[publicId]/[name]/page";
-import { AddPositionEntryNotesProps } from "@/features/components/asset/positionEntryNotes/addPositionEntryNotes";
-import { PositionEntryModel } from "@/app/investing/Chart/ListCharts/[id]/[name]/page";
-import { ListCharts, UpdateChart } from "@/types/assetsDto";
-// import { ListCharts, UpdateChart } from "@/app/investing/Chart/ListCharts/[id]/[name]/page";
+import { PositionEntryModel, UpdateChart, UpdateNote } from "@/app/investing/Chart/ListCharts/[id]/[name]/page";
+import { ListCharts } from "@/types/assetsDto";
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
@@ -133,7 +131,17 @@ export const deleteCharts = async (
   }
 };
 
-export const addNote = async (formData: AddPositionEntryNotesProps): Promise<boolean> => {
+export const updateNote = async (updateNote: UpdateNote): Promise<boolean> => {
+  try {
+    const response = await axios.put<boolean>(`${api}UpdateNotes`, updateNote);
+    return response.status === 200;
+  } catch (error) {
+    console.error("Error:", error);
+    throw error;
+  }
+};
+
+export const addChartToNote = async (formData: FormData): Promise<boolean> => {
   try {
     const response = await axios.post<boolean>(`${api}AddCharts`, formData);
     return response.status === 200;

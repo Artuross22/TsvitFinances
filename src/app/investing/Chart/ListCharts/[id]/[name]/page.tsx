@@ -1,9 +1,10 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { getCharts, updateChart, deleteCharts } from "@/utils/asset";
+import { getCharts, updateChart, deleteCharts, updateNote } from "@/utils/asset";
 import Image from "next/image";
 import Link from "next/link";
+import BackLink from "@/features/components/useful/BackLink";
 
 
 interface AssetProps {
@@ -13,6 +14,19 @@ interface AssetProps {
   };
 }
 
+export interface UpdateChart {
+  id: number;
+  assetId: string;
+  name: string;
+  description: string;
+  positionEntryId : string;
+}
+
+export interface UpdateNote { 
+  id: string;
+  note: string;
+}
+  
 export interface PositionEntryModel {
   assetPublicId: string;
   positionEntries?: PositionEntry[];
@@ -31,7 +45,7 @@ export interface _Chart {
   chartsPath: string;
 }
 
-const AssetForm: React.FC<AssetProps> = ({ params }) => {
+const ListPositionEntry: React.FC<AssetProps> = ({ params }) => {
   const [asset, setFormAsset] = useState<PositionEntryModel | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -72,7 +86,6 @@ const AssetForm: React.FC<AssetProps> = ({ params }) => {
     }
   };
 
-  // Note handlers
   const handleEditNote = (note: string, positionId: string) => {
     setEditingNote(positionId);
     setEditForm({
@@ -88,13 +101,12 @@ const AssetForm: React.FC<AssetProps> = ({ params }) => {
     setError(null);
 
     try {
-      // const saveNoteModel: UpdateNote = {
-      //   assetId: params.id,
-      //   positionEntryId: positionId,
-      //   note: editForm.note
-      // };
+      const saveNoteModel: UpdateNote = {
+        id: positionId,
+        note: editForm.note
+      };
 
-      // await updateNote(saveNoteModel);
+      await updateNote(saveNoteModel);
 
       const updatedAsset = {
         ...asset,
@@ -164,15 +176,15 @@ const AssetForm: React.FC<AssetProps> = ({ params }) => {
     setError(null);
 
     try {
-      // const saveChartModel: UpdateChart = {
-      //   id: chart.id,
-      //   assetId: params.id,
-      //   name: editForm.name!,
-      //   description: editForm.description,
-      //   positionEntryId
-      // };
+      const saveChartModel: UpdateChart = {
+        id: chart.id,
+        assetId: params.id,
+        name: editForm.name!,
+        description: editForm.description || "",
+        positionEntryId
+      };
 
-      // await updateChart(saveChartModel);
+      await updateChart(saveChartModel);
 
       const updatedAsset = {
         ...asset,
@@ -237,14 +249,13 @@ const AssetForm: React.FC<AssetProps> = ({ params }) => {
 
   return (
     <div>
-      <div className="flex bg-gray-200 justify-center mt-2 p-4 relative">
-        <Link
-          href={`/investing/ViewAsset/${params.id}`}
-          className="absolute left-4 text-green-600 hover:text-green-700"
-        >
-          Back
-        </Link>
-        <h2 className="font-bold text-xl">{params.name}</h2>
+      <div className="flex bg-gray-200 justify-center mt-2 px-2">
+        
+      <div className="absolute left-4 text-green-600 hover:text-green-700">
+      <BackLink/>
+      </div>
+
+        <h2 className="font-bold">{params.name}</h2>
         <Link
           href={`/investing/Chart/AddCharts/${params.id}/${params.name}`}
           className="absolute right-4 text-green-600 hover:text-green-700"
@@ -306,34 +317,43 @@ const AssetForm: React.FC<AssetProps> = ({ params }) => {
                       </div>
                     ) : (
                       <>
-                        <div className="flex justify-between items-center mb-2">
-                          <h2 className="text-lg font-semibold">Notes</h2>
-                          <div className="flex gap-2">
-                            <button
-                              onClick={() => handleEditNote(position.note!, position.publicId)}
-                              className="p-2 hover:bg-gray-100 rounded"
-                              title="Edit"
-                            >
-                              ✏️
-                            </button>
-                            <button
-                              onClick={() => handleDeleteNote(position.publicId)}
-                              disabled={deleting === position.publicId}
-                              className={`p-2 hover:bg-red-100 rounded text-red-600
-                              ${deleting === position.publicId ? "opacity-50 cursor-not-allowed" : ""}`}
-                              title="Delete"
-                            >
-                              {deleting === position.publicId ? "⏳" : "🗑️"}
-                            </button>
-                          </div>
-                        </div>
-                        <div className="relative h-48 w-full bg-gray-50 rounded overflow-y-auto">
-                          <div className="p-4">
-                            <p className="text-gray-600 whitespace-pre-wrap break-words">
-                              {position.note}
-                            </p>
-                          </div>
-                        </div>
+                      <div className="flex justify-between items-center mb-2">
+                      <h2 className="text-lg font-semibold">Notes</h2>
+                      <div className="flex gap-2">
+                        
+                        <button
+                          onClick={() => handleEditNote(position.note!, position.publicId)}
+                          className="p-2 hover:bg-gray-100 rounded transition duration-150"
+                          title="Edit"
+                          aria-label="Edit Note"
+                        >
+                          ✏️
+                        </button>
+
+                        <Link
+                          href={`/investing/Chart/AddChartToPositionEntry/${position.publicId}`}
+                          className="px-1 py-2"
+                          aria-label="Add Charts"
+                          role="button"
+                        >
+                         ➕
+                        </Link>
+
+                        <button
+                          onClick={() => handleDeleteNote(position.publicId)}
+                          disabled={deleting === position.publicId}
+                          className={`p-2 rounded text-red-600 transition duration-150 ${
+                            deleting === position.publicId
+                              ? "opacity-50 cursor-not-allowed hover:bg-transparent"
+                              : "hover:bg-red-100"
+                          }`}
+                          title="Delete"
+                          aria-label="Delete Note"
+                        >
+                          {deleting === position.publicId ? "⏳" : "🗑️"}
+                        </button>
+                      </div>
+                    </div>
                       </>
                     )}
                   </div>
@@ -446,4 +466,4 @@ const AssetForm: React.FC<AssetProps> = ({ params }) => {
     </div>
   );
 }
-export default AssetForm;
+export default ListPositionEntry;
