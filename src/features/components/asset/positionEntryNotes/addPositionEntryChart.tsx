@@ -23,7 +23,7 @@ export interface _Chart {
 
 const AddPositionEntryChart: React.FC<AssetProps> = ({ params }) => {
   const [note, setNote] = useState<string>("");
-  const [charts, setCharts] = useState<Omit<_Chart, 'id' | 'chartsPath'>[]>([]);
+  const [charts, setCharts] = useState<Omit<_Chart, "id" | "chartsPath">[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [notification, setNotification] = useState({
     show: false,
@@ -137,9 +137,7 @@ const AddPositionEntryChart: React.FC<AssetProps> = ({ params }) => {
           className="max-w-2xl mx-auto bg-white rounded-lg shadow-md p-6"
         >
           <div className="mb-6">
-            <label className="block text-gray-700 font-medium mb-2">
-              Note
-            </label>
+            <label className="block text-gray-700 font-medium mb-2">Note</label>
             <textarea
               value={note}
               onChange={(e) => setNote(e.target.value)}

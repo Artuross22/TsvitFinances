@@ -5,7 +5,7 @@ import React, { useCallback, useRef, useState } from "react";
 import { _addChart } from "@/types/assetsDto";
 import BackLink from "@/features/components/useful/BackLink";
 interface AssetProps {
-  params: { publicId: string};
+  params: { publicId: string };
 }
 const AddChartToPositionEntry: React.FC<AssetProps> = ({ params }) => {
   const [charts, setCharts] = useState<_addChart[]>([]);
@@ -83,7 +83,7 @@ const AddChartToPositionEntry: React.FC<AssetProps> = ({ params }) => {
   return (
     <div>
       <div className="flex bg-gray-200 justify-center mt-2 px-2">
-      <BackLink/>
+        <BackLink />
       </div>
       <div className="container mx-auto px-4 py-8">
         {notification.show && (

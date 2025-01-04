@@ -1,7 +1,5 @@
 // "use client";
 
-
-
 // export interface AddPositionEntryNotesProps {
 //     assetId: string;
 //     note: string;
@@ -18,7 +16,7 @@
 
 //     const handleSubmit = async (e: React.FormEvent) => {
 //         e.preventDefault();
-        
+
 //         if (!note.trim()) {
 //             setMessage({ type: "error", text: "Please enter a note" });
 //             return;
@@ -30,15 +28,15 @@
 //                 assetId: params.id,
 //                 note: note.trim()
 //             };
-            
+
 //             await addNote(noteData);
 
 //             setMessage({ type: "success", text: "Note added successfully" });
 //             setNote("");
 //         } catch (error) {
-//             setMessage({ 
-//                 type: "error", 
-//                 text: "Failed to add note. Please try again." 
+//             setMessage({
+//                 type: "error",
+//                 text: "Failed to add note. Please try again."
 //             });
 //         } finally {
 //             setIsSubmitting(false);
@@ -72,8 +70,8 @@
 
 //                 {message.text && (
 //                     <div className={`mb-4 p-3 rounded ${
-//                         message.type === 'error' 
-//                             ? 'bg-red-100 text-red-700' 
+//                         message.type === 'error'
+//                             ? 'bg-red-100 text-red-700'
 //                             : 'bg-green-100 text-green-700'
 //                     }`}>
 //                         {message.text}

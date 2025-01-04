@@ -1,27 +1,26 @@
-
 "use client";
 import { ViewChart } from "@/types/assetsDto";
 import Link from "next/link";
 
 export type ViewAssetDto = {
-    userPublicId: string;
-    strategyPublicId: string | null;
-    strategyName: string | null;
-    publicId: string;
-    sector: string;
-    term: string;
-    market: string;
-    name: string;
-    ticker: string;
-    currentPrice: number;
-    quantity: number;
-    boughtFor: number;
-    percentageProfit: number;
-    profit: number;
-    addedAt: Date;
-    interestOnCurrentDeposit: number;
-    charts: ViewChart[];
-  };
+  userPublicId: string;
+  strategyPublicId: string | null;
+  strategyName: string | null;
+  publicId: string;
+  sector: string;
+  term: string;
+  market: string;
+  name: string;
+  ticker: string;
+  currentPrice: number;
+  quantity: number;
+  boughtFor: number;
+  percentageProfit: number;
+  profit: number;
+  addedAt: Date;
+  interestOnCurrentDeposit: number;
+  charts: ViewChart[];
+};
 
 interface AssetDetailsProps {
   asset: ViewAssetDto;

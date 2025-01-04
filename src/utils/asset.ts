@@ -9,7 +9,11 @@ import { EditAssetDto } from "@/app/investing/EditAsset/[id]/page";
 import { ViewAssetDto } from "@/features/components/asset/viewAsset/AssetDetails";
 import { AddTarget } from "@/app/investing/Target/addTargets/[assetPublicId]/page";
 import { EditTarget } from "@/app/investing/Target/editTarget/[publicId]/[name]/page";
-import { PositionEntryModel, UpdateChart, UpdateNote } from "@/app/investing/Chart/ListCharts/[id]/[name]/page";
+import {
+  PositionEntryModel,
+  UpdateChart,
+  UpdateNote,
+} from "@/app/investing/Chart/ListCharts/[id]/[name]/page";
 import { ListCharts } from "@/types/assetsDto";
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
@@ -29,20 +33,23 @@ export interface AssetOptions {
   investmentTerms: InvestmentTerm[];
 }
 
-export const editTargetGet = async (publicId: string, levelName : string): Promise<EditTarget> => {
+export const editTargetGet = async (
+  publicId: string,
+  levelName: string,
+): Promise<EditTarget> => {
   const res = await axios.get(`${api}EditTarget/${publicId}/${levelName}`);
   return res.data;
-}
+};
 
 export const editTargetPost = async (model: EditTarget): Promise<boolean> => {
   const res = await axios.post(`${api}EditTarget`, model);
   return res.status === 200;
-}
+};
 
 export const addTargets = async (model: AddTarget): Promise<boolean> => {
   const res = await axios.post(`${api}AddTargets`, model);
   return res.status === 200;
-}
+};
 
 export const createAssetGet = async (): Promise<AssetOptions> => {
   try {
@@ -144,7 +151,10 @@ export const updateNote = async (updateNote: UpdateNote): Promise<boolean> => {
 
 export const addChartToNote = async (formData: FormData): Promise<boolean> => {
   try {
-    const response = await axios.post<boolean>(`${api}AddChartToPositionEntry`, formData);
+    const response = await axios.post<boolean>(
+      `${api}AddChartToPositionEntry`,
+      formData,
+    );
     return response.status === 200;
   } catch (error) {
     console.error("Error:", error);

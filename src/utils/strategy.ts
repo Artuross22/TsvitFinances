@@ -89,15 +89,18 @@ export const listTargets = async (publicId: string): Promise<TargetLevels> => {
   const response = await axios.get(`${api}ListTargets/${publicId}`);
   const data = response.data;
   return data as TargetLevels;
-}
+};
 
-export const deleteTarget = async (publicId: UUID, name: string): Promise<boolean> => {
+export const deleteTarget = async (
+  publicId: UUID,
+  name: string,
+): Promise<boolean> => {
   const response = await axios.delete(`${api}DeleteTarget/${publicId}/${name}`);
   if (response.status === 200) {
     return true;
   }
   return false;
-}
+};
 
 export const getStrategy = async (publicId: UUID): Promise<GetStrategy> => {
   let userId = await getUserId();

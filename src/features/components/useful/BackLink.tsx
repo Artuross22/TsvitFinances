@@ -4,10 +4,7 @@ const BackLink: React.FC = () => {
   const router = useRouter();
 
   return (
-    <button
-      onClick={() => router.back()}
-      className="mr-auto text-green"
-    >
+    <button onClick={() => router.back()} className="mr-auto text-green">
       Back
     </button>
   );

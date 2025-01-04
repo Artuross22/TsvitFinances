@@ -19,9 +19,7 @@ const AssetCharts = ({ charts, publicId, name }: AssetChartsProps) => {
           View
         </Link>
         <br />
-        <Link href={`/investing/Chart/AddCharts/${publicId}/${name}`}>
-          Add
-        </Link>
+        <Link href={`/investing/Chart/AddCharts/${publicId}/${name}`}>Add</Link>
       </div>
       {charts.map((path, index) => (
         <div key={index} className="flex-none w-1/3 px-4 mb-4 flex flex-col">

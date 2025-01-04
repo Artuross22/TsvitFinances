@@ -1,11 +1,15 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { getCharts, updateChart, deleteCharts, updateNote } from "@/utils/asset";
+import {
+  getCharts,
+  updateChart,
+  deleteCharts,
+  updateNote,
+} from "@/utils/asset";
 import Image from "next/image";
 import Link from "next/link";
 import BackLink from "@/features/components/useful/BackLink";
-
 
 interface AssetProps {
   params: {
@@ -19,14 +23,14 @@ export interface UpdateChart {
   assetId: string;
   name: string;
   description: string;
-  positionEntryId : string;
+  positionEntryId: string;
 }
 
-export interface UpdateNote { 
+export interface UpdateNote {
   id: string;
   note: string;
 }
-  
+
 export interface PositionEntryModel {
   assetPublicId: string;
   positionEntries?: PositionEntry[];
@@ -89,7 +93,7 @@ const ListPositionEntry: React.FC<AssetProps> = ({ params }) => {
   const handleEditNote = (note: string, positionId: string) => {
     setEditingNote(positionId);
     setEditForm({
-      note: note
+      note: note,
     });
     setError(null);
   };
@@ -103,18 +107,18 @@ const ListPositionEntry: React.FC<AssetProps> = ({ params }) => {
     try {
       const saveNoteModel: UpdateNote = {
         id: positionId,
-        note: editForm.note
+        note: editForm.note,
       };
 
       await updateNote(saveNoteModel);
 
       const updatedAsset = {
         ...asset,
-        positionEntries: asset.positionEntries?.map(position => 
+        positionEntries: asset.positionEntries?.map((position) =>
           position.publicId === positionId
             ? { ...position, note: editForm.note }
-            : position
-        )
+            : position,
+        ),
       };
 
       setFormAsset(updatedAsset);
@@ -139,21 +143,23 @@ const ListPositionEntry: React.FC<AssetProps> = ({ params }) => {
 
     try {
       // await deleteNote(params.id, positionId);
-      
+
       const updatedAsset = {
         ...asset!,
-        positionEntries: asset!.positionEntries?.map(position => 
+        positionEntries: asset!.positionEntries?.map((position) =>
           position.publicId === positionId
             ? { ...position, note: undefined }
-            : position
-        )
+            : position,
+        ),
       };
 
       setFormAsset(updatedAsset);
       showSuccessMessage("Note deleted successfully!");
     } catch (error) {
       console.error("Error deleting note:", error);
-      setError(error instanceof Error ? error.message : "Failed to delete note");
+      setError(
+        error instanceof Error ? error.message : "Failed to delete note",
+      );
     } finally {
       setDeleting(null);
     }
@@ -181,26 +187,28 @@ const ListPositionEntry: React.FC<AssetProps> = ({ params }) => {
         assetId: params.id,
         name: editForm.name!,
         description: editForm.description || "",
-        positionEntryId
+        positionEntryId,
       };
 
       await updateChart(saveChartModel);
 
       const updatedAsset = {
         ...asset,
-        positionEntries: asset.positionEntries?.map(position => ({
+        positionEntries: asset.positionEntries?.map((position) => ({
           ...position,
-          charts: position.charts?.map(c =>
-            c.id === chart.id ? { ...c, ...editForm } : c
-          )
-        }))
+          charts: position.charts?.map((c) =>
+            c.id === chart.id ? { ...c, ...editForm } : c,
+          ),
+        })),
       };
 
       setFormAsset(updatedAsset);
       showSuccessMessage("Chart updated successfully!");
     } catch (error) {
       console.error("Error saving chart:", error);
-      setError(error instanceof Error ? error.message : "Failed to save changes");
+      setError(
+        error instanceof Error ? error.message : "Failed to save changes",
+      );
     } finally {
       setSaving(false);
       setEditingChart(null);
@@ -222,7 +230,9 @@ const ListPositionEntry: React.FC<AssetProps> = ({ params }) => {
       showSuccessMessage("Chart deleted successfully!");
     } catch (error) {
       console.error("Error deleting chart:", error);
-      setError(error instanceof Error ? error.message : "Failed to delete chart");
+      setError(
+        error instanceof Error ? error.message : "Failed to delete chart",
+      );
     } finally {
       setDeleting(null);
     }
@@ -250,10 +260,9 @@ const ListPositionEntry: React.FC<AssetProps> = ({ params }) => {
   return (
     <div>
       <div className="flex bg-gray-200 justify-center mt-2 px-2">
-        
-      <div className="absolute left-4 text-green-600 hover:text-green-700">
-      <BackLink/>
-      </div>
+        <div className="absolute left-4 text-green-600 hover:text-green-700">
+          <BackLink />
+        </div>
 
         <h2 className="font-bold">{params.name}</h2>
         <Link
@@ -317,44 +326,50 @@ const ListPositionEntry: React.FC<AssetProps> = ({ params }) => {
                       </div>
                     ) : (
                       <>
-                      <div className="flex justify-between items-center mb-2">
-                      <h2 className="text-lg font-semibold">Notes</h2>
-                      <div className="flex gap-2">
-                        
-                        <button
-                          onClick={() => handleEditNote(position.note!, position.publicId)}
-                          className="p-2 hover:bg-gray-100 rounded transition duration-150"
-                          title="Edit"
-                          aria-label="Edit Note"
-                        >
-                          ✏️
-                        </button>
+                        <div className="flex justify-between items-center mb-2">
+                          <h2 className="text-lg font-semibold">Notes</h2>
+                          <div className="flex gap-2">
+                            <button
+                              onClick={() =>
+                                handleEditNote(
+                                  position.note!,
+                                  position.publicId,
+                                )
+                              }
+                              className="p-2 hover:bg-gray-100 rounded transition duration-150"
+                              title="Edit"
+                              aria-label="Edit Note"
+                            >
+                              ✏️
+                            </button>
 
-                        <Link
-                          href={`/investing/Chart/AddChartToPositionEntry/${position.publicId}`}
-                          className="px-1 py-2"
-                          aria-label="Add Charts"
-                          role="button"
-                        >
-                         ➕
-                        </Link>
+                            <Link
+                              href={`/investing/Chart/AddChartToPositionEntry/${position.publicId}`}
+                              className="px-1 py-2"
+                              aria-label="Add Charts"
+                              role="button"
+                            >
+                              ➕
+                            </Link>
 
-                        <button
-                          onClick={() => handleDeleteNote(position.publicId)}
-                          disabled={deleting === position.publicId}
-                          className={`p-2 rounded text-red-600 transition duration-150 ${
-                            deleting === position.publicId
-                              ? "opacity-50 cursor-not-allowed hover:bg-transparent"
-                              : "hover:bg-red-100"
-                          }`}
-                          title="Delete"
-                          aria-label="Delete Note"
-                        >
-                          {deleting === position.publicId ? "⏳" : "🗑️"}
-                        </button>
-                      </div>
-                    </div>
-                    <div className="relative h-48 w-full bg-gray-50 rounded overflow-y-auto">
+                            <button
+                              onClick={() =>
+                                handleDeleteNote(position.publicId)
+                              }
+                              disabled={deleting === position.publicId}
+                              className={`p-2 rounded text-red-600 transition duration-150 ${
+                                deleting === position.publicId
+                                  ? "opacity-50 cursor-not-allowed hover:bg-transparent"
+                                  : "hover:bg-red-100"
+                              }`}
+                              title="Delete"
+                              aria-label="Delete Note"
+                            >
+                              {deleting === position.publicId ? "⏳" : "🗑️"}
+                            </button>
+                          </div>
+                        </div>
+                        <div className="relative h-48 w-full bg-gray-50 rounded overflow-y-auto">
                           <div className="p-4">
                             <p className="text-gray-600 whitespace-pre-wrap break-words">
                               {position.note}
@@ -421,7 +436,9 @@ const ListPositionEntry: React.FC<AssetProps> = ({ params }) => {
                     ) : (
                       <>
                         <div className="flex justify-between items-center mb-2">
-                          <h2 className="text-lg font-semibold">{chart.name}</h2>
+                          <h2 className="text-lg font-semibold">
+                            {chart.name}
+                          </h2>
                           <div className="flex gap-2">
                             <button
                               onClick={() => handleEdit(chart)}
@@ -432,7 +449,10 @@ const ListPositionEntry: React.FC<AssetProps> = ({ params }) => {
                             </button>
                             <button
                               onClick={() =>
-                                handleDelete(chart.id.toString(), asset.assetPublicId)
+                                handleDelete(
+                                  chart.id.toString(),
+                                  asset.assetPublicId,
+                                )
                               }
                               disabled={deleting === chart.id.toString()}
                               className={`p-2 hover:bg-red-100 rounded text-red-600
@@ -443,7 +463,9 @@ const ListPositionEntry: React.FC<AssetProps> = ({ params }) => {
                             </button>
                           </div>
                         </div>
-                        <p className="text-gray-600 mb-4">{chart.description}</p>
+                        <p className="text-gray-600 mb-4">
+                          {chart.description}
+                        </p>
                         <div className="relative h-48 w-full">
                           <a
                             href={chart.chartsPath}
@@ -472,5 +494,5 @@ const ListPositionEntry: React.FC<AssetProps> = ({ params }) => {
       </div>
     </div>
   );
-}
+};
 export default ListPositionEntry;

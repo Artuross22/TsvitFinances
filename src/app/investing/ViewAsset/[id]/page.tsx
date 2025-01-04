@@ -1,6 +1,8 @@
 "use client";
 import AssetCharts from "@/features/components/asset/viewAsset/AssetCharts";
-import AssetDetails, { ViewAssetDto } from "@/features/components/asset/viewAsset/AssetDetails";
+import AssetDetails, {
+  ViewAssetDto,
+} from "@/features/components/asset/viewAsset/AssetDetails";
 import AssetHeader from "@/features/components/asset/viewAsset/AssetHeader";
 import AssetStrategy from "@/features/components/asset/viewAsset/AssetStrategy";
 import AssetTargets from "@/features/components/asset/viewAsset/AssetTargets";
@@ -33,17 +35,24 @@ const ViewAsset = ({ params }: AssetProps) => {
     <div>
       <AssetHeader name={asset.name} assetId={params.id} />
 
-    <div className="flex">
-    <div className="overflow-x-auto w-1/2 m-4 p-4">
-      <AssetStrategy strategyName={asset.strategyName} publicId={asset.publicId} />
-      <AssetDetails asset={asset} />
-      <AssetCharts charts={asset.charts} publicId={asset.publicId} name={asset.name} />
-    </div>
+      <div className="flex">
+        <div className="overflow-x-auto w-1/2 m-4 p-4">
+          <AssetStrategy
+            strategyName={asset.strategyName}
+            publicId={asset.publicId}
+          />
+          <AssetDetails asset={asset} />
+          <AssetCharts
+            charts={asset.charts}
+            publicId={asset.publicId}
+            name={asset.name}
+          />
+        </div>
 
-    <div className="overflow-x-auto w-1/2 m-4 p-4">
-        <AssetTargets publicId={asset.publicId}/>
-    </div>
-    </div>
+        <div className="overflow-x-auto w-1/2 m-4 p-4">
+          <AssetTargets publicId={asset.publicId} />
+        </div>
+      </div>
     </div>
   );
 };
