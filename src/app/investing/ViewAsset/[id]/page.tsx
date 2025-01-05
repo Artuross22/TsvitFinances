@@ -36,12 +36,13 @@ const ViewAsset = ({ params }: AssetProps) => {
       <AssetHeader name={asset.name} assetId={params.id} />
 
       <div className="flex">
-        <div className="overflow-x-auto w-1/2 m-4 p-4">
+        <div className="w-1/2 m-4 p-4">
           <AssetStrategy
             strategyName={asset.strategyName}
             publicId={asset.publicId}
           />
           <AssetDetails asset={asset} />
+          
           <AssetCharts
             charts={asset.charts}
             publicId={asset.publicId}
@@ -49,7 +50,7 @@ const ViewAsset = ({ params }: AssetProps) => {
           />
         </div>
 
-        <div className="overflow-x-auto w-1/2 m-4 p-4">
+        <div className="w-1/2 m-4 p-4">
           <AssetTargets publicId={asset.publicId} />
         </div>
       </div>

@@ -6,6 +6,7 @@ import {
   updateChart,
   deleteCharts,
   updateNote,
+  deletePositionEntry,
 } from "@/utils/asset";
 import Image from "next/image";
 import Link from "next/link";
@@ -56,6 +57,8 @@ const ListPositionEntry: React.FC<AssetProps> = ({ params }) => {
   const [deleting, setDeleting] = useState<string | null>(null);
   const [editingChart, setEditingChart] = useState<string | null>(null);
   const [editingNote, setEditingNote] = useState<string | null>(null);
+  const [showFullDescription, setShowFullDescription] = useState<number | null>(null);
+
   const [error, setError] = useState<string | null>(null);
   const [editForm, setEditForm] = useState<{
     name?: string;
@@ -142,15 +145,13 @@ const ListPositionEntry: React.FC<AssetProps> = ({ params }) => {
     setError(null);
 
     try {
-      // await deleteNote(params.id, positionId);
+       await deletePositionEntry(positionId);
 
-      const updatedAsset = {
+       const updatedAsset = {
         ...asset!,
-        positionEntries: asset!.positionEntries?.map((position) =>
-          position.publicId === positionId
-            ? { ...position, note: undefined }
-            : position,
-        ),
+        positionEntries: asset!.positionEntries?.filter(position => 
+          position.publicId !== positionId
+        )
       };
 
       setFormAsset(updatedAsset);
@@ -463,9 +464,31 @@ const ListPositionEntry: React.FC<AssetProps> = ({ params }) => {
                             </button>
                           </div>
                         </div>
-                        <p className="text-gray-600 mb-4">
-                          {chart.description}
-                        </p>
+
+                        <div>
+                          <div className="flex p-4">
+                            <p className="text-gray-600 truncate">
+                              {chart.description}
+                            </p>
+                            <button
+                              className="hover:bg-gray-100 rounded"
+                              onMouseEnter={() => setShowFullDescription(chart.id)}
+                              onMouseLeave={() => setShowFullDescription(null)}
+                            >
+                              👁️
+                            </button>
+                          </div>
+                          {showFullDescription === chart.id && chart.description && (
+                            <div className="bg-gray-50">
+                            <div className="p-4">
+                              <p className="text-gray-600 whitespace-pre-wrap break-words">
+                                {chart.description}
+                              </p>
+                            </div>
+                          </div>
+                          )}
+                        </div>
+            
                         <div className="relative h-48 w-full">
                           <a
                             href={chart.chartsPath}

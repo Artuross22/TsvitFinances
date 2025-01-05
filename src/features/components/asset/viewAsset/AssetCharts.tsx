@@ -9,7 +9,7 @@ interface AssetChartsProps {
   name: string;
 }
 
-const AssetCharts = ({ charts, publicId, name }: AssetChartsProps) => {
+const ShowCharts = ({ charts, publicId, name }: AssetChartsProps) => {
   if (!charts || charts.length === 0) return null;
 
   return (
@@ -21,24 +21,26 @@ const AssetCharts = ({ charts, publicId, name }: AssetChartsProps) => {
         <br />
         <Link href={`/investing/Chart/AddCharts/${publicId}/${name}`}>Add</Link>
       </div>
-      {charts.map((path, index) => (
-        <div key={index} className="flex-none w-1/3 px-4 mb-4 flex flex-col">
-          <p className="flex-grow">{path.name}</p>
-          <p className="flex-grow">{path.description}</p>
-          <div className="w-full h-64 relative">
-            <a href={path.chartsPath} target="_blank" rel="noopener noreferrer">
-              <Image
-                src={path.chartsPath}
-                alt={`Chart ${index}`}
-                layout="fill"
-                objectFit="cover"
-              />
-            </a>
+
+      <div className="overflow-x-auto flex">
+        {charts.map((path, index) => (
+          <div key={index} className="flex-none w-1/3 px-4 mb-4 flex flex-col">
+            <p className="flex-grow">{path.name}</p>
+            <div className="w-full h-64 relative">
+              <a href={path.chartsPath} target="_blank" rel="noopener noreferrer">
+                <Image
+                  src={path.chartsPath}
+                  alt={`Chart ${index}`}
+                  layout="fill"
+                  objectFit="cover"
+                />
+              </a>
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
     </div>
+  </div>
   );
 };
 
-export default AssetCharts;
+export default ShowCharts;

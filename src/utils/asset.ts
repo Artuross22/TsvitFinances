@@ -139,6 +139,19 @@ export const deleteCharts = async (
   }
 };
 
+export const deletePositionEntry = async (publicId: string): Promise<boolean> => {
+  try {
+    const response = await axios.delete<boolean>(
+      `${api}DeletePositionEntry/${publicId}`,
+    );
+    return response.status === 200;
+  } catch (error) {
+    console.error("Error:", error);
+    throw error;
+  }
+};
+
+
 export const updateNote = async (updateNote: UpdateNote): Promise<boolean> => {
   try {
     const response = await axios.put<boolean>(`${api}UpdateNotes`, updateNote);
