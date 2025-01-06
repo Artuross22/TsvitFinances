@@ -267,13 +267,13 @@ const ListPositionEntry: React.FC<AssetProps> = ({ params }) => {
 
         <h2 className="font-bold">{params.name}</h2>
         <Link
-          href={`/investing/Chart/AddCharts/${params.id}/${params.name}`}
+          href={`/PositionEntryNotes/AddCharts/${params.id}/${params.name}`}
           className="absolute right-4 text-green-600 hover:text-green-700"
         >
           Add
         </Link>
       </div>
-
+      
       <div className="container mx-auto p-4">
         <div
           id="successMessage"
@@ -345,7 +345,7 @@ const ListPositionEntry: React.FC<AssetProps> = ({ params }) => {
                             </button>
 
                             <Link
-                              href={`/investing/Chart/AddChartToPositionEntry/${position.publicId}`}
+                              href={`/PositionEntryNotes/AddChartToPositionEntry/${position.publicId}`}
                               className="px-1 py-2"
                               aria-label="Add Charts"
                               role="button"

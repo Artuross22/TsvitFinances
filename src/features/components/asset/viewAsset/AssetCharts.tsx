@@ -15,11 +15,11 @@ const ShowCharts = ({ charts, publicId, name }: AssetChartsProps) => {
   return (
     <div className="bg-gray-300 m-2 p-2 flex">
       <div>
-        <Link href={`/investing/Chart/ListCharts/${publicId}/${name}`}>
+        <Link href={`/PositionEntryNotes/ListPositionEntry/${publicId}/${name}`}>
           View
         </Link>
         <br />
-        <Link href={`/investing/Chart/AddCharts/${publicId}/${name}`}>Add</Link>
+        <Link href={`/PositionEntryNotes/AddCharts/${publicId}/${name}`}>Add</Link>
       </div>
 
       <div className="overflow-x-auto flex">

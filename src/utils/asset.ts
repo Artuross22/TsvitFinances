@@ -13,7 +13,7 @@ import {
   PositionEntryModel,
   UpdateChart,
   UpdateNote,
-} from "@/app/investing/Chart/ListCharts/[id]/[name]/page";
+} from "@/app/PositionEntryNotes/ListPositionEntry/[id]/[name]/page";
 import { ListCharts } from "@/types/assetsDto";
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
@@ -116,7 +116,7 @@ export const getAsset = async (id: string): Promise<ViewAssetDto> => {
 
 export const getCharts = async (id: string): Promise<PositionEntryModel> => {
   try {
-    const response = await axios.get(`${api}GetChartsByAsset/${id}`);
+    const response = await axios.get(`${api}PositionEntryByAsset/${id}`);
     const data = response.data;
     return data as PositionEntryModel;
   } catch (error) {
