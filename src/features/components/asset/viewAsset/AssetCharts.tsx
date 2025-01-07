@@ -10,14 +10,15 @@ interface AssetChartsProps {
 }
 
 const ShowCharts = ({ charts, publicId, name }: AssetChartsProps) => {
-  if (!charts || charts.length === 0) return null;
 
   return (
     <div className="bg-gray-300 m-2 p-2 flex">
       <div>
-        <Link href={`/PositionEntryNotes/ListPositionEntry/${publicId}/${name}`}>
-          View
-        </Link>
+        {charts && charts.length > 0 && (
+          <Link href={`/PositionEntryNotes/ListPositionEntry/${publicId}/${name}`}>
+            View
+          </Link>
+        )}
         <br />
         <Link href={`/PositionEntryNotes/AddCharts/${publicId}/${name}`}>Add</Link>
       </div>
@@ -38,8 +39,8 @@ const ShowCharts = ({ charts, publicId, name }: AssetChartsProps) => {
             </div>
           </div>
         ))}
+      </div>
     </div>
-  </div>
   );
 };
 

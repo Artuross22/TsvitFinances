@@ -11,6 +11,7 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import BackLink from "@/features/components/useful/BackLink";
+import DescriptionTooltip from "@/features/tools/DescriptionTooltip";
 
 interface AssetProps {
   params: {
@@ -57,7 +58,6 @@ const ListPositionEntry: React.FC<AssetProps> = ({ params }) => {
   const [deleting, setDeleting] = useState<string | null>(null);
   const [editingChart, setEditingChart] = useState<string | null>(null);
   const [editingNote, setEditingNote] = useState<string | null>(null);
-  const [showFullDescription, setShowFullDescription] = useState<number | null>(null);
 
   const [error, setError] = useState<string | null>(null);
   const [editForm, setEditForm] = useState<{
@@ -464,31 +464,7 @@ const ListPositionEntry: React.FC<AssetProps> = ({ params }) => {
                             </button>
                           </div>
                         </div>
-
-                        <div>
-                          <div className="flex p-4">
-                            <p className="text-gray-600 truncate">
-                              {chart.description}
-                            </p>
-                            <button
-                              className="hover:bg-gray-100 rounded"
-                              onMouseEnter={() => setShowFullDescription(chart.id)}
-                              onMouseLeave={() => setShowFullDescription(null)}
-                            >
-                              👁️
-                            </button>
-                          </div>
-                          {showFullDescription === chart.id && chart.description && (
-                            <div className="bg-gray-50">
-                            <div className="p-4">
-                              <p className="text-gray-600 whitespace-pre-wrap break-words">
-                                {chart.description}
-                              </p>
-                            </div>
-                          </div>
-                          )}
-                        </div>
-            
+                          <DescriptionTooltip description={chart.description} />
                         <div className="relative h-48 w-full">
                           <a
                             href={chart.chartsPath}
