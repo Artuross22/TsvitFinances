@@ -5,16 +5,15 @@ import {
   AddToStrategy,
   ListStrategiesForAsset,
 } from "@/app/strategy/AddStrategyToAsset/[publicId]/page";
+import { ApplyStrategyInput } from "@/app/strategy/ApplyStrategy/[publicId]/page";
 import { EditPositionManagement } from "@/app/strategy/EditPositionManagement/[publicId]/page";
 import { EditRiskManagement } from "@/app/strategy/EditRiskManagement/[publicId]/page";
 import { GetStrategy } from "@/app/strategy/View/[publicId]/page";
 import { ListStrategies } from "@/app/strategy/page";
 import { TargetLevels } from "@/features/components/asset/viewAsset/AssetTargets";
-// import { Diversification, InputModel } from "@/features/components/asset/viewAsset/AssetTargets";
 import { verifyAuth } from "@/lib/auth";
-import axios, { AxiosResponse } from "axios";
+import axios from "axios";
 import { UUID } from "crypto";
-import { Response } from "express";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -78,12 +77,12 @@ export const addStragyToAsset = async (
   }
 };
 
-// export const applaStrategy = async (publicId: string): Promise<InputModel> => {
-//   let userId = await getUserId();
-//   const response = await axios.get(`${api}ApplyStrategies/${publicId}/${userId}`);
-//   const data = response.data;
-//   return data as InputModel;
-// }
+export const applaStrategy = async (publicId: string): Promise<ApplyStrategyInput> => {
+  let userId = await getUserId();
+  const response = await axios.get(`${api}ApplyStrategies/${publicId}/${userId}`);
+  const data = response.data;
+  return data as ApplyStrategyInput;
+}
 
 export const listTargets = async (publicId: string): Promise<TargetLevels> => {
   const response = await axios.get(`${api}ListTargets/${publicId}`);

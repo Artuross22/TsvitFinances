@@ -308,7 +308,6 @@ export default function AssetForm() {
             ))}
           </div>
         </div>
-
         <button
           type="submit"
           className="w-full px-8 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"

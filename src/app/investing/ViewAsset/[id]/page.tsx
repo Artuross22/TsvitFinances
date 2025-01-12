@@ -1,4 +1,5 @@
 "use client";
+import ApplyStrategy from "@/app/strategy/ApplyStrategy/[publicId]/page";
 import AssetCharts from "@/features/components/asset/viewAsset/AssetCharts";
 import AssetDetails, {
   ViewAssetDto,
@@ -42,7 +43,7 @@ const ViewAsset = ({ params }: AssetProps) => {
             publicId={asset.publicId}
           />
           <AssetDetails asset={asset} />
-          
+      
           <AssetCharts
             charts={asset.charts}
             publicId={asset.publicId}
@@ -52,6 +53,7 @@ const ViewAsset = ({ params }: AssetProps) => {
 
         <div className="w-1/2 m-4 p-4">
           <AssetTargets publicId={asset.publicId} />
+          <ApplyStrategy publicId={asset.publicId} />
         </div>
       </div>
     </div>
