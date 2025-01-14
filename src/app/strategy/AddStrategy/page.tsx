@@ -36,7 +36,7 @@ export default function AddStrategy() {
     try {
       await createStrategy(formData);
       setMessage("Strategy created successfully!");
-      router.push("/strategies");
+      router.push("/strategy");
     } catch (error) {
       setMessage(error instanceof Error ? error.message : "An error occurred");
     } finally {

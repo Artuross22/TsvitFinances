@@ -80,7 +80,51 @@ export default function ApplyStrategy({ publicId }: Props) {
     }
 
     return (
-        <div className="space-y-6 p-4">
+        <div className="space-y-6 bg-gray-300 m-2 p-2">
+            
+            <div className="bg-white rounded-lg shadow-md p-6">
+                <h2 className="text-2xl font-bold mb-4">Risk Analysis</h2>
+                <div className="space-y-6">
+                    <div className="grid grid-cols-2 gap-4">
+                        <div className="p-4 bg-gray-50 rounded">
+                            <div className="text-sm text-gray-600">Base Risk</div>
+                            <div className="text-xl font-medium">{strategies.risk.baseRisk}€</div>
+                        </div>
+                        <div className="p-4 bg-gray-50 rounded">
+                            <div className="text-sm text-gray-600">Minimal risk-reward ratio</div>
+                            <div className="text-xl font-medium">{strategies.risk.riskToReward}</div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 className="text-lg font-medium mb-2">Sector Diversification</h3>
+                        <div className="overflow-x-auto">
+                            <table className="min-w-full divide-y divide-gray-200">
+                                <thead className="bg-gray-50">
+                                    <tr>
+                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sector</th>
+                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total Niche Sum</th>
+                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Recommended %</th>
+                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="bg-white divide-y divide-gray-200">
+                                    {strategies.risk.diversifications.map((div, index) => (
+                                        <tr key={index}>
+                                            <td className="px-6 py-4 whitespace-nowrap">{div.sector}</td>
+                                            <td className="px-6 py-4 whitespace-nowrap">{div.totalNicheSum}</td>
+                                            <td className="px-6 py-4 whitespace-nowrap">{div.recommendedNichePercentage}%</td>
+                                            <td className="px-6 py-4 whitespace-nowrap">{div.total}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+        </div>
+
+
             <div className="bg-white rounded-lg shadow-md p-6">
                 <h2 className="text-2xl font-bold mb-4">Position Strategy</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -152,47 +196,7 @@ export default function ApplyStrategy({ publicId }: Props) {
                 </div>
             </div>
 
-            <div className="bg-white rounded-lg shadow-md p-6">
-                <h2 className="text-2xl font-bold mb-4">Risk Analysis</h2>
-                <div className="space-y-6">
-                    <div className="grid grid-cols-2 gap-4">
-                        <div className="p-4 bg-gray-50 rounded">
-                            <div className="text-sm text-gray-600">Base Risk</div>
-                            <div className="text-xl font-medium">{strategies.risk.baseRisk}%</div>
-                        </div>
-                        <div className="p-4 bg-gray-50 rounded">
-                            <div className="text-sm text-gray-600">Risk to Reward Ratio</div>
-                            <div className="text-xl font-medium">{strategies.risk.riskToReward}</div>
-                        </div>
-                    </div>
-
-                    <div>
-                        <h3 className="text-lg font-medium mb-2">Sector Diversification</h3>
-                        <div className="overflow-x-auto">
-                            <table className="min-w-full divide-y divide-gray-200">
-                                <thead className="bg-gray-50">
-                                    <tr>
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sector</th>
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total Niche Sum</th>
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Recommended %</th>
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
-                                    </tr>
-                                </thead>
-                                <tbody className="bg-white divide-y divide-gray-200">
-                                    {strategies.risk.diversifications.map((div, index) => (
-                                        <tr key={index}>
-                                            <td className="px-6 py-4 whitespace-nowrap">{div.sector}</td>
-                                            <td className="px-6 py-4 whitespace-nowrap">{div.totalNicheSum}</td>
-                                            <td className="px-6 py-4 whitespace-nowrap">{div.recommendedNichePercentage}%</td>
-                                            <td className="px-6 py-4 whitespace-nowrap">{div.total}</td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            
         </div>
     );
 }

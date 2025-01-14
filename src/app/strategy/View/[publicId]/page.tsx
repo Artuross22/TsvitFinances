@@ -36,6 +36,7 @@ export type Diversification = {
   name: string;
 };
 
+
 export type Hedge = {
   name: string;
 };
@@ -90,13 +91,22 @@ const ViewStrategy: React.FC<Props> = ({ params }) => {
                 <h2 className="text-lg font-medium text-gray-900">
                   Risk Management
                 </h2>
-                <Link
-                  href={`/strategy/EditRiskManagement/${strategy.riskManagement?.publicId}`}
-                >
-                  <button className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    Edit
-                  </button>
-                </Link>
+                <div className="flex space-x-2">
+                    <Link
+                      href={`/strategy/AddDiversification/${strategy.riskManagement?.publicId}`}
+                    >
+                    <button className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    AddDiversification 
+                    </button>
+                  </Link>
+                  <Link
+                    href={`/strategy/EditRiskManagement/${strategy.riskManagement?.publicId}`}
+                  >
+                    <button className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                      Edit
+                    </button>
+                  </Link>
+                </div>
               </div>
             </div>
             <div className="p-6 space-y-4">
@@ -141,9 +151,6 @@ const ViewStrategy: React.FC<Props> = ({ params }) => {
                   </button>
                 </Link>
               </div>
-            </div>
-            <div className="p-6 border-b border-gray-100">
-              <h2 className="text-lg font-semibold">Position Management</h2>
             </div>
             <div className="p-6 space-y-4">
               <div>

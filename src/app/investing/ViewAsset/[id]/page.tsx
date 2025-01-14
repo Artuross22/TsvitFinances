@@ -39,6 +39,7 @@ const ViewAsset = ({ params }: AssetProps) => {
       <div className="flex">
         <div className="w-1/2 m-4 p-4">
           <AssetStrategy
+            strategyPublicId={asset.strategyPublicId}
             strategyName={asset.strategyName}
             publicId={asset.publicId}
           />
