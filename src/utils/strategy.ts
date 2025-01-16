@@ -1,11 +1,13 @@
 "use server";
 
+import { AddDiversification } from "@/app/strategy/AddDiversification/[publicId]/page";
 import { AddStragy } from "@/app/strategy/AddStrategy/page";
 import {
   AddToStrategy,
   ListStrategiesForAsset,
 } from "@/app/strategy/AddStrategyToAsset/[publicId]/page";
 import { ApplyStrategyInput } from "@/app/strategy/ApplyStrategy/[publicId]/page";
+import { EditDiversification } from "@/app/strategy/EditDiversification/[publicId]/page";
 import { EditPositionManagement } from "@/app/strategy/EditPositionManagement/[publicId]/page";
 import { EditRiskManagement } from "@/app/strategy/EditRiskManagement/[publicId]/page";
 import { GetStrategy } from "@/app/strategy/View/[publicId]/page";
@@ -13,6 +15,7 @@ import { ListStrategies } from "@/app/strategy/page";
 import { TargetLevels } from "@/features/components/asset/viewAsset/AssetTargets";
 import { verifyAuth } from "@/lib/auth";
 import axios from "axios";
+import { Console } from "console";
 import { UUID } from "crypto";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
@@ -106,6 +109,7 @@ export const getStrategy = async (publicId: UUID): Promise<GetStrategy> => {
   const response = await axios.get(`${api}GetStrategy/${publicId}/${userId}`);
 
   const data = response.data;
+  
   return data as GetStrategy;
 };
 
@@ -168,3 +172,45 @@ export const editPositionManagementPost = async (
   }
   return false;
 };
+
+export async function createDiversification(model: AddDiversification) {  
+  const response = await axios.post<boolean>(`${api}AddDiversification`, model);
+  if (response.status === 200) {
+    redirect(`/strategy`);
+  } else {
+    redirect("/");
+  }
+}
+
+export async function getDiversifications(publicId: string) {  
+  try {
+    const response = await axios.get(`${api}EditDiversification/${publicId}`);
+    const data = response.data;
+
+    console.log("GG",data);
+
+    return data as EditDiversification
+  }
+  catch (error) {
+    console.error("Error:", error);
+    throw error;
+  }
+}
+  
+  export async function updateDiversification(model: EditDiversification) {  
+    const response = await axios.post<boolean>(`${api}AddDiversification`, model);
+    if (response.status === 200) {
+      redirect(`/strategy`);
+    } else {
+      redirect("/");
+    }
+  }
+
+export async function removeDiversification(model: AddDiversification) {  
+  const response = await axios.post<boolean>(`${api}AddDiversification`, model);
+  if (response.status === 200) {
+    redirect(`/strategy`);
+  } else {
+    redirect("/");
+  }
+}

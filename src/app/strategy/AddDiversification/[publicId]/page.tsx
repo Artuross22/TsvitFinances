@@ -1,11 +1,16 @@
 "use client";
+
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { createStrategy } from "@/utils/strategy";
+import { createDiversification } from "@/utils/strategy";
 import Link from "next/link";
 
 export type AddDiversification = {
   publicId: string;
+  diversifications: Diversification[];
+};
+
+export type Diversification = {
   nichePercentage: number;
   sector: Sector;
 };
@@ -26,65 +31,86 @@ export enum Sector {
   Crypto = 200,
 }
 
-const initialStrategy: AddDiversification = {
-  publicId: "",
+const initialDiversification: Diversification = {
   nichePercentage: 0,
   sector: Sector.Technology,
 };
 
-export default function AddStrategy(publicId: string) {
+const initialStrategy: AddDiversification = {
+  publicId: "",
+  diversifications: [initialDiversification],
+};
+
+interface Props {
+  params: {
+    publicId: string;
+  };
+}
+
+export default function AddStrategy(params: Props) {
   const router = useRouter();
-  const [strategies, setStrategies] = useState<AddDiversification[]>([{ ...initialStrategy }]);
+  const [strategy, setStrategy] = useState<AddDiversification>(initialStrategy);
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState("");
 
-  const calculateTotalPercentage = (currentStrategies: AddDiversification[]): number => {
-    return currentStrategies.reduce((sum, strategy) => sum + (strategy.nichePercentage || 0), 0);
+  const calculateTotalPercentage = (diversifications: Diversification[]): number => {
+    return diversifications.reduce((sum, div) => sum + (div.nichePercentage || 0), 0);
   };
 
-  const handleChange = (index: number, field: keyof AddDiversification, value: string) => {
-    const newStrategies = [...strategies];
+  const handleChange = (index: number, field: keyof Diversification, value: string | number) => {
+    const newDiversifications = [...strategy.diversifications];
     
     if (field === 'nichePercentage') {
       const numValue = Math.max(0, Math.min(100, Number(value) || 0));
-      const otherStrategiesTotal = calculateTotalPercentage(strategies.filter((_, i) => i !== index));
+      const otherDiversificationsTotal = calculateTotalPercentage(
+        strategy.diversifications.filter((_, i) => i !== index)
+      );
       
-      if (otherStrategiesTotal + numValue > 100) {
-        const maxAllowed = 100 - otherStrategiesTotal;
-        newStrategies[index] = {
-          ...newStrategies[index],
-          [field]: Math.max(0, maxAllowed)
+      if (otherDiversificationsTotal + numValue > 100) {
+        const maxAllowed = 100 - otherDiversificationsTotal;
+        newDiversifications[index] = {
+          ...newDiversifications[index],
+          nichePercentage: Math.max(0, maxAllowed)
         };
-        setMessage(`Maximum allowed percentage for this strategy is ${maxAllowed}%`);
+        setMessage(`Maximum allowed percentage for this diversification is ${maxAllowed}%`);
       } else {
-        newStrategies[index] = {
-          ...newStrategies[index],
-          [field]: numValue
+        newDiversifications[index] = {
+          ...newDiversifications[index],
+          nichePercentage: numValue
         };
         setMessage("");
       }
     } else if (field === 'sector') {
-      newStrategies[index] = {
-        ...newStrategies[index],
-        [field]: Number(value)
+      newDiversifications[index] = {
+        ...newDiversifications[index],
+        sector: Number(value)
       };
     }
 
-    setStrategies(newStrategies);
+    setStrategy({
+      ...strategy,
+      diversifications: newDiversifications
+    });
   };
 
-  const handleAddStrategy = () => {
-    const currentTotal = calculateTotalPercentage(strategies);
+  const handleAddDiversification = () => {
+    const currentTotal = calculateTotalPercentage(strategy.diversifications);
     if (currentTotal >= 100) {
-      setMessage("Cannot add more strategies - total allocation already at 100%");
+      setMessage("Cannot add more diversifications - total allocation already at 100%");
       return;
     }
-    setStrategies([...strategies, { ...initialStrategy }]);
+    setStrategy({
+      ...strategy,
+      diversifications: [...strategy.diversifications, { ...initialDiversification }]
+    });
     setMessage("");
   };
 
-  const handleRemoveStrategy = (index: number) => {
-    setStrategies(strategies.filter((_, i) => i !== index));
+  const handleRemoveDiversification = (index: number) => {
+    setStrategy({
+      ...strategy,
+      diversifications: strategy.diversifications.filter((_, i) => i !== index)
+    });
     setMessage("");
   };
 
@@ -93,7 +119,7 @@ export default function AddStrategy(publicId: string) {
     setIsLoading(true);
     setMessage("");
 
-    const totalPercentage = calculateTotalPercentage(strategies);
+    const totalPercentage = calculateTotalPercentage(strategy.diversifications);
     if (totalPercentage > 100) {
       setMessage("Total allocation cannot exceed 100%");
       setIsLoading(false);
@@ -101,8 +127,9 @@ export default function AddStrategy(publicId: string) {
     }
 
     try {
-      await createStrategy(strategies);
-      setMessage("Strategies created successfully!");
+      strategy.publicId = params.params.publicId;
+      await createDiversification(strategy);
+      setMessage("Strategy created successfully!");
       router.push("/strategy");
     } catch (error) {
       setMessage(error instanceof Error ? error.message : "An error occurred");
@@ -111,7 +138,7 @@ export default function AddStrategy(publicId: string) {
     }
   };
 
-  const totalPercentage = calculateTotalPercentage(strategies);
+  const totalPercentage = calculateTotalPercentage(strategy.diversifications);
   const isValid = totalPercentage <= 100 && totalPercentage > 0;
 
   return (
@@ -121,13 +148,13 @@ export default function AddStrategy(publicId: string) {
           Back
         </Link>
         <h2>
-          <strong>Create Strategies</strong>
+          <strong>Create Strategy</strong>
         </h2>
       </div>
       <div className="max-w-4xl mx-auto p-6">
         <div className="bg-white shadow-md rounded-lg p-6">
           <div className="flex justify-between items-center mb-6">
-            <h1 className="text-2xl font-bold">Add New Strategies</h1>
+            <h1 className="text-2xl font-bold">Add New Strategy</h1>
             <div className="text-sm">
               Total Allocation: {totalPercentage}%
               {totalPercentage > 100 && (
@@ -151,14 +178,14 @@ export default function AddStrategy(publicId: string) {
           )}
 
           <form onSubmit={handleSubmit} className="space-y-6">
-            {strategies.map((strategy, index) => (
+            {strategy.diversifications.map((diversification, index) => (
               <div key={index} className="p-4 border rounded-lg space-y-4">
                 <div className="flex justify-between items-center">
-                  <h3 className="font-medium">Strategy {index + 1}</h3>
-                  {strategies.length > 1 && (
+                  <h3 className="font-medium">Diversification {index + 1}</h3>
+                  {strategy.diversifications.length > 1 && (
                     <button
                       type="button"
-                      onClick={() => handleRemoveStrategy(index)}
+                      onClick={() => handleRemoveDiversification(index)}
                       className="text-red-500 hover:text-red-700"
                     >
                       Remove
@@ -172,7 +199,7 @@ export default function AddStrategy(publicId: string) {
                       Sector
                     </label>
                     <select
-                      value={strategy.sector}
+                      value={diversification.sector}
                       onChange={(e) => handleChange(index, 'sector', e.target.value)}
                       className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                     >
@@ -194,7 +221,7 @@ export default function AddStrategy(publicId: string) {
                       type="number"
                       min="0"
                       max="100"
-                      value={strategy.nichePercentage || ''}
+                      value={diversification.nichePercentage || ''}
                       onChange={(e) => handleChange(index, 'nichePercentage', e.target.value)}
                       className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                     />
@@ -206,10 +233,10 @@ export default function AddStrategy(publicId: string) {
             <div className="flex justify-between">
               <button
                 type="button"
-                onClick={handleAddStrategy}
+                onClick={handleAddDiversification}
                 className="px-4 py-2 text-blue-500 border border-blue-500 rounded-md hover:bg-blue-50"
               >
-                Add Another Strategy
+                Add Another Diversification
               </button>
 
               <button
@@ -217,7 +244,7 @@ export default function AddStrategy(publicId: string) {
                 className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:bg-gray-400"
                 disabled={isLoading || !isValid}
               >
-                {isLoading ? "Saving..." : "Save Strategies"}
+                {isLoading ? "Saving..." : "Save Strategy"}
               </button>
             </div>
           </form>
