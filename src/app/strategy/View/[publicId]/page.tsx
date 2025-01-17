@@ -92,18 +92,11 @@ const ViewStrategy: React.FC<Props> = ({ params }) => {
                   Risk Management
                 </h2>
                 <div className="flex space-x-2">
-                    <Link
-                      href={`/strategy/AddDiversification/${strategy.riskManagement?.publicId}`}
-                    >
-                    <button className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    AddDiversification 
-                    </button>
-                  </Link>
                   <Link
-                      href={`/strategy/EditDiversification/${strategy.riskManagement?.publicId}`}
+                      href={`/strategy/ManageDiversification/${strategy.riskManagement?.publicId}/${params.publicId}`}
                     >
                     <button className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    EditDiversification 
+                    Manage Diversification 
                     </button>
                   </Link>
                   <Link

@@ -2,8 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
-import { getDiversifications, updateDiversification } from "@/utils/strategy";
+import { getDiversifications, removeDiversification, updateDiversification } from "@/utils/strategy";
 
 export type AddDiversification = {
   publicId: string;
@@ -29,7 +28,7 @@ export enum Sector {
 
 export type EditDiversification = {
   publicId: string;
-  diversifications: Diversification[];
+  diversifications: Diversification[] | null;
 };
 
 export type Diversification = {
@@ -41,6 +40,7 @@ export type Diversification = {
 interface Props {
   params: {
     publicId: string;
+    strategyId: string;
   };
 }
 
@@ -55,8 +55,8 @@ export default function DiversificationPage({ params }: Props) {
     const fetchDiversifications = async () => {
       try {
         const data = await getDiversifications(params.publicId);
-        setDiversifications(data.diversifications);
-        calculateTotalPercentage(data.diversifications);
+        setDiversifications(data.diversifications || []);
+        calculateTotalPercentage(data.diversifications || []);
         setIsLoading(false);
       } catch (err) {
         setError("Failed to load diversifications");
@@ -72,24 +72,59 @@ export default function DiversificationPage({ params }: Props) {
     setTotalPercentage(total);
   };
 
+  const getAvailableSectors = (currentIndex: number) => {
+    const usedSectors = diversifications
+      .filter((_, index) => index !== currentIndex)
+      .map(div => div.sector);
+    
+    return Object.entries(Sector)
+      .filter(([key]) => isNaN(Number(key)))
+      .filter(([_, value]) => !usedSectors.includes(value as Sector));
+  };
+
   const handlePercentageChange = (index: number, value: number) => {
     const updatedDiversifications = [...diversifications];
+    const currentTotal = totalPercentage - updatedDiversifications[index].nichePercentage;
+    
+    if (currentTotal + value > 100) {
+      setError("Total percentage cannot exceed 100%");
+      return;
+    }
+    
     updatedDiversifications[index].nichePercentage = value;
     setDiversifications(updatedDiversifications);
     calculateTotalPercentage(updatedDiversifications);
+    setError(null);
   };
 
   const handleSectorChange = (index: number, sector: Sector) => {
     const updatedDiversifications = [...diversifications];
+    
+    const sectorExists = diversifications.some(
+      (div, i) => i !== index && div.sector === sector
+    );
+    
+    if (sectorExists) {
+      setError("This sector is already selected");
+      return;
+    }
+    
     updatedDiversifications[index].sector = sector;
     setDiversifications(updatedDiversifications);
+    setError(null);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (totalPercentage !== 100) {
-      setError("Total percentage must equal 100%");
+    if (totalPercentage > 100) {
+      setError("Total percentage cannot exceed 100%");
+      return;
+    }
+
+    const sectors = diversifications.map(div => div.sector);
+    if (new Set(sectors).size !== sectors.length) {
+      setError("Duplicate sectors are not allowed");
       return;
     }
 
@@ -97,9 +132,9 @@ export default function DiversificationPage({ params }: Props) {
       setIsLoading(true);
       await updateDiversification({
         publicId: params.publicId,
-        diversifications: diversifications
+        diversifications: diversifications.length > 0 ? diversifications : null
       });
-      router.push(`/strategy/${params.publicId}`);
+      router.push(`/strategy/View/${params.strategyId}`);
     } catch (err) {
       setError("Failed to update diversifications");
       setIsLoading(false);
@@ -107,20 +142,35 @@ export default function DiversificationPage({ params }: Props) {
   };
 
   const addNewDiversification = () => {
+    if (totalPercentage >= 100) {
+      setError("Cannot add more sectors - total percentage is already at 100%");
+      return;
+    }
+
+    const availableSectors = getAvailableSectors(-1);
+    if (availableSectors.length === 0) {
+      setError("All sectors have been used");
+      return;
+    }
+
     setDiversifications([
       ...diversifications,
       {
         id: 0,
         nichePercentage: 0,
-        sector: Sector.Technology
+        sector: Number(availableSectors[0][1]) as Sector
       }
     ]);
+    setError(null);
   };
 
-  const removeDiversification = (index: number) => {
+  const remove = (index: number) => {
     const updatedDiversifications = diversifications.filter((_, i) => i !== index);
     setDiversifications(updatedDiversifications);
     calculateTotalPercentage(updatedDiversifications);
+    setError(null);    
+
+     removeDiversification(index);
   };
 
   if (isLoading) {
@@ -145,28 +195,29 @@ export default function DiversificationPage({ params }: Props) {
               onChange={(e) => handleSectorChange(index, Number(e.target.value) as Sector)}
               className="p-2 border rounded"
             >
-              {Object.entries(Sector)
-                .filter(([key]) => isNaN(Number(key)))
-                .map(([key, value]) => (
-                  <option key={value} value={value}>
-                    {key}
-                  </option>
-                ))}
+              {getAvailableSectors(index).map(([key, value]) => (
+                <option key={value} value={value}>
+                  {key}
+                </option>
+              ))}
+              <option key={div.sector} value={div.sector}>
+                {Sector[div.sector]}
+              </option>
             </select>
 
             <input
               type="number"
-              value={div.nichePercentage}
+              value={div.nichePercentage || ""}
               onChange={(e) => handlePercentageChange(index, Number(e.target.value))}
               min="0"
-              max="100"
+              max={100 - (totalPercentage - div.nichePercentage)}
               className="p-2 border rounded w-24"
             />
             <span>%</span>
 
             <button
               type="button"
-              onClick={() => removeDiversification(index)}
+              onClick={() => remove(index)}
               className="text-red-600 hover:text-red-800"
             >
               Remove
@@ -178,27 +229,21 @@ export default function DiversificationPage({ params }: Props) {
           <button
             type="button"
             onClick={addNewDiversification}
-            className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+            disabled={totalPercentage >= 100 || diversifications.length >= Object.keys(Sector).length / 2}
+            className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 disabled:bg-green-300"
           >
             Add Sector
           </button>
           
-          <div className="text-lg">
+          <div className={`text-lg ${totalPercentage > 100 ? 'text-red-600' : ''}`}>
             Total: {totalPercentage}%
           </div>
         </div>
 
-        <div className="flex justify-end gap-4">
-          <Link
-            href={`/strategy/${params.publicId}`}
-            className="bg-gray-500 text-white px-6 py-2 rounded hover:bg-gray-600"
-          >
-            Cancel
-          </Link>
-          
+        <div className="flex justify-end gap-4">      
           <button
             type="submit"
-            disabled={isLoading}
+            disabled={isLoading || totalPercentage > 100}
             className="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600 disabled:bg-blue-300"
           >
             Save Changes
