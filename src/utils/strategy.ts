@@ -78,12 +78,16 @@ export const addStragyToAsset = async (
   }
 };
 
-export const applaStrategy = async (publicId: string): Promise<ApplyStrategyInput> => {
+export const applaStrategy = async (
+  publicId: string,
+): Promise<ApplyStrategyInput> => {
   let userId = await getUserId();
-  const response = await axios.get(`${api}ApplyStrategies/${publicId}/${userId}`);
+  const response = await axios.get(
+    `${api}ApplyStrategies/${publicId}/${userId}`,
+  );
   const data = response.data;
   return data as ApplyStrategyInput;
-}
+};
 
 export const listTargets = async (publicId: string): Promise<TargetLevels> => {
   const response = await axios.get(`${api}ListTargets/${publicId}`);
@@ -107,7 +111,7 @@ export const getStrategy = async (publicId: UUID): Promise<GetStrategy> => {
   const response = await axios.get(`${api}GetStrategy/${publicId}/${userId}`);
 
   const data = response.data;
-  
+
   return data as GetStrategy;
 };
 
@@ -171,7 +175,7 @@ export const editPositionManagementPost = async (
   return false;
 };
 
-// export async function createDiversification(model: AddDiversification) {  
+// export async function createDiversification(model: AddDiversification) {
 //   const response = await axios.post<boolean>(`${api}AddDiversification`, model);
 //   if (response.status === 200) {
 //     redirect(`/strategy`);
@@ -180,27 +184,31 @@ export const editPositionManagementPost = async (
 //   }
 // }
 
-export async function getDiversifications(publicId: string) {  
+export async function getDiversifications(publicId: string) {
   try {
     const response = await axios.get(`${api}EditDiversification/${publicId}`);
     const data = response.data;
-    return data as EditDiversification
-  }
-  catch (error) {
+    return data as EditDiversification;
+  } catch (error) {
     console.error("Error:", error);
     throw error;
   }
 }
-  
-  export async function updateDiversification(model: EditDiversification) {  
-    const response = await axios.post<boolean>(`${api}EditDiversification`, model);
-    if (response.status !== 200) {
-      redirect("/");
-    }
-  }
 
-export async function removeDiversification(publicId: number) {  
-  const response = await axios.delete(`${api}RemoveDiversification/${publicId}`);
+export async function updateDiversification(model: EditDiversification) {
+  const response = await axios.post<boolean>(
+    `${api}EditDiversification`,
+    model,
+  );
+  if (response.status !== 200) {
+    redirect("/");
+  }
+}
+
+export async function removeDiversification(publicId: number) {
+  const response = await axios.delete(
+    `${api}RemoveDiversification/${publicId}`,
+  );
   if (response.status === 200) {
     redirect(`/strategy/View/${publicId}`);
   } else {

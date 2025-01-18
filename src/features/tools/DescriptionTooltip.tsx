@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { Eye } from 'lucide-react';
+import { Eye } from "lucide-react";
 
 interface DescriptionTooltipProps {
   description: string | undefined;

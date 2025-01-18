@@ -145,13 +145,13 @@ const ListPositionEntry: React.FC<AssetProps> = ({ params }) => {
     setError(null);
 
     try {
-       await deletePositionEntry(positionId);
+      await deletePositionEntry(positionId);
 
-       const updatedAsset = {
+      const updatedAsset = {
         ...asset!,
-        positionEntries: asset!.positionEntries?.filter(position => 
-          position.publicId !== positionId
-        )
+        positionEntries: asset!.positionEntries?.filter(
+          (position) => position.publicId !== positionId,
+        ),
       };
 
       setFormAsset(updatedAsset);
@@ -273,7 +273,7 @@ const ListPositionEntry: React.FC<AssetProps> = ({ params }) => {
           Add
         </Link>
       </div>
-      
+
       <div className="container mx-auto p-4">
         <div
           id="successMessage"
@@ -464,7 +464,7 @@ const ListPositionEntry: React.FC<AssetProps> = ({ params }) => {
                             </button>
                           </div>
                         </div>
-                          <DescriptionTooltip description={chart.description} />
+                        <DescriptionTooltip description={chart.description} />
                         <div className="relative h-48 w-full">
                           <a
                             href={chart.chartsPath}

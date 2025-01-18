@@ -44,7 +44,7 @@ const ViewAsset = ({ params }: AssetProps) => {
             publicId={asset.publicId}
           />
           <AssetDetails asset={asset} />
-      
+
           <AssetCharts
             charts={asset.charts}
             publicId={asset.publicId}

@@ -2,7 +2,8 @@
 
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { getDiversifications, removeDiversification, updateDiversification } from "@/utils/strategy";
+import { getDiversifications, updateDiversification } from "@/utils/strategy";
+import BackLink from "@/features/components/useful/BackLink";
 
 export type AddDiversification = {
   publicId: string;
@@ -46,7 +47,9 @@ interface Props {
 
 export default function DiversificationPage({ params }: Props) {
   const router = useRouter();
-  const [diversifications, setDiversifications] = useState<Diversification[]>([]);
+  const [diversifications, setDiversifications] = useState<Diversification[]>(
+    [],
+  );
   const [totalPercentage, setTotalPercentage] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -75,8 +78,8 @@ export default function DiversificationPage({ params }: Props) {
   const getAvailableSectors = (currentIndex: number) => {
     const usedSectors = diversifications
       .filter((_, index) => index !== currentIndex)
-      .map(div => div.sector);
-    
+      .map((div) => div.sector);
+
     return Object.entries(Sector)
       .filter(([key]) => isNaN(Number(key)))
       .filter(([_, value]) => !usedSectors.includes(value as Sector));
@@ -84,13 +87,14 @@ export default function DiversificationPage({ params }: Props) {
 
   const handlePercentageChange = (index: number, value: number) => {
     const updatedDiversifications = [...diversifications];
-    const currentTotal = totalPercentage - updatedDiversifications[index].nichePercentage;
-    
+    const currentTotal =
+      totalPercentage - updatedDiversifications[index].nichePercentage;
+
     if (currentTotal + value > 100) {
       setError("Total percentage cannot exceed 100%");
       return;
     }
-    
+
     updatedDiversifications[index].nichePercentage = value;
     setDiversifications(updatedDiversifications);
     calculateTotalPercentage(updatedDiversifications);
@@ -99,16 +103,16 @@ export default function DiversificationPage({ params }: Props) {
 
   const handleSectorChange = (index: number, sector: Sector) => {
     const updatedDiversifications = [...diversifications];
-    
+
     const sectorExists = diversifications.some(
-      (div, i) => i !== index && div.sector === sector
+      (div, i) => i !== index && div.sector === sector,
     );
-    
+
     if (sectorExists) {
       setError("This sector is already selected");
       return;
     }
-    
+
     updatedDiversifications[index].sector = sector;
     setDiversifications(updatedDiversifications);
     setError(null);
@@ -116,13 +120,13 @@ export default function DiversificationPage({ params }: Props) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (totalPercentage > 100) {
       setError("Total percentage cannot exceed 100%");
       return;
     }
 
-    const sectors = diversifications.map(div => div.sector);
+    const sectors = diversifications.map((div) => div.sector);
     if (new Set(sectors).size !== sectors.length) {
       setError("Duplicate sectors are not allowed");
       return;
@@ -132,7 +136,7 @@ export default function DiversificationPage({ params }: Props) {
       setIsLoading(true);
       await updateDiversification({
         publicId: params.publicId,
-        diversifications: diversifications.length > 0 ? diversifications : null
+        diversifications: diversifications.length > 0 ? diversifications : null,
       });
       router.push(`/strategy/View/${params.strategyId}`);
     } catch (err) {
@@ -158,19 +162,19 @@ export default function DiversificationPage({ params }: Props) {
       {
         id: 0,
         nichePercentage: 0,
-        sector: Number(availableSectors[0][1]) as Sector
-      }
+        sector: Number(availableSectors[0][1]) as Sector,
+      },
     ]);
     setError(null);
   };
 
   const remove = (index: number) => {
-    const updatedDiversifications = diversifications.filter((_, i) => i !== index);
+    const updatedDiversifications = diversifications.filter(
+      (_, i) => i !== index,
+    );
     setDiversifications(updatedDiversifications);
     calculateTotalPercentage(updatedDiversifications);
-    setError(null);    
-
-     removeDiversification(index);
+    setError(null);
   };
 
   if (isLoading) {
@@ -178,78 +182,98 @@ export default function DiversificationPage({ params }: Props) {
   }
 
   return (
-    <div className="max-w-4xl mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-6">Edit Diversification Strategy</h1>
-      
-      {error && (
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-          {error}
-        </div>
-      )}
+    <>
+      <div className="flex bg-gray-200 justify-center mt-2 px-2">
+        <BackLink />
+        <div className="ml-auto flex space-x-12 text-green"></div>
+      </div>
+      <div className="max-w-4xl mx-auto p-4">
+        <h1 className="text-2xl font-bold mb-6">
+          Edit Diversification Strategy
+        </h1>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
-        {diversifications.map((div, index) => (
-          <div key={index} className="flex items-center gap-4 p-4 bg-gray-50 rounded">
-            <select
-              value={div.sector}
-              onChange={(e) => handleSectorChange(index, Number(e.target.value) as Sector)}
-              className="p-2 border rounded"
+        {error && (
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+            {error}
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          {diversifications.map((div, index) => (
+            <div
+              key={index}
+              className="flex items-center gap-4 p-4 bg-gray-50 rounded"
             >
-              {getAvailableSectors(index).map(([key, value]) => (
-                <option key={value} value={value}>
-                  {key}
+              <select
+                value={div.sector}
+                onChange={(e) =>
+                  handleSectorChange(index, Number(e.target.value) as Sector)
+                }
+                className="p-2 border rounded"
+              >
+                {getAvailableSectors(index).map(([key, value]) => (
+                  <option key={value} value={value}>
+                    {key}
+                  </option>
+                ))}
+                <option key={div.sector} value={div.sector}>
+                  {Sector[div.sector]}
                 </option>
-              ))}
-              <option key={div.sector} value={div.sector}>
-                {Sector[div.sector]}
-              </option>
-            </select>
+              </select>
 
-            <input
-              type="number"
-              value={div.nichePercentage || ""}
-              onChange={(e) => handlePercentageChange(index, Number(e.target.value))}
-              min="0"
-              max={100 - (totalPercentage - div.nichePercentage)}
-              className="p-2 border rounded w-24"
-            />
-            <span>%</span>
+              <input
+                type="number"
+                value={div.nichePercentage || ""}
+                onChange={(e) =>
+                  handlePercentageChange(index, Number(e.target.value))
+                }
+                min="0"
+                max={100 - (totalPercentage - div.nichePercentage)}
+                className="p-2 border rounded w-24"
+              />
+              <span>%</span>
 
+              <button
+                type="button"
+                onClick={() => remove(index)}
+                className="text-red-600 hover:text-red-800"
+              >
+                Remove
+              </button>
+            </div>
+          ))}
+
+          <div className="flex justify-between items-center py-4">
             <button
               type="button"
-              onClick={() => remove(index)}
-              className="text-red-600 hover:text-red-800"
+              onClick={addNewDiversification}
+              disabled={
+                totalPercentage >= 100 ||
+                diversifications.length >= Object.keys(Sector).length / 2
+              }
+              className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 disabled:bg-green-300"
             >
-              Remove
+              Add Sector
+            </button>
+
+            <div
+              className={`text-lg ${totalPercentage > 100 ? "text-red-600" : ""}`}
+            >
+              Total: {totalPercentage}%
+            </div>
+          </div>
+
+          <div className="flex justify-end gap-4">
+            <button
+              type="submit"
+              disabled={isLoading || totalPercentage > 100}
+              className="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600 disabled:bg-blue-300"
+            >
+              Save Changes
             </button>
           </div>
-        ))}
-
-        <div className="flex justify-between items-center py-4">
-          <button
-            type="button"
-            onClick={addNewDiversification}
-            disabled={totalPercentage >= 100 || diversifications.length >= Object.keys(Sector).length / 2}
-            className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 disabled:bg-green-300"
-          >
-            Add Sector
-          </button>
-          
-          <div className={`text-lg ${totalPercentage > 100 ? 'text-red-600' : ''}`}>
-            Total: {totalPercentage}%
-          </div>
-        </div>
-
-        <div className="flex justify-end gap-4">      
-          <button
-            type="submit"
-            disabled={isLoading || totalPercentage > 100}
-            className="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600 disabled:bg-blue-300"
-          >
-            Save Changes
-          </button>
-        </div>
-      </form>
-    </div>
+        </form>
+      </div>
+    </>
   );
 }

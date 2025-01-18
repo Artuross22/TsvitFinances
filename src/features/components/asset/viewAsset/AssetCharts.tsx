@@ -10,17 +10,20 @@ interface AssetChartsProps {
 }
 
 const ShowCharts = ({ charts, publicId, name }: AssetChartsProps) => {
-
   return (
     <div className="bg-gray-300 m-2 p-2 flex">
       <div>
         {charts && charts.length > 0 && (
-          <Link href={`/PositionEntryNotes/ListPositionEntry/${publicId}/${name}`}>
+          <Link
+            href={`/PositionEntryNotes/ListPositionEntry/${publicId}/${name}`}
+          >
             View
           </Link>
         )}
         <br />
-        <Link href={`/PositionEntryNotes/AddCharts/${publicId}/${name}`}>Add</Link>
+        <Link href={`/PositionEntryNotes/AddCharts/${publicId}/${name}`}>
+          Add
+        </Link>
       </div>
 
       <div className="overflow-x-auto flex">
@@ -28,7 +31,11 @@ const ShowCharts = ({ charts, publicId, name }: AssetChartsProps) => {
           <div key={index} className="flex-none w-1/3 px-4 mb-4 flex flex-col">
             <p className="flex-grow">{path.name}</p>
             <div className="w-full h-64 relative">
-              <a href={path.chartsPath} target="_blank" rel="noopener noreferrer">
+              <a
+                href={path.chartsPath}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 <Image
                   src={path.chartsPath}
                   alt={`Chart ${index}`}

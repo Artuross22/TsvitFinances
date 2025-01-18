@@ -36,7 +36,6 @@ export type Diversification = {
   name: string;
 };
 
-
 export type Hedge = {
   name: string;
 };
@@ -92,13 +91,6 @@ const ViewStrategy: React.FC<Props> = ({ params }) => {
                   Risk Management
                 </h2>
                 <div className="flex space-x-2">
-                  <Link
-                      href={`/strategy/ManageDiversification/${strategy.riskManagement?.publicId}/${params.publicId}`}
-                    >
-                    <button className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    Manage Diversification 
-                    </button>
-                  </Link>
                   <Link
                     href={`/strategy/EditRiskManagement/${strategy.riskManagement?.publicId}`}
                   >
@@ -170,6 +162,31 @@ const ViewStrategy: React.FC<Props> = ({ params }) => {
                 <p className="font-medium">
                   {strategy.positionManagement?.averageLevel}%
                 </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-white rounded-lg border shadow-sm">
+            <div className="p-6 border-b">
+              <div className="flex items-center justify-between">
+                <h2 className="text-lg font-medium text-gray-900">
+                  Overview of diversification
+                </h2>
+                <div className="flex space-x-2">
+                  <Link
+                    href={`/strategy/ManageDiversification/${strategy.riskManagement?.publicId}/${params.publicId}`}
+                  >
+                    <button className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                      Manage Diversification
+                    </button>
+                  </Link>
+                </div>
+              </div>
+            </div>
+            <div className="p-6 space-y-4">
+              <div>
+                <p className="text-sm text-gray-500"></p>
+                <p className="font-medium">he</p>
               </div>
             </div>
           </div>
