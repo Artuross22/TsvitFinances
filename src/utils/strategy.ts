@@ -1,5 +1,7 @@
 "use server";
 
+import { AddInvestmentIdeaGet, AddInvestmentIdeaPost } from "@/app/InvestmentIdea/Add/page";
+import { ListInvestmentIdeas } from "@/app/InvestmentIdea/ListIdeas/page";
 import { AddStragy } from "@/app/strategy/AddStrategy/page";
 import {
   AddToStrategy,
@@ -175,15 +177,6 @@ export const editPositionManagementPost = async (
   return false;
 };
 
-// export async function createDiversification(model: AddDiversification) {
-//   const response = await axios.post<boolean>(`${api}AddDiversification`, model);
-//   if (response.status === 200) {
-//     redirect(`/strategy`);
-//   } else {
-//     redirect("/");
-//   }
-// }
-
 export async function getDiversifications(publicId: string) {
   try {
     const response = await axios.get(`${api}EditDiversification/${publicId}`);
@@ -205,12 +198,31 @@ export async function updateDiversification(model: EditDiversification) {
   }
 }
 
-export async function removeDiversification(publicId: number) {
-  const response = await axios.delete(
-    `${api}RemoveDiversification/${publicId}`,
-  );
+export async function createInvestmentIdeaGet() {
+  let userId = await getUserId();
+  const response = await axios.get<AddInvestmentIdeaGet[]>(`${api}AddInvestmentIdea/${userId}`);
   if (response.status === 200) {
-    redirect(`/strategy/View/${publicId}`);
+    return response.data;
+  } else {
+    redirect("/");
+  }
+}
+
+export async function createInvestmentIdeaPost(model: AddInvestmentIdeaPost) {
+  model.appUserId = await getUserId();
+  const response = await axios.post(`${api}AddInvestmentIdea`, model);
+  if (response.status === 200) {
+    redirect(`/investmentIdea/view${response.data}`);
+  } else {
+    redirect("/error");
+  }
+}
+
+export async function listInvestmentIdeas() {
+  let userId = await getUserId();
+  const response = await axios.get<ListInvestmentIdeas[]>(`${api}ListInvestmentIdeas/${userId}`);
+  if (response.status === 200) {
+    return response.data;
   } else {
     redirect("/");
   }
