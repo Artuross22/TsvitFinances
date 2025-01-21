@@ -2,6 +2,7 @@
 
 import { AddInvestmentIdeaGet, AddInvestmentIdeaPost } from "@/app/InvestmentIdea/Add/page";
 import { ListInvestmentIdeas } from "@/app/InvestmentIdea/ListIdeas/page";
+import { ViewInvestmentIdea } from "@/app/InvestmentIdea/View/[publicId]/page";
 import { AddStragy } from "@/app/strategy/AddStrategy/page";
 import {
   AddToStrategy,
@@ -226,4 +227,9 @@ export async function listInvestmentIdeas() {
   } else {
     redirect("/");
   }
+}
+
+export async function viewInvestmentIdeaPost(publicId: string) {
+  const response = await axios.get<ViewInvestmentIdea>(`${api}ViewInvestmentIdea/${publicId}`);
+  return response.data;
 }

@@ -4,6 +4,9 @@ import BackLink from "@/features/components/useful/BackLink";
 import { listInvestmentIdeas } from "@/utils/strategy";
 import { UUID } from "crypto";
 import { useEffect, useState } from "react";
+import { useRouter } from 'next/router';
+import Link from "next/link";
+
 
 export interface ListInvestmentIdeas {
   publicId: UUID;
@@ -31,9 +34,6 @@ export const List = () => {
 
     fetchInvestmentIdeas();
   }, []);
-
-  const handleView = (publicId: UUID) => {
-  };
 
   if (loading) {
     return (
@@ -93,12 +93,10 @@ export const List = () => {
                         {createdAtDate.toLocaleDateString()}
                       </p>
                     </div>
-                    <button 
-                      onClick={() => handleView(idea.publicId)}
-                      className="w-full bg-blue-600 text-white py-3 px-4 rounded-md hover:bg-blue-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-                    >
+                    <Link className="w-full bg-blue-600 text-white py-3 px-4 rounded-md hover:bg-blue-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                      href={`/InvestmentIdea/View/${idea.publicId}`}>                     
                       View
-                    </button>
+                    </Link>
                   </div>
                 );
               })}
