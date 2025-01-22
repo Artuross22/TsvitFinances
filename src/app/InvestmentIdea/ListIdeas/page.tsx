@@ -4,7 +4,6 @@ import BackLink from "@/features/components/useful/BackLink";
 import { listInvestmentIdeas } from "@/utils/strategy";
 import { UUID } from "crypto";
 import { useEffect, useState } from "react";
-import { useRouter } from 'next/router';
 import Link from "next/link";
 
 
@@ -68,9 +67,9 @@ export const List = () => {
         </div>
     <div className="min-h-screen bg-gray-50 p-8">
       <div className="max-w-8xl mx-auto">
-        <h6 className="text-2xl font-bold text-center text-gray-800 mb-8">
-        Failing to plan is planning to fail.
-        </h6>
+          <h6 className="text-2xl font-bold text-center text-gray-800 mb-8">
+              Failing to plan is planning to fail.
+          </h6>
         <div className="space-y-8">
           {rows.map((row, rowIndex) => (
             <div 

@@ -1,8 +1,10 @@
 "use client";
 
 import React, { useEffect, useState } from 'react';
-import { TrendingUp } from "lucide-react";
-import { viewInvestmentIdeaPost } from "@/utils/strategy";
+import { Pencil, TrendingUp } from "lucide-react";
+import { viewInvestmentIdea } from "@/utils/strategy";
+import Link from 'next/link';
+import BackLink from '@/features/components/useful/BackLink';
 
 interface Asset {
   publicId: string;
@@ -35,7 +37,7 @@ const ViewInvestmentIdea = ({ params }: Props) => {
       try {
         setIsLoading(true);
         setError(null);
-        const data = await viewInvestmentIdeaPost(params.publicId);
+        const data = await viewInvestmentIdea(params.publicId);
         setInvestmentIdea(data);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to fetch investment idea');
@@ -87,7 +89,21 @@ const ViewInvestmentIdea = ({ params }: Props) => {
   }
 
   return (
+    <>
+      <div className="flex bg-gray-200 justify-center mt-2 px-2">
+          <BackLink />
+          <div className="ml-auto flex space-x-12 text-green"></div>
+      </div>
     <div className={containerClasses}>
+    <div className="flex justify-end space-x-3">
+        <Link
+            href={`/InvestmentIdea/Edit/${investmentIdea.publicId}`}
+            className="flex items-center space-x-1 px-3 py-1.5 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors duration-200"
+        >
+            <Pencil size={16} />
+            <span className="text-sm font-medium">Edit</span>
+        </Link>
+    </div>
       <div className="bg-white rounded-lg shadow hover:shadow-lg transition-shadow p-6">
         <div className="mb-4">
           <div className="flex items-center justify-between">
@@ -123,22 +139,29 @@ const ViewInvestmentIdea = ({ params }: Props) => {
         </div>
 
         {investmentIdea.assets && investmentIdea.assets.length > 0 && (
-          <div className="border-t pt-4">
-            <p className="text-sm text-gray-500 mb-2">Assets</p>
-            <div className="flex flex-wrap gap-2">
+          <div className="border-t pt-6 mt-4">
+            <p className="text-sm font-medium text-gray-700 mb-3">Assets</p>
+            <div className="flex flex-wrap gap-3">
               {investmentIdea.assets.map((asset) => (
-                <span
+                <div
                   key={asset.publicId}
-                  className="px-3 py-1 bg-gray-100 rounded-full text-sm text-gray-600"
+                  className="group flex items-center space-x-2 px-4 py-2 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors duration-200"
                 >
-                  {asset.name}
-                </span>
+                  <span className="text-sm text-gray-700">{asset.name}</span>
+                  <Link 
+                    href={`/investing/ViewAsset/${asset.publicId}`}
+                    className="text-xs text-blue-600 hover:text-blue-700 font-medium transition-colors duration-200"
+                  >
+                    View →
+                  </Link>
+                </div>
               ))}
             </div>
           </div>
         )}
       </div>
     </div>
+    </>
   );
 }
 

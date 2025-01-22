@@ -1,6 +1,7 @@
 "use server";
 
 import { AddInvestmentIdeaGet, AddInvestmentIdeaPost } from "@/app/InvestmentIdea/Add/page";
+import { EditInvestmentIdea } from "@/app/InvestmentIdea/Edit/[publicId]/page";
 import { ListInvestmentIdeas } from "@/app/InvestmentIdea/ListIdeas/page";
 import { ViewInvestmentIdea } from "@/app/InvestmentIdea/View/[publicId]/page";
 import { AddStragy } from "@/app/strategy/AddStrategy/page";
@@ -229,7 +230,21 @@ export async function listInvestmentIdeas() {
   }
 }
 
-export async function viewInvestmentIdeaPost(publicId: string) {
+export async function viewInvestmentIdea(publicId: string) {
   const response = await axios.get<ViewInvestmentIdea>(`${api}ViewInvestmentIdea/${publicId}`);
   return response.data;
+}
+
+export async function EditInvestmentIdeaGet(publicId: string) {
+  const response = await axios.get<EditInvestmentIdea>(`${api}EditInvestmentIdea/${publicId}`);
+  return response.data;
+}
+
+export async function InvestmentIdeaPost(model: EditInvestmentIdea) {
+  const response = await axios.post(`${api}EditInvestmentIdea`, model);
+  if (response.status === 200) {
+    redirect(`/investmentIdea/view${response.data}`);
+  } else {
+    redirect("/error");
+  }
 }
