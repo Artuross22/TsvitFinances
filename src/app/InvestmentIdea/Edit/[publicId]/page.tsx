@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { EditInvestmentIdeaGet, InvestmentIdeaPost } from "@/utils/strategy";
+import { EditInvestmentIdeaGet, InvestmentIdeaPost, GetAllAssetsForIdea } from "@/utils/strategy";
 import { ArrowLeft, Save } from "lucide-react";
 import Link from "next/link";
 
@@ -12,10 +12,10 @@ export interface EditInvestmentIdea {
   expectedReturn: number;
   profit?: number;
   createdAt: Date;
-  assets?: Asset[];
+  assets?: AssetsForIdea[];
 }
 
-interface Asset {
+export interface AssetsForIdea {
   publicId: string;
   name: string;
 }
@@ -33,12 +33,15 @@ const Edit = ({ params }: Props) => {
     description: "",
     expectedReturn: 0,
   });
+  const [allAssets, setAllAssets] = useState<AssetsForIdea[]>([]);
+  const [selectedAssets, setSelectedAssets] = useState<AssetsForIdea[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        // Fetch investment idea details
         const data = await EditInvestmentIdeaGet(params.publicId);
         setInvestmentIdea(data);
         setFormData({
@@ -46,8 +49,13 @@ const Edit = ({ params }: Props) => {
           description: data.description,
           expectedReturn: data.expectedReturn,
         });
+
+        const assets = await GetAllAssetsForIdea();
+        setAllAssets(assets);
+
+        setSelectedAssets(data.assets || []);
       } catch (err) {
-        setError("Failed to load investment idea");
+        setError("Failed to load investment idea or assets");
       }
     };
 
@@ -58,8 +66,22 @@ const Edit = ({ params }: Props) => {
     e.preventDefault();
     setLoading(true);
     setError("");
-    //   await InvestmentIdeaPost(formData);
-
+    try {
+      const updatedInvestmentIdea: EditInvestmentIdea = {
+        publicId: params.publicId,
+        name: formData.name,
+        description: formData.description,
+        expectedReturn: formData.expectedReturn,
+        createdAt: investmentIdea?.createdAt || new Date(),
+        profit: investmentIdea?.profit,
+        assets: selectedAssets
+      };
+      await InvestmentIdeaPost(updatedInvestmentIdea);
+      setLoading(false);
+    } catch (err) {
+      setError("Failed to save investment idea");
+      setLoading(false);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -68,6 +90,14 @@ const Edit = ({ params }: Props) => {
       ...prev,
       [name]: name === 'expectedReturn' ? parseFloat(value) || 0 : value,
     }));
+  };
+
+  const toggleAssetSelection = (asset: AssetsForIdea) => {
+    setSelectedAssets(prev => 
+      prev.some(a => a.publicId === asset.publicId)
+        ? prev.filter(a => a.publicId !== asset.publicId)
+        : [...prev, asset]
+    );
   };
 
   return (
@@ -127,7 +157,7 @@ const Edit = ({ params }: Props) => {
                 <input
                   type="number"
                   name="expectedReturn"
-                  value={formData.expectedReturn}
+                  value={formData.expectedReturn || ""}
                   onChange={handleChange}
                   step="0.01"
                   className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
@@ -135,23 +165,31 @@ const Edit = ({ params }: Props) => {
                 />
               </div>
 
-              {investmentIdea?.assets && investmentIdea.assets.length > 0 && (
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Related Assets
-                  </label>
-                  <div className="flex flex-wrap gap-2">
-                    {investmentIdea.assets.map((asset) => (
-                      <div
-                        key={asset.publicId}
-                        className="px-3 py-1 bg-gray-100 rounded text-sm text-gray-600"
-                      >
-                        {asset.name}
-                      </div>
-                    ))}
-                  </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Select Related Assets
+                </label>
+                <div className="grid grid-cols-3 gap-2">
+                  {allAssets.map((asset) => (
+                    <label 
+                      key={asset.publicId} 
+                      className={`flex items-center p-2 border rounded cursor-pointer ${
+                        selectedAssets.some(a => a.publicId === asset.publicId) 
+                          ? 'bg-blue-100 border-blue-500' 
+                          : 'bg-white'
+                      }`}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={selectedAssets.some(a => a.publicId === asset.publicId)}
+                        onChange={() => toggleAssetSelection(asset)}
+                        className="mr-2"
+                      />
+                      {asset.name}
+                    </label>
+                  ))}
                 </div>
-              )}
+              </div>
 
               <div className="flex justify-end mt-6">
                 <button

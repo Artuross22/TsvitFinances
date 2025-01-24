@@ -1,7 +1,7 @@
 "use server";
 
 import { AddInvestmentIdeaGet, AddInvestmentIdeaPost } from "@/app/InvestmentIdea/Add/page";
-import { EditInvestmentIdea } from "@/app/InvestmentIdea/Edit/[publicId]/page";
+import { AssetsForIdea, EditInvestmentIdea } from "@/app/InvestmentIdea/Edit/[publicId]/page";
 import { ListInvestmentIdeas } from "@/app/InvestmentIdea/ListIdeas/page";
 import { ViewInvestmentIdea } from "@/app/InvestmentIdea/View/[publicId]/page";
 import { AddStragy } from "@/app/strategy/AddStrategy/page";
@@ -247,4 +247,10 @@ export async function InvestmentIdeaPost(model: EditInvestmentIdea) {
   } else {
     redirect("/error");
   }
+}
+
+export async function GetAllAssetsForIdea() {
+  let userPublicId = await getUserId();
+  const response = await axios.get<AssetsForIdea[]>(`${api}GetAssetsForIdea/${userPublicId}`);
+  return response.data;
 }
