@@ -61,10 +61,21 @@ export const List = () => {
 
   return (
     <>
-      <div className="flex bg-gray-200 justify-center mt-2 px-2">
-      <BackLink />
-      <div className="ml-auto flex space-x-12 text-green"></div>
+           <div className="flex bg-gray-200 justify-center mt-2 px-2">
+        <div className="absolute left-1 text-green">
+        <BackLink />
+
         </div>
+        <Link
+          href={`/InvestmentIdea/Add`}
+          className="absolute right-1 text-green"
+        >
+          Create
+        </Link>
+        <h2>
+          <strong>List of Assets</strong>
+        </h2>
+      </div>
     <div className="min-h-screen bg-gray-50 p-8">
       <div className="max-w-8xl mx-auto">
           <h6 className="text-2xl font-bold text-center text-gray-800 mb-8">

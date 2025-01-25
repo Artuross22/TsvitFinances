@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useEffect, useState } from 'react';
-import { Pencil, TrendingUp } from "lucide-react";
-import { viewInvestmentIdea } from "@/utils/strategy";
+import { Pencil, Trash2, TrendingUp } from "lucide-react";
+import { deleteInvestmentIdea, viewInvestmentIdea } from "@/utils/strategy";
 import Link from 'next/link';
 import BackLink from '@/features/components/useful/BackLink';
 
@@ -49,6 +49,21 @@ const ViewInvestmentIdea = ({ params }: Props) => {
 
     fetchData();
   }, [params.publicId]);
+
+  const handleDelete = async () => {
+    if (!investmentIdea) return;
+
+    const confirmDelete = window.confirm(`Are you sure you want to delete the investment idea "${investmentIdea.name}"?`);
+    
+    if (confirmDelete) {
+      try {
+        await deleteInvestmentIdea(investmentIdea.publicId);
+      } catch (err) {
+        console.error("Error deleting investment idea:", err);
+        alert('Failed to delete investment idea');
+      }
+    }
+  };
 
   const containerClasses = "max-w-2xl mx-auto w-full px-4 p-8";
 
@@ -103,6 +118,13 @@ const ViewInvestmentIdea = ({ params }: Props) => {
             <Pencil size={16} />
             <span className="text-sm font-medium">Edit</span>
         </Link>
+        <button
+            onClick={handleDelete}
+            className="flex items-center space-x-1 px-3 py-1.5 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors duration-200"
+        >
+            <Trash2 size={16} />
+            <span className="text-sm font-medium">Delete</span>
+        </button>
     </div>
       <div className="bg-white rounded-lg shadow hover:shadow-lg transition-shadow p-6">
         <div className="mb-4">

@@ -1,18 +1,23 @@
 "use client";
-import Link from "next/link";
 import DeleteForm from "@/features/components/DeleteForm";
+import BackLink from "../../useful/BackLink";
 
 interface AssetHeaderProps {
   name: string;
   assetId: string;
 }
 
+<div className="flex bg-gray-200 justify-center mt-2 px-2">
+<div className="ml-auto flex space-x-12 text-green"></div>
+</div>
+
 const AssetHeader = ({ name, assetId }: AssetHeaderProps) => {
   return (
     <div className="flex bg-gray-200 justify-center mt-2 px-2">
-      <Link href="/investing" className="mr-auto text-green">
-        Back
-      </Link>
+      <div className="mr-auto text-green">
+        <BackLink />
+      </div>
+
       <h2>
         <strong>{name}</strong>
       </h2>

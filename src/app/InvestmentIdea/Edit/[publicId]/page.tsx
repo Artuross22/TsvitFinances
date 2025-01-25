@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { EditInvestmentIdeaGet, InvestmentIdeaPost, GetAllAssetsForIdea } from "@/utils/strategy";
+import { editInvestmentIdeaGet, investmentIdeaPost, getAllAssetsForIdea } from "@/utils/strategy";
 import { ArrowLeft, Save } from "lucide-react";
-import Link from "next/link";
+import BackLink from "@/features/components/useful/BackLink";
 
 export interface EditInvestmentIdea {
   publicId: string;
@@ -32,6 +32,7 @@ const Edit = ({ params }: Props) => {
     name: "",
     description: "",
     expectedReturn: 0,
+    profit: 0,
   });
   const [allAssets, setAllAssets] = useState<AssetsForIdea[]>([]);
   const [selectedAssets, setSelectedAssets] = useState<AssetsForIdea[]>([]);
@@ -41,16 +42,16 @@ const Edit = ({ params }: Props) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Fetch investment idea details
-        const data = await EditInvestmentIdeaGet(params.publicId);
+        const data = await editInvestmentIdeaGet(params.publicId);
         setInvestmentIdea(data);
         setFormData({
           name: data.name,
           description: data.description,
           expectedReturn: data.expectedReturn,
+          profit: data.profit || 0,
         });
 
-        const assets = await GetAllAssetsForIdea();
+        const assets = await getAllAssetsForIdea();
         setAllAssets(assets);
 
         setSelectedAssets(data.assets || []);
@@ -72,11 +73,11 @@ const Edit = ({ params }: Props) => {
         name: formData.name,
         description: formData.description,
         expectedReturn: formData.expectedReturn,
+        profit: formData.profit,
         createdAt: investmentIdea?.createdAt || new Date(),
-        profit: investmentIdea?.profit,
         assets: selectedAssets
       };
-      await InvestmentIdeaPost(updatedInvestmentIdea);
+      await investmentIdeaPost(updatedInvestmentIdea);
       setLoading(false);
     } catch (err) {
       setError("Failed to save investment idea");
@@ -88,7 +89,7 @@ const Edit = ({ params }: Props) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: name === 'expectedReturn' ? parseFloat(value) || 0 : value,
+      [name]: ['expectedReturn', 'profit'].includes(name) ? parseFloat(value) || 0 : value,
     }));
   };
 
@@ -102,12 +103,9 @@ const Edit = ({ params }: Props) => {
 
   return (
     <>
-      <div className="flex bg-gray-200 items-center px-4 py-2 mt-2">
-        <Link href={`/investing/ViewInvestmentIdea/${params.publicId}`} 
-          className="flex items-center text-gray-600 hover:text-gray-900">
-          <ArrowLeft size={20} />
-          <span className="ml-1">Back</span>
-        </Link>
+      <div className="flex bg-gray-200 justify-center mt-2 px-2">
+        <BackLink />
+        <div className="ml-auto flex space-x-12 text-green"></div>
       </div>
 
       <div className="max-w-2xl mx-auto mt-6 px-4">
@@ -162,6 +160,20 @@ const Edit = ({ params }: Props) => {
                   step="0.01"
                   className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   required
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Profit (%)
+                </label>
+                <input
+                  type="number"
+                  name="profit"
+                  value={formData.profit || ""}
+                  onChange={handleChange}
+                  step="0.01"
+                  className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 />
               </div>
 

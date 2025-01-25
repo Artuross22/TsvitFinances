@@ -18,7 +18,7 @@ import { ListStrategies } from "@/app/strategy/page";
 import { TargetLevels } from "@/features/components/asset/viewAsset/AssetTargets";
 import { verifyAuth } from "@/lib/auth";
 import axios from "axios";
-import { UUID } from "crypto";
+import { UUID, publicDecrypt } from "crypto";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -235,22 +235,29 @@ export async function viewInvestmentIdea(publicId: string) {
   return response.data;
 }
 
-export async function EditInvestmentIdeaGet(publicId: string) {
+export async function editInvestmentIdeaGet(publicId: string) {
   const response = await axios.get<EditInvestmentIdea>(`${api}EditInvestmentIdea/${publicId}`);
   return response.data;
 }
 
-export async function InvestmentIdeaPost(model: EditInvestmentIdea) {
+export async function investmentIdeaPost(model: EditInvestmentIdea) {
   const response = await axios.post(`${api}EditInvestmentIdea`, model);
   if (response.status === 200) {
-    redirect(`/investmentIdea/view${response.data}`);
+    redirect(`/InvestmentIdea/View/${model.publicId}`);
   } else {
     redirect("/error");
   }
 }
 
-export async function GetAllAssetsForIdea() {
+export async function getAllAssetsForIdea() {
   let userPublicId = await getUserId();
   const response = await axios.get<AssetsForIdea[]>(`${api}GetAssetsForIdea/${userPublicId}`);
   return response.data;
+}
+
+export async function deleteInvestmentIdea(publicId: string) {
+  const response = await axios.delete(`${api}DeleteInvestmentIdea/${publicId}`);
+  if (response.status === 200) {
+    redirect(`/InvestmentIdea/ListIdeas`);
+  }
 }

@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { editAsset, editAssetGet } from "@/utils/asset";
 import Link from "next/link";
+import BackLink from "@/features/components/useful/BackLink";
 
 export type EditAssetDto = {
   userPublicId: string;
@@ -43,17 +44,15 @@ const AssetForm: React.FC<AssetProps> = ({ params }) => {
 
   return (
     <div>
-      <div className="flex bg-gray-200 justify-center mt-2">
-        <Link
-          href={`/investing/ViewAsset/${params.id}`}
-          className="absolute left-1 text-green"
-        >
-          Back
-        </Link>
-        <h2>
+
+      <div className="flex bg-gray-200 justify-center mt-2 px-2">
+           <div className="absolute left-1 text-green">
+           <BackLink />
+           </div>
+            <h2>
           <strong>Edit {formAsset.name}</strong>
         </h2>
-      </div>
+        </div>
       <form
         onSubmit={handleSubmit}
         className="flex flex-col items-center mx-auto mt-10"

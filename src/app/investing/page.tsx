@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { getAllAssets } from "@/utils/asset";
 import Link from "next/link";
 import { Asset } from "@/types/asset";
+import BackLink from "@/features/components/useful/BackLink";
 
 const ListAssets: React.FC = () => {
   const [assets, setAssets] = useState<Asset[]>([]);
@@ -36,10 +37,10 @@ const ListAssets: React.FC = () => {
   return (
     <div>
       <div className="flex bg-gray-200 justify-center mt-2">
-        <Link href={`/`} className="absolute left-1 text-green">
-          Back
-        </Link>
+        <div className="absolute left-1 text-green">
+        <BackLink />
 
+        </div>
         <Link
           href={`/investing/AddAsset`}
           className="absolute right-1 text-green"
