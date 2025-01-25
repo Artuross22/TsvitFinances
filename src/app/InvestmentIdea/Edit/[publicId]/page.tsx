@@ -1,7 +1,11 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { editInvestmentIdeaGet, investmentIdeaPost, getAllAssetsForIdea } from "@/utils/strategy";
+import {
+  editInvestmentIdeaGet,
+  investmentIdeaPost,
+  getAllAssetsForIdea,
+} from "@/utils/strategy";
 import { ArrowLeft, Save } from "lucide-react";
 import BackLink from "@/features/components/useful/BackLink";
 
@@ -75,7 +79,7 @@ const Edit = ({ params }: Props) => {
         expectedReturn: formData.expectedReturn,
         profit: formData.profit,
         createdAt: investmentIdea?.createdAt || new Date(),
-        assets: selectedAssets
+        assets: selectedAssets,
       };
       await investmentIdeaPost(updatedInvestmentIdea);
       setLoading(false);
@@ -85,19 +89,23 @@ const Edit = ({ params }: Props) => {
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: ['expectedReturn', 'profit'].includes(name) ? parseFloat(value) || 0 : value,
+      [name]: ["expectedReturn", "profit"].includes(name)
+        ? parseFloat(value) || 0
+        : value,
     }));
   };
 
   const toggleAssetSelection = (asset: AssetsForIdea) => {
-    setSelectedAssets(prev => 
-      prev.some(a => a.publicId === asset.publicId)
-        ? prev.filter(a => a.publicId !== asset.publicId)
-        : [...prev, asset]
+    setSelectedAssets((prev) =>
+      prev.some((a) => a.publicId === asset.publicId)
+        ? prev.filter((a) => a.publicId !== asset.publicId)
+        : [...prev, asset],
     );
   };
 
@@ -183,17 +191,21 @@ const Edit = ({ params }: Props) => {
                 </label>
                 <div className="grid grid-cols-3 gap-2">
                   {allAssets.map((asset) => (
-                    <label 
-                      key={asset.publicId} 
+                    <label
+                      key={asset.publicId}
                       className={`flex items-center p-2 border rounded cursor-pointer ${
-                        selectedAssets.some(a => a.publicId === asset.publicId) 
-                          ? 'bg-blue-100 border-blue-500' 
-                          : 'bg-white'
+                        selectedAssets.some(
+                          (a) => a.publicId === asset.publicId,
+                        )
+                          ? "bg-blue-100 border-blue-500"
+                          : "bg-white"
                       }`}
                     >
                       <input
                         type="checkbox"
-                        checked={selectedAssets.some(a => a.publicId === asset.publicId)}
+                        checked={selectedAssets.some(
+                          (a) => a.publicId === asset.publicId,
+                        )}
                         onChange={() => toggleAssetSelection(asset)}
                         className="mr-2"
                       />

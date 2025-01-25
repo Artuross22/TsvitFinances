@@ -47,7 +47,9 @@ interface Props {
 
 export default function DiversificationPage({ params }: Props) {
   const router = useRouter();
-  const [diversifications, setDiversifications] = useState<Diversification[]>([],);
+  const [diversifications, setDiversifications] = useState<Diversification[]>(
+    [],
+  );
   const [totalPercentage, setTotalPercentage] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);

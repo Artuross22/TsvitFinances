@@ -38,8 +38,7 @@ const ListAssets: React.FC = () => {
     <div>
       <div className="flex bg-gray-200 justify-center mt-2">
         <div className="absolute left-1 text-green">
-        <BackLink />
-
+          <BackLink />
         </div>
         <Link
           href={`/investing/AddAsset`}

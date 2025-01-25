@@ -52,10 +52,10 @@ function Navbar({ userName }: Props) {
       </div>
       <nav>
         <ul style={{ listStyle: "none", display: "flex", gap: "10px" }}>
-        <li>
+          <li>
             <Link href="/InvestmentIdea/ListIdeas">
               <span style={{ color: "white", textDecoration: "none" }}>
-              Ideas
+                Ideas
               </span>
             </Link>
           </li>

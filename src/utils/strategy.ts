@@ -1,7 +1,13 @@
 "use server";
 
-import { AddInvestmentIdeaGet, AddInvestmentIdeaPost } from "@/app/InvestmentIdea/Add/page";
-import { AssetsForIdea, EditInvestmentIdea } from "@/app/InvestmentIdea/Edit/[publicId]/page";
+import {
+  AddInvestmentIdeaGet,
+  AddInvestmentIdeaPost,
+} from "@/app/InvestmentIdea/Add/page";
+import {
+  AssetsForIdea,
+  EditInvestmentIdea,
+} from "@/app/InvestmentIdea/Edit/[publicId]/page";
 import { ListInvestmentIdeas } from "@/app/InvestmentIdea/ListIdeas/page";
 import { ViewInvestmentIdea } from "@/app/InvestmentIdea/View/[publicId]/page";
 import { AddStragy } from "@/app/strategy/AddStrategy/page";
@@ -202,7 +208,9 @@ export async function updateDiversification(model: EditDiversification) {
 
 export async function createInvestmentIdeaGet() {
   let userId = await getUserId();
-  const response = await axios.get<AddInvestmentIdeaGet[]>(`${api}AddInvestmentIdea/${userId}`);
+  const response = await axios.get<AddInvestmentIdeaGet[]>(
+    `${api}AddInvestmentIdea/${userId}`,
+  );
   if (response.status === 200) {
     return response.data;
   } else {
@@ -222,7 +230,9 @@ export async function createInvestmentIdeaPost(model: AddInvestmentIdeaPost) {
 
 export async function listInvestmentIdeas() {
   let userId = await getUserId();
-  const response = await axios.get<ListInvestmentIdeas[]>(`${api}ListInvestmentIdeas/${userId}`);
+  const response = await axios.get<ListInvestmentIdeas[]>(
+    `${api}ListInvestmentIdeas/${userId}`,
+  );
   if (response.status === 200) {
     return response.data;
   } else {
@@ -231,12 +241,16 @@ export async function listInvestmentIdeas() {
 }
 
 export async function viewInvestmentIdea(publicId: string) {
-  const response = await axios.get<ViewInvestmentIdea>(`${api}ViewInvestmentIdea/${publicId}`);
+  const response = await axios.get<ViewInvestmentIdea>(
+    `${api}ViewInvestmentIdea/${publicId}`,
+  );
   return response.data;
 }
 
 export async function editInvestmentIdeaGet(publicId: string) {
-  const response = await axios.get<EditInvestmentIdea>(`${api}EditInvestmentIdea/${publicId}`);
+  const response = await axios.get<EditInvestmentIdea>(
+    `${api}EditInvestmentIdea/${publicId}`,
+  );
   return response.data;
 }
 
@@ -251,7 +265,9 @@ export async function investmentIdeaPost(model: EditInvestmentIdea) {
 
 export async function getAllAssetsForIdea() {
   let userPublicId = await getUserId();
-  const response = await axios.get<AssetsForIdea[]>(`${api}GetAssetsForIdea/${userPublicId}`);
+  const response = await axios.get<AssetsForIdea[]>(
+    `${api}GetAssetsForIdea/${userPublicId}`,
+  );
   return response.data;
 }
 

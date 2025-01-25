@@ -44,15 +44,14 @@ const AssetForm: React.FC<AssetProps> = ({ params }) => {
 
   return (
     <div>
-
       <div className="flex bg-gray-200 justify-center mt-2 px-2">
-           <div className="absolute left-1 text-green">
-           <BackLink />
-           </div>
-            <h2>
+        <div className="absolute left-1 text-green">
+          <BackLink />
+        </div>
+        <h2>
           <strong>Edit {formAsset.name}</strong>
         </h2>
-        </div>
+      </div>
       <form
         onSubmit={handleSubmit}
         className="flex flex-col items-center mx-auto mt-10"

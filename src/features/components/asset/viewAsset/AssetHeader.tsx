@@ -8,8 +8,8 @@ interface AssetHeaderProps {
 }
 
 <div className="flex bg-gray-200 justify-center mt-2 px-2">
-<div className="ml-auto flex space-x-12 text-green"></div>
-</div>
+  <div className="ml-auto flex space-x-12 text-green"></div>
+</div>;
 
 const AssetHeader = ({ name, assetId }: AssetHeaderProps) => {
   return (
