@@ -52,6 +52,13 @@ function Navbar({ userName }: Props) {
       </div>
       <nav>
         <ul style={{ listStyle: "none", display: "flex", gap: "10px" }}>
+        <li>
+            <Link href="/userManagement/View">
+              <span style={{ color: "white", textDecoration: "none" }}>
+                User Management
+              </span>
+            </Link>
+          </li>
           <li>
             <Link href="/InvestmentIdea/ListIdeas">
               <span style={{ color: "white", textDecoration: "none" }}>

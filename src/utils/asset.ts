@@ -13,7 +13,7 @@ import {
   PositionEntryModel,
   UpdateChart,
   UpdateNote,
-} from "@/app/PositionEntryNotes/ListPositionEntry/[id]/[name]/page";
+} from "@/app/positionEntryNotes/ListPositionEntry/[id]/[name]/page";
 import { ListCharts } from "@/types/assetsDto";
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";

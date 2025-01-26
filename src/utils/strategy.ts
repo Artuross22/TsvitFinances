@@ -3,13 +3,13 @@
 import {
   AddInvestmentIdeaGet,
   AddInvestmentIdeaPost,
-} from "@/app/InvestmentIdea/Add/page";
+} from "@/app/investmentIdea/Add/page";
 import {
   AssetsForIdea,
   EditInvestmentIdea,
-} from "@/app/InvestmentIdea/Edit/[publicId]/page";
-import { ListInvestmentIdeas } from "@/app/InvestmentIdea/ListIdeas/page";
-import { ViewInvestmentIdea } from "@/app/InvestmentIdea/View/[publicId]/page";
+} from "@/app/investmentIdea/Edit/[publicId]/page";
+import { ListInvestmentIdeas } from "@/app/investmentIdea/ListIdeas/page";
+import { ViewInvestmentIdea } from "@/app/investmentIdea/View/[publicId]/page";
 import { AddStragy } from "@/app/strategy/AddStrategy/page";
 import {
   AddToStrategy,
@@ -22,26 +22,12 @@ import { EditDiversification } from "@/app/strategy/ManageDiversification/[publi
 import { GetStrategy } from "@/app/strategy/View/[publicId]/page";
 import { ListStrategies } from "@/app/strategy/page";
 import { TargetLevels } from "@/features/components/asset/viewAsset/AssetTargets";
-import { verifyAuth } from "@/lib/auth";
 import axios from "axios";
-import { UUID, publicDecrypt } from "crypto";
-import { cookies } from "next/headers";
+import { UUID } from "crypto";
 import { redirect } from "next/navigation";
+import { api, checkverify, getUserId } from "./helpers/apiHelpers";
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
-
-const api = "https://localhost:44309/api/";
-
-export const checkverify = async () => {
-  const cookieStore = cookies();
-  const token = cookieStore.get("jwtToken")!.value;
-
-  return await verifyAuth(token);
-};
-
-export async function getUserId() {
-  return await checkverify().then((data) => data.userPublicId!);
-}
 
 export const listStrategies = async (): Promise<ListStrategies[]> => {
   try {
