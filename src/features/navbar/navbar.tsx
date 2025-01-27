@@ -60,7 +60,7 @@ function Navbar({ userName }: Props) {
             </Link>
           </li>
           <li>
-            <Link href="/InvestmentIdea/ListIdeas">
+            <Link href="/investmentIdea/ListIdeas">
               <span style={{ color: "white", textDecoration: "none" }}>
                 Ideas
               </span>

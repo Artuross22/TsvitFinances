@@ -2,7 +2,7 @@
 
 import { viewUserGet } from "@/utils/user";
 import { useEffect, useState } from "react";
-import AddBalanceFlow from "../addBalanceFlow/page";
+import AddBalanceFlow from "../../../features/components/userManagement/addBalanceFlow/page";
 
 export interface ViewUser {
     id: string;
@@ -95,8 +95,7 @@ export const UserManagement = () => {
         </div>
 
         <AddBalanceFlow/>
-
-
+        
         </>
     );
 }

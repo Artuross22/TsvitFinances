@@ -1,7 +1,7 @@
 "use client";
 
+import { addBalanceFlow } from '@/utils/user';
 import React, { useState } from 'react';
-import { addBalanceFlow } from "@/utils/user";
 
 enum Balance {
     Income = 1,
@@ -16,16 +16,21 @@ enum Balance {
 }
 
 export interface AddBalanceFlow {
+    appUserId: string | "";
+    balanceFlows: BalanceFlow[];
+}
+
+interface BalanceFlow {
     sum: string;
     balanceType: Balance;
 }
 
-export const AddBalanceFlow: React.FC = () => {
-    const [balanceFlows, setBalanceFlows] = useState<AddBalanceFlow[]>([]);
-    const [currentFlow, setCurrentFlow] = useState<AddBalanceFlow>({
+export const AddBalanceFlowComponent: React.FC = () => {
+    const [currentFlow, setCurrentFlow] = useState<BalanceFlow>({
         sum: '',
         balanceType: Balance.Income
     });
+    const [balanceFlows, setBalanceFlows] = useState<BalanceFlow[]>([]);
     const [error, setError] = useState<string | null>(null);
 
     const addFlow = () => {
@@ -46,9 +51,15 @@ export const AddBalanceFlow: React.FC = () => {
             return;
         }
 
+        const flowData: AddBalanceFlow = {
+            appUserId: "",
+            balanceFlows: balanceFlows
+        };
+
         try {
-            await addBalanceFlow(balanceFlows);
+            await addBalanceFlow(flowData);
             setBalanceFlows([]);
+            setCurrentFlow({ sum: '', balanceType: Balance.Income });
             setError(null);
         } catch (err) {
             setError('Failed to add balance flows');
@@ -90,7 +101,10 @@ export const AddBalanceFlow: React.FC = () => {
                     <h3 className="font-bold mb-2">Current Flows:</h3>
                     {balanceFlows.map((flow, index) => (
                         <div key={index} className="border p-2 mb-1 flex justify-between">
-                            <span>{flow.sum} - {Balance[flow.balanceType]}</span>
+                            <span>
+                                Amount: {flow.sum} - 
+                                Type: {Balance[flow.balanceType]}
+                            </span>
                             <button 
                                 onClick={() => setBalanceFlows(balanceFlows.filter((_, i) => i !== index))}
                                 className="text-red-500"
@@ -115,4 +129,4 @@ export const AddBalanceFlow: React.FC = () => {
     );
 }
 
-export default AddBalanceFlow;
+export default AddBalanceFlowComponent;
