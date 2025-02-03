@@ -117,7 +117,7 @@ const ViewInvestmentIdea = ({ params }: Props) => {
       <div className={containerClasses}>
         <div className="flex justify-end space-x-3">
           <Link
-            href={`/InvestmentIdea/Edit/${investmentIdea.publicId}`}
+            href={`/investmentIdea/Edit/${investmentIdea.publicId}`}
             className="flex items-center space-x-1 px-3 py-1.5 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors duration-200"
           >
             <Pencil size={16} />

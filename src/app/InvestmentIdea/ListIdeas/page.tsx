@@ -108,7 +108,7 @@ export const List = () => {
                       </div>
                       <Link
                         className="w-full bg-blue-600 text-white py-3 px-4 rounded-md hover:bg-blue-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-                        href={`/InvestmentIdea/View/${idea.publicId}`}
+                        href={`/investmentIdea/View/${idea.publicId}`}
                       >
                         View
                       </Link>
