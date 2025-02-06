@@ -2,18 +2,8 @@
 
 import { addBalanceFlow } from "@/utils/user";
 import React, { useState } from "react";
+import { Balance } from "@/types/balanceFlow";
 
-enum Balance {
-  Income = 1,
-  Outcome,
-  InternalRevenue,
-  Total,
-  Crypto,
-  Stock,
-  ReserveOne = 10,
-  ReserveTwo,
-  ReserveThree,
-}
 
 export interface AddBalanceFlow {
   appUserId: string | "";

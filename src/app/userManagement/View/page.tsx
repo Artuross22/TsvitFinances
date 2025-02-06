@@ -4,7 +4,7 @@ import React from "react";
 import { useEffect, useState } from "react";
 import { viewUserGet } from "@/utils/user";
 import AddBalanceFlow from "../../../features/components/userManagement/addBalanceFlow/page";
-import RemoveBalanceFlow from "@/features/components/userManagement/removeBalanceFlow/page";
+import TransferBalanceFlow from "@/features/components/userManagement/transferBalanceFlow/page";
 import {
   User,
   CreditCard,
@@ -181,7 +181,7 @@ export const UserManagement = () => {
               </button>
             </div>
             <div className="p-6">
-              {activeTab === "add" ? <AddBalanceFlow /> : <RemoveBalanceFlow />}
+              {activeTab === "add" ? <AddBalanceFlow /> : <TransferBalanceFlow />}
             </div>
           </div>
         </div>
