@@ -15,13 +15,13 @@ const ShowCharts = ({ charts, publicId, name }: AssetChartsProps) => {
       <div>
         {charts && charts.length > 0 && (
           <Link
-            href={`/PositionEntryNotes/ListPositionEntry/${publicId}/${name}`}
+            href={`/positionEntryNotes/ListPositionEntry/${publicId}/${name}`}
           >
             View
           </Link>
         )}
         <br />
-        <Link href={`/PositionEntryNotes/AddCharts/${publicId}/${name}`}>
+        <Link href={`/positionEntryNotes/AddCharts/${publicId}/${name}`}>
           Add
         </Link>
       </div>

@@ -15,6 +15,7 @@ import {
   BookUser,
 } from "lucide-react";
 import UserBalanceHistory from "@/features/components/userManagement/balanceHistory/page";
+import BackLink from "@/features/components/useful/BackLink";
 
 export interface ViewUser {
   id: string;
@@ -124,6 +125,12 @@ export const UserManagement = () => {
   if (!user) return null;
 
   return (
+    <>
+        <div className="flex bg-gray-200 justify-center mt-2 px-2">
+        <BackLink />
+        <div className="ml-auto flex space-x-12 text-green"></div>
+      </div>
+
     <div className="min-h-screen bg-gray-100 p-8">
       <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8">
         <div className="space-y-8">
@@ -189,6 +196,7 @@ export const UserManagement = () => {
         <UserBalanceHistory user={user} />
       </div>
     </div>
+    </>
   );
 };
 
