@@ -85,7 +85,7 @@ const AssetTargets: React.FC<AssetTargetsProps> = ({ publicId }) => {
   }
 
   return (
-    <div className="bg-gray-300 m-2 p-2">
+    <div className="bg-gray-200 rounded-lg shadow-md p-4 max-w-4xl mx-auto">
       {successMessage && (
         <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4">
           <span className="block sm:inline">{successMessage}</span>

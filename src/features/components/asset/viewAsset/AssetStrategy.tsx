@@ -13,7 +13,7 @@ const AssetStrategy = ({
   strategyPublicId,
 }: AssetStrategyProps) => {
   return (
-    <div className="bg-gray-300 m-2 p-2">
+    <div className="bg-gray-200 rounded-lg shadow-md p-4 max-w-4xl mx-auto">
       {strategyName && (
         <div className="">
           <Link

@@ -5,6 +5,7 @@ import { getAllAssets } from "@/utils/asset";
 import Link from "next/link";
 import { Asset } from "@/types/asset";
 import BackLink from "@/features/components/useful/BackLink";
+import { ArrowRight, TrendingDown, TrendingUp } from "lucide-react";
 
 const ListAssets: React.FC = () => {
   const [assets, setAssets] = useState<Asset[]>([]);
@@ -50,7 +51,7 @@ const ListAssets: React.FC = () => {
           <strong>List of Assets</strong>
         </h2>
       </div>
-      <ul style={{ display: "flex", flexWrap: "wrap" }}>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
         {assets.map(
           ({
             id,
@@ -63,46 +64,76 @@ const ListAssets: React.FC = () => {
             isActive: active,
             closedAt,
             quantity,
-          }) => (
-            <div
-              key={id}
-              style={{
-                border: "1px solid black",
-                margin: "5px",
-                padding: "10px",
-                width: "203px",
-                height: "250px",
-                backgroundColor:
-                  currentPrice < boughtFor ? "lightcoral" : "lightgreen",
-              }}
-            >
-              <li>
-                <p>Name: {name}</p>
-                <p>Current Price: {currentPrice}</p>
-                <p>Added At: {new Date(addedAt).toLocaleDateString()}</p>
-                <p>Bought For: {boughtFor}</p>
-                <p>Profit: {currentPrice - boughtFor}</p>
-                <p>Active: {active ? "Yes" : "No"}</p>
-                <p>
-                  Percentage Profit:{" "}
-                  {(((currentPrice - boughtFor) * quantity) /
-                    (boughtFor * quantity)) *
-                    100}
-                  %
-                </p>
-                {closedAt && !active && (
-                  <p>Closed At: {new Date(closedAt).toLocaleDateString()}</p>
-                )}
-                <div>
-                  <Link href={`/investing/ViewAsset/${publicId}`}>
-                    <span className="text-white no-underline">Go In!</span>
+          }) => {
+            const profitPercentage = (((currentPrice - boughtFor) * quantity) /
+              (boughtFor * quantity)) *
+              100;
+            const isProfitable = currentPrice >= boughtFor;
+
+            return (
+              <div
+                key={id}
+                className={`rounded-lg shadow-md overflow-hidden transition-transform hover:scale-105 ${
+                  isProfitable ? "bg-green-50" : "bg-red-50"
+                }`}
+              >
+                <div className="p-4 space-y-2">
+                  <div className="flex justify-between items-center">
+                    <h3 className="font-semibold text-lg truncate">{name}</h3>
+                    {isProfitable ? (
+                      <TrendingUp className="w-5 h-5 text-green-600" />
+                    ) : (
+                      <TrendingDown className="w-5 h-5 text-red-600" />
+                    )}
+                  </div>
+                  
+                  <div className="space-y-1 text-sm">
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Current Price:</span>
+                      <span className="font-medium">${currentPrice.toFixed(2)}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Bought For:</span>
+                      <span className="font-medium">${boughtFor.toFixed(2)}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Profit:</span>
+                      <span className={isProfitable ? "text-green-600" : "text-red-600"}>
+                        ${(currentPrice - boughtFor).toFixed(2)}
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Profit %:</span>
+                      <span className={isProfitable ? "text-green-600" : "text-red-600"}>
+                        {profitPercentage.toFixed(2)}%
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="text-xs text-gray-500">
+                    <div>Added: {new Date(addedAt).toLocaleDateString()}</div>
+                    {closedAt && !active && (
+                      <div>Closed: {new Date(closedAt).toLocaleDateString()}</div>
+                    )}
+                  </div>
+
+                  <Link 
+                    href={`/investing/ViewAsset/${publicId}`}
+                    className={`mt-2 flex items-center justify-center gap-2 p-2 rounded-md w-full ${
+                      isProfitable 
+                        ? "bg-green-500 hover:bg-green-600" 
+                        : "bg-red-500 hover:bg-red-600"
+                    } text-white transition-colors`}
+                  >
+                    View Details
+                    <ArrowRight className="w-4 h-4" />
                   </Link>
                 </div>
-              </li>
-            </div>
-          ),
+              </div>
+            );
+          }
         )}
-      </ul>
+      </div>
     </div>
   );
 };

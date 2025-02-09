@@ -1,4 +1,5 @@
 "use client";
+
 import Link from "next/link";
 import Image from "next/image";
 import { ViewChart } from "@/types/assetsDto";
@@ -11,41 +12,54 @@ interface AssetChartsProps {
 
 const ShowCharts = ({ charts, publicId, name }: AssetChartsProps) => {
   return (
-    <div className="bg-gray-300 m-2 p-2 flex">
-      <div>
-        {charts && charts.length > 0 && (
-          <Link
-            href={`/positionEntryNotes/ListPositionEntry/${publicId}/${name}`}
+    <div className="bg-gray-100 rounded-lg shadow-md p-4 max-w-4xl mx-auto my-8">
+      <div className="flex items-center space-x-4 mb-4">
+        <div>
+          {charts && charts.length > 0 && (
+            <Link
+              href={`/positionEntryNotes/ListPositionEntry/${publicId}/${name}`}
+              className="block mb-2 text-blue-600 hover:text-blue-800"
+            >
+              View
+            </Link>
+          )}
+          <Link 
+            href={`/positionEntryNotes/AddCharts/${publicId}/${name}`}
+            className="block text-blue-600 hover:text-blue-800"
           >
-            View
+            Add
           </Link>
-        )}
-        <br />
-        <Link href={`/positionEntryNotes/AddCharts/${publicId}/${name}`}>
-          Add
-        </Link>
-      </div>
+        </div>
 
-      <div className="overflow-x-auto flex">
-        {charts.map((path, index) => (
-          <div key={index} className="flex-none w-1/3 px-4 mb-4 flex flex-col">
-            <p className="flex-grow">{path.name}</p>
-            <div className="w-full h-64 relative">
-              <a
-                href={path.chartsPath}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Image
-                  src={path.chartsPath}
-                  alt={`Chart ${index}`}
-                  layout="fill"
-                  objectFit="cover"
-                />
-              </a>
-            </div>
+        <div className="overflow-x-auto flex-1">
+          <div className="flex">
+            {charts.map((path, index) => (
+              <div key={index} className="flex-none w-80 px-4 mb-4">
+                <p className="mb-2 font-medium text-gray-800 truncate">
+                  {path.name}
+                </p>
+                <div className="relative w-full h-48">
+                  <a
+                    href={path.chartsPath}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block w-full h-full"
+                  >
+                    <Image
+                      src={path.chartsPath}
+                      alt={`Chart ${index + 1}`}
+                      sizes="320px"
+                      priority={index < 3}
+                      quality={75}
+                      className="object-contain hover:opacity-90 transition-opacity"
+                      fill
+                    />
+                  </a>
+                </div>
+              </div>
+            ))}
           </div>
-        ))}
+        </div>
       </div>
     </div>
   );

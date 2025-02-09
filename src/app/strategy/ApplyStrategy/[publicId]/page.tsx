@@ -79,7 +79,7 @@ export default function ApplyStrategy({ publicId }: Props) {
   }
 
   return (
-    <div className="space-y-6 bg-gray-300 m-2 p-2">
+    <div className="space-y-6  m-2 p-2  bg-gray-200 rounded-lg shadow-md max-w-4xl mx-auto">
       <div className="bg-white rounded-lg shadow-md p-6">
         <h2 className="text-2xl font-bold mb-4">Risk Analysis</h2>
         <div className="space-y-6">
