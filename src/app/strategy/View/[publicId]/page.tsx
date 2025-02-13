@@ -32,6 +32,11 @@ export type PositionManagement = {
   averageLevel: number;
 };
 
+export type PositionScaling = {
+  publicId: string;
+  equityPercentage: string;
+}
+
 export type Diversification = {
   name: string;
 };
