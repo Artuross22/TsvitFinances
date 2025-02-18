@@ -20,7 +20,9 @@ export type EditPositionManagement = {
   publicId: string;
   strategyPublicId: string;
   scalingOut: number | null;
+  scalingOutPositionDistribution : number | null;
   scalingIn: number | null;
+  scalingInPositionDistribution : number | null;
   averageLevel: number;
   positionScalings: PositionScaling[] | null;
 };
@@ -82,19 +84,45 @@ const PositionManagement: React.FC<Props> = ({ params }) => {
       setValidationError("Short positions total cannot exceed 100%");
       return false;
     }
-    
+  
+    const { longCount, shortCount } = countPositionsByType(scalings);
+  
+    if (positionManagement?.scalingInPositionDistribution && longCount > positionManagement.scalingInPositionDistribution) {
+      setValidationError(`Number of long positions cannot exceed ${positionManagement.scalingInPositionDistribution}`);
+      return false;
+    }
+  
+    if (positionManagement?.scalingOutPositionDistribution && shortCount > positionManagement.scalingOutPositionDistribution) {
+      setValidationError(`Number of short positions cannot exceed ${positionManagement.scalingOutPositionDistribution}`);
+      return false;
+    }
+  
     setValidationError(null);
     return true;
   };
-
+  
+  const countPositionsByType = (scalings: PositionScaling[]): { longCount: number, shortCount: number } => {
+    return scalings.reduce(
+      (acc, scaling) => {
+        if (scaling.positionType === PositionType.Long) {
+          acc.longCount += 1;
+        } else {
+          acc.shortCount += 1;
+        }
+        return acc;
+      },
+      { longCount: 0, shortCount: 0 }
+    );
+  };
+  
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     if (!positionManagement?.positionScalings) return;
-
+  
     if (!validatePositionTotals(positionManagement.positionScalings)) {
       return;
     }
-
+  
     try {
       setIsSaving(true);
       setError(null);
@@ -201,7 +229,7 @@ const PositionManagement: React.FC<Props> = ({ params }) => {
 
           <div className="space-y-2">
             <label className="block text-sm font-medium text-gray-700">
-              Scaling In
+              Scaling In %
             </label>
             <input
               type="number"
@@ -221,7 +249,7 @@ const PositionManagement: React.FC<Props> = ({ params }) => {
 
           <div className="space-y-2">
             <label className="block text-sm font-medium text-gray-700">
-              Scaling Out
+              Scaling Out %
             </label>
             <input
               type="number"
@@ -241,7 +269,7 @@ const PositionManagement: React.FC<Props> = ({ params }) => {
 
           <div className="space-y-2">
             <label className="block text-sm font-medium text-gray-700">
-              Average Level
+              Average Level %
             </label>
             <input
               type="number"
@@ -263,7 +291,7 @@ const PositionManagement: React.FC<Props> = ({ params }) => {
           onUpdate={updatePositionScaling}
           onRemove={removePositionScaling}
           onAdd={addPositionScaling}
-          validationError={validationError}
+          validationError={validationError}   
         />
         
           </div>
