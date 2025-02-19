@@ -7,7 +7,6 @@ import {
   editPositionManagementPost,
 } from "@/utils/strategy";
 import { PositionType } from "@/types/strategy";
-import { PositionScalingManager } from "@/features/components/strategy/editPositionManagement/page";
 
 interface Props {
   params: {
@@ -134,52 +133,6 @@ const PositionManagement: React.FC<Props> = ({ params }) => {
     }
   };
 
-  const addPositionScaling = () => {
-    if (!positionManagement) return;
-
-    const newScaling: PositionScaling = {
-      publicId: crypto.randomUUID(),
-      equityPercentage: "0",
-      positionType: PositionType.Long,
-    };
-
-    const newScalings = [...(positionManagement.positionScalings || []), newScaling];
-    
-    setPositionManagement({
-      ...positionManagement,
-      positionScalings: newScalings,
-    });
-  };
-
-  const updatePositionScaling = (index: number, updates: Partial<PositionScaling>) => {
-    if (!positionManagement?.positionScalings) return;
-
-    const updatedScalings = [...positionManagement.positionScalings];
-    updatedScalings[index] = { ...updatedScalings[index], ...updates };
-
-    if (updates.equityPercentage || updates.positionType) {
-      validatePositionTotals(updatedScalings);
-    }
-
-    setPositionManagement({
-      ...positionManagement,
-      positionScalings: updatedScalings,
-    });
-  };
-
-  const removePositionScaling = (index: number) => {
-    if (!positionManagement?.positionScalings) return;
-
-    const updatedScalings = positionManagement.positionScalings.filter((_, i) => i !== index);
-    
-    setPositionManagement({
-      ...positionManagement,
-      positionScalings: updatedScalings,
-    });
-
-    validatePositionTotals(updatedScalings);
-  };
-
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[200px]">
@@ -285,14 +238,6 @@ const PositionManagement: React.FC<Props> = ({ params }) => {
               }
               required
             />
-
-        <PositionScalingManager
-          positionScalings={positionManagement.positionScalings || []}
-          onUpdate={updatePositionScaling}
-          onRemove={removePositionScaling}
-          onAdd={addPositionScaling}
-          validationError={validationError}   
-        />
         
           </div>
           <button

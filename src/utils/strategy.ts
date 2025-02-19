@@ -26,6 +26,7 @@ import axios from "axios";
 import { UUID } from "crypto";
 import { redirect } from "next/navigation";
 import { api, checkverify, getUserId } from "./helpers/apiHelpers";
+import { GetPositionScaling } from "@/app/strategy/EditPositionScalingManagement/[publicId]/page";
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
@@ -139,6 +140,30 @@ export const editRiskManagementPost = async (
   model: EditRiskManagement,
 ): Promise<boolean> => {
   const response = await axios.put<boolean>(`${api}PutRiskManagement/`, model);
+  if (response.status === 200) {
+    return true;
+  }
+  return false;
+};
+
+export const editPositionScalingManagerGet = async (publicId: string): Promise<GetPositionScaling> => {
+  try {
+    const response = await axios.get(`${api}GetPositionManagement/${publicId}`);
+    const data = response.data;
+    return data as GetPositionScaling;
+  } catch (error) {
+    console.error("Error:", error);
+    throw error;
+  }
+};
+
+export const editPositionScalingManagerPost = async (
+  model: GetPositionScaling,
+): Promise<boolean> => {
+  const response = await axios.put<boolean>(
+    `${api}PutPositionManagement/`,
+    model,
+  );
   if (response.status === 200) {
     return true;
   }
