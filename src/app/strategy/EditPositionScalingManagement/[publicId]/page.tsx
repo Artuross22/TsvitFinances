@@ -48,6 +48,16 @@ const PositionScalingManager: React.FC<Props> = ({ params }) => {
 
   const savePositionScaling = async () => {
     if (!positionManagement) return;
+
+    const hasInvalidValues = positionManagement.positionScalings?.some(scaling => {
+      const value = parseFloat(scaling.equityPercentage);
+      return isNaN(value) || value < 0.01;
+    });
+
+    if (hasInvalidValues) {
+      setValidationError("All equity percentages must be at least 0.01%");
+      return;
+    }
     
     setIsLoading(true);
     try {
@@ -120,13 +130,13 @@ const PositionScalingManager: React.FC<Props> = ({ params }) => {
     return true;
   };
 
-  const addPositionScaling = () => {
+  const addPosition = (positionType: PositionType) => {
     if (!positionManagement) return;
 
     const newScaling: PositionScalings = {
       publicId: crypto.randomUUID(),
-      equityPercentage: null!,
-      positionType: PositionType.Long,
+      equityPercentage: '',
+      positionType: positionType,
     };
 
     const newScalings = [...(positionManagement.positionScalings || []), newScaling];
@@ -143,15 +153,22 @@ const PositionScalingManager: React.FC<Props> = ({ params }) => {
     if (!positionManagement?.positionScalings) return;
 
     const updatedScalings = [...positionManagement.positionScalings];
-    updatedScalings[index] = { ...updatedScalings[index], ...updates };
-
-    if (updates.equityPercentage || updates.positionType) {
-      if (validatePositionTotals(updatedScalings)) {
-        setPositionManagement({
-          ...positionManagement,
-          positionScalings: updatedScalings,
-        });
+    
+    if (updates.equityPercentage !== undefined) {
+      if (updates.equityPercentage === '' || 
+          updates.equityPercentage === '0.' || 
+          /^\d*\.?\d*$/.test(updates.equityPercentage)) {
+        updatedScalings[index] = { ...updatedScalings[index], ...updates };
       }
+    } else {
+      updatedScalings[index] = { ...updatedScalings[index], ...updates };
+    }
+
+    if (validatePositionTotals(updatedScalings)) {
+      setPositionManagement({
+        ...positionManagement,
+        positionScalings: updatedScalings,
+      });
     }
   };
 
@@ -197,8 +214,7 @@ const PositionScalingManager: React.FC<Props> = ({ params }) => {
 
   return (
     <div>
-
-    <div className="flex bg-gray-200 justify-center mt-2 px-2">
+      <div className="flex bg-gray-200 justify-center mt-2 px-2">
         <div className="absolute left-4 text-green-600 hover:text-green-700">
           <BackLink />
         </div>
@@ -207,122 +223,127 @@ const PositionScalingManager: React.FC<Props> = ({ params }) => {
         </h2>
       </div>
          
-     <div className=" bg-white rounded-lg shadow hover:shadow-lg transition-shadow p-6 max-w-5xl mx-auto px-4 py-8">   
-      <div className="flex justify-between items-center mb-8">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Position Scaling Manager</h1>
-          <div className="mt-2 text-sm text-gray-600 space-x-4">
-            {positionManagement?.scalingInPositionDistribution && (
-              <span>Max Long Positions: {positionManagement.scalingInPositionDistribution} (Current: {counts.longCount})</span>
-            )}
-            {positionManagement?.scalingOutPositionDistribution && (
-              <span>Max Short Positions: {positionManagement.scalingOutPositionDistribution} (Current: {counts.shortCount})</span>
-            )}
+      <div className="bg-white rounded-lg shadow hover:shadow-lg transition-shadow p-6 max-w-5xl mx-auto px-4 py-8">   
+        <div className="flex justify-between items-center mb-8">
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900">Position Scaling Manager</h1>
+            <div className="mt-2 text-sm text-gray-600 space-x-4">
+              {positionManagement?.scalingInPositionDistribution && (
+                <span>Max Long Positions: {positionManagement.scalingInPositionDistribution} (Current: {counts.longCount})</span>
+              )}
+              {positionManagement?.scalingOutPositionDistribution && (
+                <span>Max Short Positions: {positionManagement.scalingOutPositionDistribution} (Current: {counts.shortCount})</span>
+              )}
+            </div>
+          </div>
+          <div className="flex space-x-4">
+            <button
+              onClick={savePositionScaling}
+              className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+            >
+              Save
+            </button>
           </div>
         </div>
-        <div className="flex space-x-4">
+
+        {!emptyState && (
+          <div className="bg-white rounded-lg p-4 mb-8 flex justify-between items-center shadow-sm">
+            <div className="space-x-6 flex">
+              <div className={`px-4 py-2 rounded-full ${
+                totals.longTotal > 100 ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'
+              }`}>
+                Long Total: {totals.longTotal.toFixed(1)}%
+              </div>
+              <div className={`px-4 py-2 rounded-full ${
+                totals.shortTotal > 100 ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'
+              }`}>
+                Short Total: {totals.shortTotal.toFixed(1)}%
+              </div>
+            </div>
+          </div>
+        )}
+
+        {validationError && (
+          <div className="mb-6 bg-yellow-50 border-l-4 border-yellow-400 p-4">
+            <div className="flex">
+              <p className="text-yellow-700">{validationError}</p>
+            </div>
+          </div>
+        )}
+
+        <div className="space-y-4">
+          {emptyState ? (
+            <div className="text-center py-12 bg-gray-50 rounded-lg">
+              <p className="text-gray-500">No positions added yet. Click one of the buttons below to add a position.</p>
+            </div>
+          ) : (
+            positionManagement?.positionScalings?.map((scaling, index) => (
+              <div
+                key={scaling.publicId}
+                className="bg-white rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow"
+              >
+                <div className="flex items-center justify-between mb-4">
+                  <span className="text-md font-medium text-gray-900">
+                    Position {index + 1}
+                  </span>
+                  <button
+                    onClick={() => removePositionScaling(index)}
+                    className="text-red-600 hover:text-red-800 transition-colors"
+                  >
+                    Remove
+                  </button>
+                </div>
+                
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Equity Percentage
+                    </label>
+                    <input
+                      type="text"
+                      value={scaling.equityPercentage}
+                      onChange={(e) => updatePositionScaling(index, { equityPercentage: e.target.value })}
+                      className="w-full px-3 py-1 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                      placeholder="Minimum 0.01"
+                    />
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Position Type
+                    </label>
+                    <select
+                      value={scaling.positionType}
+                      onChange={(e) => updatePositionScaling(index, { 
+                        positionType: parseInt(e.target.value) as PositionType 
+                      })}
+                      className="w-full px-3 py-1 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                    >
+                      <option value={PositionType.Long}>Long</option>
+                      <option value={PositionType.Short}>Short</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+
+        <div className="mt-8 grid grid-cols-2 gap-4">
           <button
-            onClick={savePositionScaling}
+            onClick={() => addPosition(PositionType.Long)}
             className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
           >
-            Save
+            Add buy target
+          </button>
+          <button
+            onClick={() => addPosition(PositionType.Short)}
+            className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+          >
+            Add sell target
           </button>
         </div>
       </div>
-
-      {!emptyState && (
-        <div className="bg-white rounded-lg p-4 mb-8 flex justify-between items-center shadow-sm">
-          <div className="space-x-6 flex">
-            <div className={`px-4 py-2 rounded-full ${
-              totals.longTotal > 100 ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'
-            }`}>
-              Long Total: {totals.longTotal.toFixed(1)}%
-            </div>
-            <div className={`px-4 py-2 rounded-full ${
-              totals.shortTotal > 100 ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'
-            }`}>
-              Short Total: {totals.shortTotal.toFixed(1)}%
-            </div>
-          </div>
-        </div>
-      )}
-
-      {validationError && (
-        <div className="mb-6 bg-yellow-50 border-l-4 border-yellow-400 p-4">
-          <div className="flex">
-            <p className="text-yellow-700">{validationError}</p>
-          </div>
-        </div>
-      )}
-
-      <div className="space-y-4">
-        {emptyState ? (
-          <div className="text-center py-12 bg-gray-50 rounded-lg">
-            <p className="text-gray-500">No positions added yet. Click "Add Position" to get started.</p>
-          </div>
-        ) : (
-          positionManagement?.positionScalings?.map((scaling, index) => (
-            <div
-              key={scaling.publicId}
-              className="bg-white rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow"
-            >
-              <div className="flex items-center justify-between mb-4">
-                <span className="text-md font-medium text-gray-900">
-                  Position {index + 1}
-                </span>
-                <button
-                  onClick={() => removePositionScaling(index)}
-                  className="text-red-600 hover:text-red-800 transition-colors"
-                >
-                  Remove
-                </button>
-              </div>
-              
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Equity Percentage
-                  </label>
-                  <input
-                    type="number"
-                    step="0.01"
-                    max="100"
-                    value={scaling.equityPercentage}
-                    onChange={(e) => updatePositionScaling(index, { equityPercentage: e.target.value })}
-                    className="w-full px-3 py-1 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-                  />
-                </div>
-                
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Position Type
-                  </label>
-                  <select
-                    value={scaling.positionType}
-                    onChange={(e) => updatePositionScaling(index, { 
-                      positionType: parseInt(e.target.value) as PositionType 
-                    })}
-                    className="w-full px-3 py-1 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-                  >
-                    <option value={PositionType.Long}>Long</option>
-                    <option value={PositionType.Short}>Short</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-          ))
-        )}
-      </div>
-
-      <div className="mt-8">
-        <button
-          onClick={addPositionScaling}
-          className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-        >
-          Add Position
-        </button>
-      </div>
-    </div>
     </div> 
   );
 };
