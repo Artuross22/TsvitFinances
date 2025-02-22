@@ -15,7 +15,8 @@ export interface ApplyStrategyInput {
 export interface Targets {
   start?: number | null;
   end: number;
-  percentage: number;
+  percentageLevel: number;
+  positionScaling : number;
 }
 
 export interface _Position {
@@ -163,7 +164,10 @@ export default function ApplyStrategy({ publicId }: Props) {
                       Target Range
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Percentage Level
+                      Percentage Level %
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                     Scaling Out $
                     </th>
                   </tr>
                 </thead>
@@ -173,10 +177,13 @@ export default function ApplyStrategy({ publicId }: Props) {
                       <td className="px-6 py-4 whitespace-nowrap">
                         {target.start
                           ? `${target.start} - ${target.end}`
-                          : `Up to ${target.end}`}
+                          : `-`}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        {target.percentage}%
+                        {target.percentageLevel}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {target.positionScaling}%
                       </td>
                     </tr>
                   ))}
@@ -195,7 +202,10 @@ export default function ApplyStrategy({ publicId }: Props) {
                       Target Range
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Percentage Level
+                      Percentage Level %
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Scaling In $
                     </th>
                   </tr>
                 </thead>
@@ -205,10 +215,13 @@ export default function ApplyStrategy({ publicId }: Props) {
                       <td className="px-6 py-4 whitespace-nowrap">
                         {target.start
                           ? `${target.start} - ${target.end}`
-                          : `Up to ${target.end}`}
+                          : `-`}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        {target.percentage}%
+                        {target.percentageLevel}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {target.positionScaling}%
                       </td>
                     </tr>
                   ))}

@@ -13,8 +13,6 @@ interface PositionScalings {
 
 export interface GetPositionScaling {
   publicId: string;
-  scalingInPositionDistribution?: number;
-  scalingOutPositionDistribution?: number;
   positionScalings?: PositionScalings[];
 }
 
@@ -111,18 +109,6 @@ const PositionScalingManager: React.FC<Props> = ({ params }) => {
     
     if (shortTotal > 100) {
       setValidationError("Short positions total cannot exceed 100%");
-      return false;
-    }
-
-    const { longCount, shortCount } = countPositionsByType(scalings);
-
-    if (positionManagement?.scalingInPositionDistribution && longCount > positionManagement.scalingInPositionDistribution) {
-      setValidationError(`Number of long positions cannot exceed ${positionManagement.scalingInPositionDistribution}`);
-      return false;
-    }
-
-    if (positionManagement?.scalingOutPositionDistribution && shortCount > positionManagement.scalingOutPositionDistribution) {
-      setValidationError(`Number of short positions cannot exceed ${positionManagement.scalingOutPositionDistribution}`);
       return false;
     }
 
@@ -227,14 +213,6 @@ const PositionScalingManager: React.FC<Props> = ({ params }) => {
         <div className="flex justify-between items-center mb-8">
           <div>
             <h1 className="text-2xl font-bold text-gray-900">Position Scaling Manager</h1>
-            <div className="mt-2 text-sm text-gray-600 space-x-4">
-              {positionManagement?.scalingInPositionDistribution && (
-                <span>Max Long Positions: {positionManagement.scalingInPositionDistribution} (Current: {counts.longCount})</span>
-              )}
-              {positionManagement?.scalingOutPositionDistribution && (
-                <span>Max Short Positions: {positionManagement.scalingOutPositionDistribution} (Current: {counts.shortCount})</span>
-              )}
-            </div>
           </div>
           <div className="flex space-x-4">
             <button

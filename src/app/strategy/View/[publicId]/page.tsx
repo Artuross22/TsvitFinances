@@ -17,7 +17,6 @@ export type RiskManagement = {
   id: number;
   publicId: string;
   name: string;
-  category: number;
   baseRiskPercentage: number;
   riskToRewardRatio: number;
   hedgeId: number;
@@ -27,8 +26,6 @@ export type RiskManagement = {
 export type PositionManagement = {
   id: number;
   publicId: string;
-  scalingOut: number | null;
-  scalingIn: number | null;
   averageLevel: number;
 };
 
@@ -78,16 +75,6 @@ const ViewStrategy: React.FC<Props> = ({ params }) => {
       </div>
 
       <div className="container mx-auto py-6 space-y-6 px-4">
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <div className="flex justify-between items-center">
-            <h1 className="text-2xl font-bold">{strategy.name}</h1>
-            <span className="bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-sm">
-              {strategy.riskManagement?.category &&
-                RiskCategory[strategy.riskManagement.category]}
-            </span>
-          </div>
-        </div>
-
         <div className="grid gap-6 md:grid-cols-2">
           <div className="bg-white rounded-lg border shadow-sm">
             <div className="p-6 border-b">
@@ -119,18 +106,6 @@ const ViewStrategy: React.FC<Props> = ({ params }) => {
                   1/{strategy.riskManagement?.riskToRewardRatio}
                 </p>
               </div>
-              <div>
-                <p className="text-sm text-gray-500">Risk Category</p>
-                <p className="font-medium">
-                  {RiskCategory[strategy.riskManagement?.category ?? 0]}
-                </p>
-              </div>
-              <div>
-                <p className="text-sm text-gray-500">Hedge Strategy</p>
-                <p className="font-medium">
-                  {strategy.riskManagement?.hedge?.name}
-                </p>
-              </div>
             </div>
           </div>
 
@@ -157,19 +132,7 @@ const ViewStrategy: React.FC<Props> = ({ params }) => {
                 </Link>
               </div>
             </div>
-            <div className="p-6 space-y-4">
-              <div>
-                <p className="text-sm text-gray-500">Scaling Out</p>
-                <p className="font-medium">
-                  {strategy.positionManagement?.scalingOut}%
-                </p>
-              </div>
-              <div>
-                <p className="text-sm text-gray-500">Scaling In</p>
-                <p className="font-medium">
-                  {strategy.positionManagement?.scalingIn}%
-                </p>
-              </div>
+            <div className="p-6 space-y-4">          
               <div>
                 <p className="text-sm text-gray-500">Average Level</p>
                 <p className="font-medium">
