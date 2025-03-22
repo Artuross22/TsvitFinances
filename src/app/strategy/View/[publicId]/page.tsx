@@ -1,6 +1,5 @@
 "use client";
 
-import { RiskCategory } from "@/types/strategy";
 import { getStrategy } from "@/utils/strategy";
 import { UUID } from "crypto";
 import Link from "next/link";
@@ -11,6 +10,7 @@ export type GetStrategy = {
   name: string;
   riskManagement: RiskManagement | null;
   positionManagement: PositionManagement | null;
+  financeData: financeData | null;
 };
 
 export type RiskManagement = {
@@ -21,6 +21,10 @@ export type RiskManagement = {
   riskToRewardRatio: number;
   hedgeId: number;
   hedge: Hedge | null;
+};
+
+export type financeData = {
+  publicId: string;
 };
 
 export type PositionManagement = {
@@ -138,6 +142,31 @@ const ViewStrategy: React.FC<Props> = ({ params }) => {
                 <p className="font-medium">
                   {strategy.positionManagement?.averageLevel}%
                 </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-white rounded-lg border shadow-sm">
+            <div className="p-6 border-b">
+              <div className="flex items-center justify-between">
+                <h2 className="text-lg font-medium text-gray-900">
+                    StockMetrics
+                </h2>
+                <Link
+                  href={`/strategy/AddStockMetrics/${strategy.financeData?.publicId}/${params.publicId}`}
+                >
+                  <button className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    Add
+                  </button>
+                </Link>
+
+                <Link
+                  href={`/strategy/EditStockMetrics/${strategy.financeData?.publicId}/${params.publicId}`}
+                  >
+                  <button className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    Edit
+                  </button>
+                </Link>
               </div>
             </div>
           </div>

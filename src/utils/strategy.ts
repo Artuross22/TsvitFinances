@@ -27,6 +27,7 @@ import { UUID } from "crypto";
 import { redirect } from "next/navigation";
 import { api, checkverify, getUserId } from "./helpers/apiHelpers";
 import { GetPositionScaling } from "@/app/strategy/EditPositionScalingManagement/[publicId]/page";
+import { FinanceDataStockMetrics } from "@/app/strategy/AddStockMetrics/[publicId]/[strategyId]/page";
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
@@ -286,5 +287,15 @@ export async function deleteInvestmentIdea(publicId: string) {
   const response = await axios.delete(`${api}DeleteInvestmentIdea/${publicId}`);
   if (response.status === 200) {
     redirect(`/InvestmentIdea/ListIdeas`);
+  }
+}
+
+export async function createStockMetrics(stragy: FinanceDataStockMetrics) {
+
+  const response = await axios.post<boolean>(`${api}AddStockMetrics`, stragy);
+  if (response.status === 200) {
+    redirect(`/strategy`);
+  } else {
+    redirect("/");
   }
 }
