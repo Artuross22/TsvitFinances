@@ -3,27 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { TrendingUp, TrendingDown, Edit, Calendar, DollarSign, Hash, Briefcase, MapPin } from "lucide-react";
-import { ViewChart } from "@/types/assetsDto";
-
-export type ViewAssetDto = {
-  userPublicId: string;
-  strategyPublicId: string | null;
-  strategyName: string | null;
-  publicId: string;
-  sector: string;
-  term: string;
-  market: string;
-  name: string;
-  ticker: string;
-  currentPrice: number;
-  quantity: number;
-  boughtFor: number;
-  percentageProfit: number;
-  profit: number;
-  addedAt: Date;
-  interestOnCurrentDeposit: number;
-  charts: ViewChart[];
-};
+import { ViewAssetDto } from "@/app/investing/ViewAsset/[id]/page";
 
 interface AssetDetailsProps {
   asset: ViewAssetDto;

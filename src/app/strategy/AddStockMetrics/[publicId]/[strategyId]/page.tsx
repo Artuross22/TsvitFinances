@@ -83,7 +83,7 @@ export const AddStockMetrics = ({ params }: Props) => {
       });
     } finally {
       setIsSubmitting(false);
-      router.push(`/strategy/View/${params.strategyId}`);
+      // router.push(`/strategy/View/${params.strategyId}`);
     }
   };
 

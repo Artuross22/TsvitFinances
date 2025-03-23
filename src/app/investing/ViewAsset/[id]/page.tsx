@@ -1,14 +1,35 @@
 "use client";
 import ApplyStrategy from "@/app/strategy/ApplyStrategy/[publicId]/page";
+import ApplyStockMetrics from "@/features/components/asset/viewAsset/ApplyStockMetrics";
 import AssetCharts from "@/features/components/asset/viewAsset/AssetCharts";
 import AssetDetails, {
-  ViewAssetDto,
 } from "@/features/components/asset/viewAsset/AssetDetails";
 import AssetHeader from "@/features/components/asset/viewAsset/AssetHeader";
 import AssetStrategy from "@/features/components/asset/viewAsset/AssetStrategy";
 import AssetTargets from "@/features/components/asset/viewAsset/AssetTargets";
+import { ViewChart } from "@/types/assetsDto";
 import { getAsset } from "@/utils/asset";
 import { useEffect, useState } from "react";
+
+export type ViewAssetDto = {
+  userPublicId: string;
+  strategyPublicId: string | null;
+  strategyName: string | null;
+  publicId: string;
+  sector: string;
+  term: string;
+  market: string;
+  name: string;
+  ticker: string;
+  currentPrice: number;
+  quantity: number;
+  boughtFor: number;
+  percentageProfit: number;
+  profit: number;
+  addedAt: Date;
+  interestOnCurrentDeposit: number;
+  charts: ViewChart[];
+};
 
 interface AssetProps {
   params: {
@@ -50,6 +71,11 @@ const ViewAsset = ({ params }: AssetProps) => {
             publicId={asset.publicId}
             name={asset.name}
           />
+
+          <ApplyStockMetrics
+            strategyPublicId={asset.strategyPublicId!} 
+            symbol={asset.name}        
+            />
         </div>
 
         <div className="w-1/2 m-4 p-4">

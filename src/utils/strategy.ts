@@ -28,6 +28,7 @@ import { redirect } from "next/navigation";
 import { api, checkverify, getUserId } from "./helpers/apiHelpers";
 import { GetPositionScaling } from "@/app/strategy/EditPositionScalingManagement/[publicId]/page";
 import { FinanceDataStockMetrics } from "@/app/strategy/AddStockMetrics/[publicId]/[strategyId]/page";
+import { ApplyStockMetricsModel } from "@/features/components/asset/viewAsset/ApplyStockMetrics";
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
@@ -299,3 +300,13 @@ export async function createStockMetrics(stragy: FinanceDataStockMetrics) {
     redirect("/");
   }
 }
+
+export const applyStockMetrics = async (publicId: string, symbol: string): Promise<ApplyStockMetricsModel> => {
+  const response = await axios.get(`${api}ApplyStockMetrics/${publicId}/${symbol}`);
+
+  const data = response.data;
+
+  console.log("GFGF", data)
+
+  return data;
+};
