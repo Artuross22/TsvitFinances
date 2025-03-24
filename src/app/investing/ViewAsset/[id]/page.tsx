@@ -74,7 +74,7 @@ const ViewAsset = ({ params }: AssetProps) => {
 
           <ApplyStockMetrics
             strategyPublicId={asset.strategyPublicId!} 
-            symbol={asset.name}        
+            assetPublicId={asset.publicId!}        
             />
         </div>
 

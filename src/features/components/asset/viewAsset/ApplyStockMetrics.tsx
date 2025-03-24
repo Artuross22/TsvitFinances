@@ -9,17 +9,17 @@ export interface ApplyStockMetricsModel {
     date: string;
     debtRatio: number;
     recommendedDebtRatio: number;
-    pSRatio: number;
+    psRatio: number;
     recommendedPSRatio: number;
-    pBRatio: number;
+    pbRatio: number;
     recommendedPBRatio: number;
-    pERatio: number;
+    peRatio: number;
     recommendedPERatio: number;
-    rOA: number;
+    roa: number;
     recommendedROA: number;
-    rOE: number;
+    roe: number;
     recommendedROE: number;
-    eBIT: number;
+    ebit: number;
     recommendedEBIT: number;
     freeCashFlow: number;
     recommendedFreeCashFlow: number;
@@ -29,8 +29,6 @@ export interface ApplyStockMetricsModel {
     recommendedNetProfitMargin: number;
     dividendYield: number;
     recommendedDividendYield: number;
-    revenueGrowth: number;
-    recommendedRevenueGrowth: number;
     sharesOutstanding: number;
     recommendedSharesOutstanding: number;
     debtToEquityRatio: number;
@@ -43,10 +41,10 @@ export interface ApplyStockMetricsModel {
 
 export interface Props {
     strategyPublicId: string;
-    symbol: string;
+    assetPublicId: string;
 }
 
-const Page = ({ strategyPublicId, symbol }: Props) => {
+const StockMetricsPage = ({ strategyPublicId, assetPublicId }: Props) => {
     const [metrics, setMetrics] = useState<ApplyStockMetricsModel | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
 
@@ -54,7 +52,7 @@ const Page = ({ strategyPublicId, symbol }: Props) => {
         const fetchMetrics = async () => {
             try {
                 setLoading(true);
-                const data = await GetStockMetrics(strategyPublicId, symbol);
+                const data = await GetStockMetrics(strategyPublicId, assetPublicId);
                 setMetrics(data);
             } catch (error) {
                 console.error("Error fetching metrics:", error);
@@ -64,113 +62,73 @@ const Page = ({ strategyPublicId, symbol }: Props) => {
         };
 
         fetchMetrics();
-    }, [strategyPublicId, symbol]);
+    }, [strategyPublicId, assetPublicId]);
 
-    const safeToFixed = (value: number | undefined) => {
-        return value !== undefined && !isNaN(value) ? value.toFixed(2) : '-';
+    const safeToFixed = (value: number | undefined, decimals: number = 2) => {
+        return value !== undefined && !isNaN(value) ? value.toFixed(decimals) : '-';
     };
 
-    if (loading) return <div>Loading...</div>;
-    if (!metrics) return <div>No data available</div>;
+    const renderMetricRow = (
+        label: string, 
+        currentValue: number | undefined, 
+        recommendedValue: number | undefined, 
+        percentage: boolean = false
+    ) => (
+        <tr key={label} className="border-b hover:bg-gray-50 transition-colors">
+            <td className="px-4 py-2 font-medium text-gray-900">{label}</td>
+            <td className="px-4 py-2 text-right">
+                {safeToFixed(currentValue)}{percentage ? '%' : ''}
+            </td>
+            <td className="px-4 py-2 text-right">
+                {safeToFixed(recommendedValue)}{percentage ? '%' : ''}
+            </td>
+        </tr>
+    );
+
+    if (loading) return <div className="text-center py-4 text-gray-600">Loading...</div>;
+    if (!metrics) return <div className="text-center py-4 text-gray-600">No data available</div>;
 
     return (
-        <div>
-            <h1>{metrics.symbol} Stock Metrics</h1>
-            <p>Date: {metrics.date}</p>
-
-            <table>
-                <thead>
-                    <tr>
-                        <th>Metric</th>
-                        <th>Current</th>
-                        <th>Recommended</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Debt Ratio</td>
-                        <td>{safeToFixed(metrics.debtRatio)}</td>
-                        <td>{safeToFixed(metrics.recommendedDebtRatio)}</td>
-                    </tr>
-                    <tr>
-                        <td>P/S Ratio</td>
-                        <td>{safeToFixed(metrics.pSRatio)}</td>
-                        <td>{safeToFixed(metrics.recommendedPSRatio)}</td>
-                    </tr>
-                    <tr>
-                        <td>P/B Ratio</td>
-                        <td>{safeToFixed(metrics.pBRatio)}</td>
-                        <td>{safeToFixed(metrics.recommendedPBRatio)}</td>
-                    </tr>
-                    <tr>
-                        <td>P/E Ratio</td>
-                        <td>{safeToFixed(metrics.pERatio)}</td>
-                        <td>{safeToFixed(metrics.recommendedPERatio)}</td>
-                    </tr>
-                    <tr>
-                        <td>ROA</td>
-                        <td>{safeToFixed(metrics.rOA)}%</td>
-                        <td>{safeToFixed(metrics.recommendedROA)}%</td>
-                    </tr>
-                    <tr>
-                        <td>ROE</td>
-                        <td>{safeToFixed(metrics.rOE)}%</td>
-                        <td>{safeToFixed(metrics.recommendedROE)}%</td>
-                    </tr>
-                    <tr>
-                        <td>EBIT</td>
-                        <td>{safeToFixed(metrics.eBIT)}</td>
-                        <td>{safeToFixed(metrics.recommendedEBIT)}</td>
-                    </tr>
-                    <tr>
-                        <td>Free Cash Flow</td>
-                        <td>{safeToFixed(metrics.freeCashFlow)}</td>
-                        <td>{safeToFixed(metrics.recommendedFreeCashFlow)}</td>
-                    </tr>
-                    <tr>
-                        <td>Net Income</td>
-                        <td>{safeToFixed(metrics.netIncome)}</td>
-                        <td>{safeToFixed(metrics.recommendedNetIncome)}</td>
-                    </tr>
-                    <tr>
-                        <td>Net Profit Margin</td>
-                        <td>{safeToFixed(metrics.netProfitMargin)}%</td>
-                        <td>{safeToFixed(metrics.recommendedNetProfitMargin)}%</td>
-                    </tr>
-                    <tr>
-                        <td>Dividend Yield</td>
-                        <td>{safeToFixed(metrics.dividendYield)}%</td>
-                        <td>{safeToFixed(metrics.recommendedDividendYield)}%</td>
-                    </tr>
-                    <tr>
-                        <td>Revenue Growth</td>
-                        <td>{safeToFixed(metrics.revenueGrowth)}%</td>
-                        <td>{safeToFixed(metrics.recommendedRevenueGrowth)}%</td>
-                    </tr>
-                    <tr>
-                        <td>Shares Outstanding</td>
-                        <td>{safeToFixed(metrics.sharesOutstanding)}</td>
-                        <td>{safeToFixed(metrics.recommendedSharesOutstanding)}</td>
-                    </tr>
-                    <tr>
-                        <td>Debt to Equity Ratio</td>
-                        <td>{safeToFixed(metrics.debtToEquityRatio)}</td>
-                        <td>{safeToFixed(metrics.recommendedDebtToEquityRatio)}</td>
-                    </tr>
-                    <tr>
-                        <td>Free Cash Flow Per Share</td>
-                        <td>{safeToFixed(metrics.freeCashFlowPerShare)}</td>
-                        <td>{safeToFixed(metrics.recommendedFreeCashFlowPerShare)}</td>
-                    </tr>
-                    <tr>
-                        <td>Operating Cash Flow Per Share</td>
-                        <td>{safeToFixed(metrics.operatingCashFlowPerShare)}</td>
-                        <td>{safeToFixed(metrics.recommendedOperatingCashFlowPerShare)}</td>
-                    </tr>
-                </tbody>
-            </table>
+        <div className="bg-gray-100 rounded-lg shadow-md p-4 max-w-4xl mx-auto my-8">
+            <div className="mb-4">
+                <h1 className="text-2xl font-bold text-gray-900 mb-2">
+                    {metrics.symbol} Stock Metrics
+                </h1>
+                <p className="text-sm text-gray-600">
+                    Date: {metrics.date}
+                </p>
+            </div>
+            
+            <div className="overflow-x-auto">
+                <table className="w-full border-collapse text-sm">
+                    <thead>
+                        <tr className="bg-gray-100">
+                            <th className="px-4 py-3 text-left font-semibold text-gray-700">Metric</th>
+                            <th className="px-4 py-3 text-right font-semibold text-gray-700">Current</th>
+                            <th className="px-4 py-3 text-right font-semibold text-gray-700">Recommended</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {renderMetricRow("Debt Ratio", metrics.debtRatio, metrics.recommendedDebtRatio)}
+                        {renderMetricRow("P/S Ratio", metrics.psRatio, metrics.recommendedPSRatio)}
+                        {renderMetricRow("P/B Ratio", metrics.pbRatio, metrics.recommendedPBRatio)}
+                        {renderMetricRow("P/E Ratio", metrics.peRatio, metrics.recommendedPERatio)}
+                        {renderMetricRow("ROA", metrics.roa, metrics.recommendedROA, true)}
+                        {renderMetricRow("ROE", metrics.roe, metrics.recommendedROE, true)}
+                        {renderMetricRow("EBIT", metrics.ebit, metrics.recommendedEBIT)}
+                        {renderMetricRow("Free Cash Flow", metrics.freeCashFlow, metrics.recommendedFreeCashFlow)}
+                        {renderMetricRow("Net Income", metrics.netIncome, metrics.recommendedNetIncome)}
+                        {renderMetricRow("Net Profit Margin", metrics.netProfitMargin, metrics.recommendedNetProfitMargin, true)}
+                        {renderMetricRow("Dividend Yield", metrics.dividendYield, metrics.recommendedDividendYield, true)}
+                        {renderMetricRow("Shares Outstanding", metrics.sharesOutstanding, metrics.recommendedSharesOutstanding)}
+                        {renderMetricRow("Debt to Equity Ratio", metrics.debtToEquityRatio, metrics.recommendedDebtToEquityRatio)}
+                        {renderMetricRow("Free Cash Flow Per Share", metrics.freeCashFlowPerShare, metrics.recommendedFreeCashFlowPerShare)}
+                        {renderMetricRow("Operating Cash Flow Per Share", metrics.operatingCashFlowPerShare, metrics.recommendedOperatingCashFlowPerShare)}
+                    </tbody>
+                </table>
+            </div>
         </div>
     );
 };
 
-export default Page;
+export default StockMetricsPage;

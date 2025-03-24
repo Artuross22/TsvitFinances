@@ -301,12 +301,10 @@ export async function createStockMetrics(stragy: FinanceDataStockMetrics) {
   }
 }
 
-export const applyStockMetrics = async (publicId: string, symbol: string): Promise<ApplyStockMetricsModel> => {
-  const response = await axios.get(`${api}ApplyStockMetrics/${publicId}/${symbol}`);
+export const applyStockMetrics = async (publicId: string, assetPublicId: string): Promise<ApplyStockMetricsModel> => {
+  const response = await axios.get(`${api}ApplyStockMetrics/${publicId}/${assetPublicId}`);
 
   const data = response.data;
-
-  console.log("GFGF", data)
 
   return data;
 };
