@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { getAllAssets } from "@/utils/asset";
+import { getAllAssets } from "@/api/asset";
 import Link from "next/link";
 import { Asset } from "@/types/asset";
 import BackLink from "@/features/components/useful/BackLink";

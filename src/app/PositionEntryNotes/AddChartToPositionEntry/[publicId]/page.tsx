@@ -1,6 +1,6 @@
 "use client";
 
-import { addChartToNote } from "@/utils/asset";
+import { addChartToNote } from "@/api/asset";
 import React, { useCallback, useRef, useState } from "react";
 import { _addChart } from "@/types/assetsDto";
 import BackLink from "@/features/components/useful/BackLink";

@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import {
   editPositionManagementGet,
   editPositionManagementPost,
-} from "@/utils/strategy";
+} from "@/api/strategy";
 import BackLink from "@/features/components/useful/BackLink";
 
 interface Props {

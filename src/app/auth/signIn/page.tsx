@@ -1,7 +1,7 @@
 "use client";
 
 import { Login } from "@/types/login";
-import { signIn } from "@/utils/auth";
+import { signIn } from "@/api/auth";
 import { ChangeEvent, FC, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Mail, Lock, LogIn } from "lucide-react";

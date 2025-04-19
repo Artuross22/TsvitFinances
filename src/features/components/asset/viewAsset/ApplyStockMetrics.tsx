@@ -1,6 +1,6 @@
 "use client";
 
-import { applyStockMetrics as GetStockMetrics } from "@/utils/strategy";
+import { applyStockMetrics as GetStockMetrics } from "@/api/strategy";
 import { useEffect, useState } from "react";
 
 export interface ApplyStockMetricsModel {

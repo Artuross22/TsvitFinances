@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { deleteTarget, listTargets } from "@/utils/strategy";
+import { deleteTarget, listTargets } from "@/api/strategy";
 import { UUID } from "crypto";
 
 interface AssetTargetsProps {

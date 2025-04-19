@@ -1,6 +1,6 @@
 "use client";
 
-import { addStragyToAsset, listStrategiesForAsset } from "@/utils/strategy";
+import { addStragyToAsset, listStrategiesForAsset } from "@/api/strategy";
 import { UUID } from "crypto";
 import Link from "next/link";
 import { useEffect, useState } from "react";

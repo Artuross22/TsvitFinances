@@ -1,6 +1,6 @@
 "use client";
 
-import { getStrategy } from "@/utils/strategy";
+import { getStrategy } from "@/api/strategy";
 import { UUID } from "crypto";
 import Link from "next/link";
 import { useEffect, useState } from "react";

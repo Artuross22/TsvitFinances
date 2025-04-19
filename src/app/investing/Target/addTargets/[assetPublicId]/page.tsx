@@ -1,7 +1,7 @@
 "use client";
 
 import BackLink from "@/features/components/useful/BackLink";
-import { addTargets } from "@/utils/asset";
+import { addTargets } from "@/api/asset";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 

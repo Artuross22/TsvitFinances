@@ -5,7 +5,7 @@ import {
   editInvestmentIdeaGet,
   investmentIdeaPost,
   getAllAssetsForIdea,
-} from "@/utils/strategy";
+} from "@/api/strategy";
 import { ArrowLeft, Save } from "lucide-react";
 import BackLink from "@/features/components/useful/BackLink";
 

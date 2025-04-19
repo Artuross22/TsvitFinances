@@ -1,7 +1,7 @@
 "use client";
 
 import BackLink from "@/features/components/useful/BackLink";
-import { createStockMetrics } from "@/utils/strategy";
+import { createStockMetrics } from "@/api/strategy";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 

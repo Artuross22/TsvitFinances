@@ -1,5 +1,5 @@
 "use client";
-import { deleteAsset } from "@/utils/asset";
+import { deleteAsset } from "@/api/asset";
 import { useFormStatus } from "react-dom";
 
 import { Spinner } from "@/shared/ui/spinner";

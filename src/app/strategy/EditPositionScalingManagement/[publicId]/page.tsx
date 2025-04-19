@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { PositionType } from '@/types/strategy';
-import { editPositionScalingManagerGet, editPositionScalingManagerPost } from '@/utils/strategy';
+import { editPositionScalingManagerGet, editPositionScalingManagerPost } from '@/api/strategy';
 import BackLink from '@/features/components/useful/BackLink';
 
 interface PositionScalings {

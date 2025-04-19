@@ -4,7 +4,7 @@ import BackLink from "@/features/components/useful/BackLink";
 import {
   createInvestmentIdeaGet,
   createInvestmentIdeaPost,
-} from "@/utils/strategy";
+} from "@/api/strategy";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 

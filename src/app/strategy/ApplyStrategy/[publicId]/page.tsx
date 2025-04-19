@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { applaStrategy } from "@/utils/strategy";
+import { applaStrategy } from "@/api/strategy";
 
 interface Props {
   publicId: string;

@@ -5,7 +5,7 @@ import Link from "next/link";
 import {
   editEditRiskManagementGet,
   editRiskManagementPost,
-} from "@/utils/strategy";
+} from "@/api/strategy";
 import { RiskCategory } from "@/types/strategy";
 
 export interface EditRiskManagement {

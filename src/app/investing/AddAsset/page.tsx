@@ -1,6 +1,6 @@
 "use client";
 
-import { createAssetGet, createAssetPost } from "@/utils/asset";
+import { createAssetGet, createAssetPost } from "@/api/asset";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import {

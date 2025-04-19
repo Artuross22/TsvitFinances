@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { getDiversifications, updateDiversification } from "@/utils/strategy";
+import { getDiversifications, updateDiversification } from "@/api/strategy";
 import BackLink from "@/features/components/useful/BackLink";
 
 export type AddDiversification = {

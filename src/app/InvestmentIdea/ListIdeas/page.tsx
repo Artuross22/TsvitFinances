@@ -1,7 +1,7 @@
 "use client";
 
 import BackLink from "@/features/components/useful/BackLink";
-import { listInvestmentIdeas } from "@/utils/strategy";
+import { listInvestmentIdeas } from "@/api/strategy";
 import { UUID } from "crypto";
 import { useEffect, useState } from "react";
 import Link from "next/link";

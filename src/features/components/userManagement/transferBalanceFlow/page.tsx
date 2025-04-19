@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { Send } from "lucide-react";
-import { transferBalanceFlow } from "@/utils/user";
+import { transferBalanceFlow } from "@/api/user";
 
 export interface TransferBalanceFlow {
   appUserId: string | "";

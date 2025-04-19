@@ -7,7 +7,7 @@ import {
   deleteCharts,
   updateNote,
   deletePositionEntry,
-} from "@/utils/asset";
+} from "@/api/asset";
 import Image from "next/image";
 import Link from "next/link";
 import BackLink from "@/features/components/useful/BackLink";

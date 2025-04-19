@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { editTargetGet, editTargetPost } from "@/utils/asset";
+import { editTargetGet, editTargetPost } from "@/api/asset";
 import BackLink from "@/features/components/useful/BackLink";
 
 export interface EditTarget {

@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { Pencil, Trash2, TrendingUp } from "lucide-react";
-import { deleteInvestmentIdea, viewInvestmentIdea } from "@/utils/strategy";
+import { deleteInvestmentIdea, viewInvestmentIdea } from "@/api/strategy";
 import Link from "next/link";
 import BackLink from "@/features/components/useful/BackLink";
 

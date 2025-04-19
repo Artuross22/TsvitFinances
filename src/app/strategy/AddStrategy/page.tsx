@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { createStrategy } from "@/utils/strategy";
+import { createStrategy } from "@/api/strategy";
 import Link from "next/link";
 
 export type AddStragy = {

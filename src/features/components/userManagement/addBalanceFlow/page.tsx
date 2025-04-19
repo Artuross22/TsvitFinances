@@ -1,6 +1,6 @@
 "use client";
 
-import { addBalanceFlow } from "@/utils/user";
+import { addBalanceFlow } from "@/api/user";
 import React, { useState } from "react";
 import { Balance } from "@/types/balanceFlow";
 

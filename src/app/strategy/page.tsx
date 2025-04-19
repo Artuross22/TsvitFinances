@@ -1,6 +1,6 @@
 "use client";
 
-import { listStrategies } from "@/utils/strategy";
+import { listStrategies } from "@/api/strategy";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 

@@ -8,7 +8,7 @@ import AssetHeader from "@/features/components/asset/viewAsset/AssetHeader";
 import AssetStrategy from "@/features/components/asset/viewAsset/AssetStrategy";
 import AssetTargets from "@/features/components/asset/viewAsset/AssetTargets";
 import { ViewChart } from "@/types/assetsDto";
-import { getAsset } from "@/utils/asset";
+import { getAsset } from "@/api/asset";
 import { useEffect, useState } from "react";
 
 export type ViewAssetDto = {

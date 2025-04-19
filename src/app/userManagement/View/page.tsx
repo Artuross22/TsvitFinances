@@ -2,7 +2,7 @@
 
 import React from "react";
 import { useEffect, useState } from "react";
-import { viewUserGet } from "@/utils/user";
+import { viewUserGet } from "@/api/user";
 import AddBalanceFlow from "../../../features/components/userManagement/addBalanceFlow/page";
 import TransferBalanceFlow from "@/features/components/userManagement/transferBalanceFlow/page";
 import {
