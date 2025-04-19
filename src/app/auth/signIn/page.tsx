@@ -26,6 +26,7 @@ const LoginProps: FC<Login> = () => {
     try {
       setIsLoading(true);
       setError(null);
+    
       
       const result = await signIn({
         email: input.email,

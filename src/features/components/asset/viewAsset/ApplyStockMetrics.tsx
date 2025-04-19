@@ -64,7 +64,7 @@ const StockMetricsPage = ({ strategyPublicId, assetPublicId }: Props) => {
         fetchMetrics();
     }, [strategyPublicId, assetPublicId]);
 
-    const safeToFixed = (value: number | undefined, decimals: number = 2) => {
+    const safeToFixed = (value: number | undefined, decimals: number = 5) => {
         return value !== undefined && !isNaN(value) ? value.toFixed(decimals) : '-';
     };
 
