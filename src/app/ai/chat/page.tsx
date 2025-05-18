@@ -92,7 +92,7 @@ export const Page = ({
                                 {msg.userId === "" ? "You" : "AI Assistant"}
                             </p>
                             <p>{msg.response}</p>
-                            {msg.current_question && <p>{msg.current_question}</p>}
+                            {/* {msg.current_question && <p>{msg.current_question}</p>} */}
                         </div>
                     ))
                 )}
