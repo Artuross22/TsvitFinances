@@ -5,7 +5,6 @@ import {
   createInvestmentIdeaGet,
   createInvestmentIdeaPost,
 } from "@/api/strategy";
-import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 export interface AddInvestmentIdeaPost {

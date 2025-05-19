@@ -68,8 +68,8 @@ function Navbar({ userName }: Props) {
                   </Link>
                 </li>
                 <li>
-                  <Link href="/strategy" passHref>
-                    <span className="text-white no-underline hover:text-gray-300">Microeconomics</span>
+                  <Link href="/macroeconomic" passHref>
+                    <span className="text-white no-underline hover:text-gray-300">Macroeconomic</span>
                   </Link>
                 </li>
                 <li>
