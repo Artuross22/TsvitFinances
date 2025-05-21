@@ -5,25 +5,25 @@ export enum EconomicType {
 }
 
 export interface MacroeconomicPost {
-    UserId: string;
-    Title: string;
-    Description: string;
-    EconomicType: EconomicType;
+    userId: string;
+    title: string;
+    description: string;
+    economicType: EconomicType;
 }
 
 export interface MacroeconomicEvent {
-    PublicId: string;
-    Title: string;
-    Description: string;
-    Rating: number;
-    CreateAt: Date;
-    Source: string;
+    publicId: string;
+    title: string;
+    description: string;
+    rating: number;
+    createAt: Date;
+    source: string;
 }
 
 export interface ViewMacroeconomic {
-    PublicId: string;
-    Title: string;
-    Description: string;
-    EconomicType: EconomicType;
-    MacroeconomicEvents?: ReadonlyArray<MacroeconomicEvent>;
+    publicId: string;
+    title: string;
+    description: string;
+    economicType: EconomicType;
+    macroeconomicEvents?: ReadonlyArray<MacroeconomicEvent>;
 }

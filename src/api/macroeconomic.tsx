@@ -9,14 +9,15 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 const api = "https://localhost:44309/api/";
 
 export const macroeconomicPost = async (model: MacroeconomicCreate) => {
-    model.UserId = await getUserId();
+    model.userId = await getUserId();
     const response = await axios.post(`${api}CreateMacroeconomic`, model);
     return response.data;
 }
 
 export const macroeconomicView = async () => {
     const userId = await getUserId();
-    const response = await axios.get<ViewMacroeconomic[]>(`${api}ViewMacroeconomic?userId=${userId}`);
+    const response = await axios.get<ViewMacroeconomic>(`${api}ViewMacroeconomic?userId=${userId}`);
+    console.log("response.data", response.data);
     return response.data;
 }
 

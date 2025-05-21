@@ -9,10 +9,10 @@ import BackLink from "@/features/components/useful/BackLink";
 export default function AddMacroeconomic() {
     const router = useRouter();
     const [formData, setFormData] = useState<MacroeconomicPost>({
-        UserId: "",
-        Title: "",
-        Description: "",
-        EconomicType: EconomicType.Positive
+        userId: "",
+        title: "",
+        description: "",
+        economicType: EconomicType.Positive
     });
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -51,7 +51,7 @@ export default function AddMacroeconomic() {
                         type="text"
                         id="Title"
                         name="Title"
-                        value={formData.Title}
+                        value={formData.title}
                         onChange={handleChange}
                         className="w-full px-3 py-2 border border-gray-300 rounded-md"
                         required
@@ -65,7 +65,7 @@ export default function AddMacroeconomic() {
                     <textarea
                         id="Description"
                         name="Description"
-                        value={formData.Description}
+                        value={formData.description}
                         onChange={handleChange}
                         className="w-full px-3 py-2 border border-gray-300 rounded-md"
                         rows={4}
@@ -80,7 +80,7 @@ export default function AddMacroeconomic() {
                     <select
                         id="EconomicType"
                         name="EconomicType"
-                        value={formData.EconomicType}
+                        value={formData.economicType}
                         onChange={handleChange}
                         className="w-full px-3 py-2 border border-gray-300 rounded-md"
                         required
