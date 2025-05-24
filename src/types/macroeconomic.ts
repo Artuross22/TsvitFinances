@@ -27,3 +27,11 @@ export interface ViewMacroeconomic {
     economicType: EconomicType;
     macroeconomicEvents?: ReadonlyArray<MacroeconomicEvent>;
 }
+
+export interface AddEvent {
+    macroeconomicAnalysisId : string;
+    title: string;
+    description: string;
+    source: string;
+    rating?: number | null;
+}

@@ -5,6 +5,7 @@ import { ViewMacroeconomic, EconomicType } from "@/types/macroeconomic";
 import { macroeconomicView } from "@/api/macroeconomic";
 import { useRouter } from "next/navigation";
 import BackLink from "@/features/components/useful/BackLink";
+import Link from "next/link";
 
 export default function MacroeconomicView() {
     const [macroeconomicData, setMacroeconomicData] = useState<ViewMacroeconomic>();
@@ -82,6 +83,15 @@ export default function MacroeconomicView() {
                             {EconomicType[macroeconomicData!.economicType]}
                         </span>
                     </div>
+
+                    <div className="flex justify-end">
+                        <Link href={`/macroeconomic/event/add/${macroeconomicData!.publicId}`}>
+                            <button className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded transition-colors">
+                                Add Event
+                            </button>
+                        </Link>
+                    </div>
+
                     {macroeconomicData!.macroeconomicEvents && macroeconomicData!.macroeconomicEvents.length > 0 && (
                         <div className="mt-4">
                             <h3 className="font-medium mb-2">Related Events:</h3>
