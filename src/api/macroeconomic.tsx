@@ -2,7 +2,7 @@
 
 import axios from "axios";
 import { getUserId } from "./helpers/apiHelpers";
-import { MacroeconomicPost as MacroeconomicCreate, ViewMacroeconomic } from "@/types/macroeconomic";
+import { MacroeconomicPost as MacroeconomicCreate, ViewMacroeconomic, EconomicType } from "@/types/macroeconomic";
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
@@ -14,10 +14,9 @@ export const macroeconomicPost = async (model: MacroeconomicCreate) => {
     return response.data;
 }
 
-export const macroeconomicView = async () => {
-    const userId = await getUserId();
-    const response = await axios.get<ViewMacroeconomic>(`${api}ViewMacroeconomic?userId=${userId}`);
-    console.log("response.data", response.data);
-    return response.data;
-}
+export const macroeconomicView = async (type : EconomicType) => {
+        const userId = await getUserId();
+        const response = await axios.get<ViewMacroeconomic | null>(`${api}ViewMacroeconomic?userId=${userId}&type=${type}`);
 
+        return response.data;
+}

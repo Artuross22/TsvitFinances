@@ -29,28 +29,27 @@ export default function AddMacroeconomic() {
         const { name, value } = e.target;
         setFormData(prev => ({
             ...prev,
-            [name]: name === "EconomicType" ? parseInt(value) : value
+            [name]: name === "economicType" ? parseInt(value) : value
         }));
     };
 
     return (
+        <>
+        <div className="flex bg-gray-200 justify-center mt-2 px-2">
+            <BackLink />
+            <strong>Add Macroeconomic</strong>
+        <div className="ml-auto flex space-x-12 text-green"></div>
+        </div>
         <div className="max-w-4xl mx-auto p-6">
-            <div className="flex bg-gray-200 justify-center mt-2">
-                <div className="absolute left-4 text-green-600 hover:text-green-700">
-                    <BackLink />
-                </div>
-                <strong>Add Macroeconomic Post</strong>
-            </div>
-
             <form onSubmit={handleSubmit} className="space-y-6 mt-6">
                 <div className="form-group">
-                    <label htmlFor="Title" className="block text-sm font-medium text-gray-700 mb-1">
+                    <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-1">
                         Title
                     </label>
                     <input
                         type="text"
-                        id="Title"
-                        name="Title"
+                        id="title"
+                        name="title"
                         value={formData.title}
                         onChange={handleChange}
                         className="w-full px-3 py-2 border border-gray-300 rounded-md"
@@ -59,12 +58,12 @@ export default function AddMacroeconomic() {
                 </div>
 
                 <div className="form-group">
-                    <label htmlFor="Description" className="block text-sm font-medium text-gray-700 mb-1">
+                    <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
                         Description
                     </label>
                     <textarea
-                        id="Description"
-                        name="Description"
+                        id="description"
+                        name="description"
                         value={formData.description}
                         onChange={handleChange}
                         className="w-full px-3 py-2 border border-gray-300 rounded-md"
@@ -74,12 +73,12 @@ export default function AddMacroeconomic() {
                 </div>
 
                 <div className="form-group">
-                    <label htmlFor="EconomicType" className="block text-sm font-medium text-gray-700 mb-1">
+                    <label htmlFor="economicType" className="block text-sm font-medium text-gray-700 mb-1">
                         Economic Type
                     </label>
                     <select
-                        id="EconomicType"
-                        name="EconomicType"
+                        id="economicType"
+                        name="economicType"
                         value={formData.economicType}
                         onChange={handleChange}
                         className="w-full px-3 py-2 border border-gray-300 rounded-md"
@@ -98,5 +97,6 @@ export default function AddMacroeconomic() {
                 </button>
             </form>
         </div>
+        </>
     );
 }
