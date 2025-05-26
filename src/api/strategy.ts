@@ -29,6 +29,7 @@ import { api, checkverify, getUserId } from "./helpers/apiHelpers";
 import { GetPositionScaling } from "@/app/strategy/EditPositionScalingManagement/[publicId]/page";
 import { FinanceDataStockMetrics } from "@/app/strategy/AddStockMetrics/[publicId]/[strategyId]/page";
 import { ApplyStockMetricsModel } from "@/features/components/asset/viewAsset/ApplyStockMetrics";
+import { EditStrategy } from "@/types/strategy";
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
@@ -107,11 +108,8 @@ export const deleteTarget = async (
 
 export const getStrategy = async (publicId: UUID): Promise<GetStrategy> => {
   let userId = await getUserId();
-  const response = await axios.get(`${api}GetStrategy/${publicId}/${userId}`);
-
-  const data = response.data;
-
-  return data as GetStrategy;
+  const response = await axios.get<GetStrategy>(`${api}GetStrategy/${publicId}/${userId}`);
+  return response.data;
 };
 
 export async function createStrategy(stragy: Partial<AddStragy>) {
@@ -124,6 +122,23 @@ export async function createStrategy(stragy: Partial<AddStragy>) {
     redirect("/");
   }
 }
+
+export const editStrategyGet = async (publicId: string) => {
+  let userId = await getUserId();
+  console.log("WTF", publicId);
+  const response = await axios.get<EditStrategy>(`${api}EditStrategy/${publicId}/${userId}`);
+  return response.data;
+};
+
+export const editStrategyPost = async (
+  model: EditStrategy,
+): Promise<boolean> => {
+  const response = await axios.put<boolean>(`${api}EditStrategy/`, model);
+  if (response.status === 200) {
+    return true;
+  }
+  return false;
+};
 
 export const editEditRiskManagementGet = async (
   publicId: string,

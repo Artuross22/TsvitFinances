@@ -16,7 +16,7 @@ export const macroeconomicPost = async (model: MacroeconomicCreate) => {
 
 export const macroeconomicView = async (type : EconomicType) => {
         const userId = await getUserId();
-        const response = await axios.get<ViewMacroeconomic | null>(`${api}ViewMacroeconomic?userId=${userId}&type=${type}`);
+        const response = await axios.get<ViewMacroeconomic>(`${api}ViewMacroeconomic?userId=${userId}&type=${type}`);
         return response.data;
 }
 
