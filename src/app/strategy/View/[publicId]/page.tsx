@@ -5,13 +5,15 @@ import { UUID } from "crypto";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { EconomicType } from "@/types/macroeconomic";
 
 export type GetStrategy = {
   name: string;
   description: string;
   riskManagement: RiskManagement | null;
   positionManagement: PositionManagement | null;
-  financeData: financeData | null;
+  financeData: FinanceData | null;
+  macroeconomicEvents: MacroeconomicEvents[];
 };
 
 export type RiskManagement = {
@@ -24,7 +26,7 @@ export type RiskManagement = {
   hedge: Hedge | null;
 };
 
-export type financeData = {
+export type FinanceData = {
   publicId: string;
 };
 
@@ -46,6 +48,12 @@ export type Diversification = {
 export type Hedge = {
   name: string;
 };
+
+ interface MacroeconomicEvents {
+  publicId: string;
+  title: string;
+  economicType: EconomicType;
+}
 
 interface Props {
   params: {
@@ -90,6 +98,24 @@ const ViewStrategy: React.FC<Props> = ({ params }) => {
             </Link>
           </div>
           <p className="text-gray-600 text-lg leading-relaxed">{strategy.description}</p>
+          <div className="mt-4">
+            <h6 className="text-lg font-semibold text-gray-900">Macroeconomic Events</h6>
+            <div className="mt-2 space-y-2">
+              {strategy.macroeconomicEvents.map((event) => (
+                <div key={event.publicId} className="flex items-center">
+                  <span className={`${
+                    event.economicType === EconomicType.Positive 
+                      ? 'text-green-600' 
+                      : 'text-red-600' 
+                  }`}>
+                    <Link href={`/macroeconomic/${event.publicId}`}>
+                      {event.title}
+                    </Link>
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
 
         <div className="grid gap-8 md:grid-cols-2">
