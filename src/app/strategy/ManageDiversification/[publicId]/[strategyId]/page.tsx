@@ -35,6 +35,7 @@ export type EditDiversification = {
 export type Diversification = {
   id: number;
   nichePercentage: number;
+  minimumAssetsPerNiche: number;
   sector: Sector;
 };
 
@@ -162,6 +163,7 @@ export default function DiversificationPage({ params }: Props) {
       {
         id: 0,
         nichePercentage: 0,
+        minimumAssetsPerNiche: 1,
         sector: Number(availableSectors[0][1]) as Sector,
       },
     ]);
@@ -232,6 +234,19 @@ export default function DiversificationPage({ params }: Props) {
                 className="p-2 border rounded w-24"
               />
               <span>%</span>
+
+              <input
+                type="number"
+                value={div.minimumAssetsPerNiche || ""}
+                onChange={(e) => {
+                  const updatedDiversifications = [...diversifications];
+                  updatedDiversifications[index].minimumAssetsPerNiche = Number(e.target.value);
+                  setDiversifications(updatedDiversifications);
+                }}
+                min="1"
+                className="p-2 border rounded w-24"
+              />
+              <span>min assets</span>
 
               <button
                 type="button"
