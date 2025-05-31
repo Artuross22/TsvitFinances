@@ -12,10 +12,11 @@ import { getAsset } from "@/api/asset";
 import { useEffect, useState } from "react";
 
 export type ViewAssetDto = {
+  publicId: string;
   userPublicId: string;
   strategyPublicId: string | null;
   strategyName: string | null;
-  publicId: string;
+  goal: string;
   sector: string;
   term: string;
   market: string;

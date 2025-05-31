@@ -2,7 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { TrendingUp, TrendingDown, Edit, Calendar, DollarSign, Hash, Briefcase, MapPin } from "lucide-react";
+import { TrendingUp, TrendingDown, Edit, Calendar, DollarSign, Hash, Briefcase, MapPin, Target } from "lucide-react";
 import { ViewAssetDto } from "@/app/investing/ViewAsset/[id]/page";
 
 interface AssetDetailsProps {
@@ -47,6 +47,14 @@ const AssetDetails = ({ asset }: AssetDetailsProps) => {
         </div>
 
         <div className="p-6 space-y-6">
+          <div className="bg-gray-50 rounded-lg p-4">
+            <h2 className="text-lg font-semibold flex items-center gap-2 mb-3">
+              <Target className="w-5 h-5" />
+              Investment Goal
+            </h2>
+            <p className="text-gray-700 whitespace-pre-wrap break-words max-w-full overflow-hidden">{asset.goal}</p>
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="bg-gray-50 rounded-lg p-4 space-y-3">
               <h2 className="text-lg font-semibold flex items-center gap-2">

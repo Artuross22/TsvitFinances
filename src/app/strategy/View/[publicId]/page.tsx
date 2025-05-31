@@ -99,7 +99,7 @@ const ViewStrategy: React.FC<Props> = ({ params }) => {
           </div>
           <p className="text-gray-600 text-lg leading-relaxed">{strategy.description}</p>
           <div className="mt-4">
-            <h6 className="text-lg font-semibold text-gray-900">Macroeconomic Events</h6>
+            <h6 className="text-sm font-semibold text-gray-900">Macroeconomic events that may have an impact on the hypothesis :</h6>
             <div className="mt-2 space-y-2">
               {strategy.macroeconomicEvents.map((event) => (
                 <div key={event.publicId} className="flex items-center">
