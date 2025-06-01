@@ -30,6 +30,7 @@ import { GetPositionScaling } from "@/app/strategy/EditPositionScalingManagement
 import { FinanceDataStockMetrics } from "@/app/strategy/AddStockMetrics/[publicId]/[strategyId]/page";
 import { ApplyStockMetricsModel } from "@/features/components/asset/viewAsset/ApplyStockMetrics";
 import { EditStrategy } from "@/types/strategy";
+import { PositionRuleBinding } from "@/types/positionRule";
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
@@ -323,3 +324,13 @@ export const applyStockMetrics = async (publicId: string, assetPublicId: string)
 
   return data;
 };
+
+export const positionRulePost = async (model: PositionRuleBinding) => {
+  const response = await axios.post(`${api}ManagePositionRule`, model);
+  return response.data;
+}
+
+export const positionRuleGet = async (publicId : string) => {
+      const response = await axios.get<PositionRuleBinding>(`${api}ManagePositionRule/${publicId}`);
+      return response.data;
+}
