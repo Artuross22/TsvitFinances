@@ -45,12 +45,10 @@ const AssetForm: React.FC<AssetProps> = ({ params }) => {
   return (
     <div>
       <div className="flex bg-gray-200 justify-center mt-2 px-2">
-      <div className="absolute left-1 text-green">
-        <BackLink />
+        <div className="absolute left-1 text-green">
+          <BackLink />
         </div>
-        <h2 className="text-lg">
-          Edit {formAsset.name}
-        </h2>
+        <h2 className="text-lg">Edit {formAsset.name}</h2>
       </div>
       <form
         onSubmit={handleSubmit}
@@ -59,7 +57,10 @@ const AssetForm: React.FC<AssetProps> = ({ params }) => {
         <input type="hidden" name="id" value={formAsset.publicId} />
 
         <div className="w-full mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
+          <label
+            className="block text-gray-700 text-sm font-bold mb-2"
+            htmlFor="name"
+          >
             Asset Name
           </label>
           <input
@@ -68,14 +69,18 @@ const AssetForm: React.FC<AssetProps> = ({ params }) => {
             className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="Asset name"
             value={formAsset.name}
-            onChange={(e) => setFormAsset({ ...formAsset, name: e.target.value })}
+            onChange={(e) =>
+              setFormAsset({ ...formAsset, name: e.target.value })
+            }
             required
           />
         </div>
 
-
         <div className="w-full mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="ticker">
+          <label
+            className="block text-gray-700 text-sm font-bold mb-2"
+            htmlFor="ticker"
+          >
             Ticker Name
           </label>
           <input
@@ -92,7 +97,10 @@ const AssetForm: React.FC<AssetProps> = ({ params }) => {
         </div>
 
         <div className="w-full mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="quantity">
+          <label
+            className="block text-gray-700 text-sm font-bold mb-2"
+            htmlFor="quantity"
+          >
             Quantity
           </label>
           <input
@@ -112,7 +120,10 @@ const AssetForm: React.FC<AssetProps> = ({ params }) => {
         </div>
 
         <div className="w-full mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="currentPrice">
+          <label
+            className="block text-gray-700 text-sm font-bold mb-2"
+            htmlFor="currentPrice"
+          >
             Current Price
           </label>
           <input
@@ -132,7 +143,10 @@ const AssetForm: React.FC<AssetProps> = ({ params }) => {
         </div>
 
         <div className="w-full mb-6">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="boughtFor">
+          <label
+            className="block text-gray-700 text-sm font-bold mb-2"
+            htmlFor="boughtFor"
+          >
             Bought For
           </label>
           <input
@@ -152,7 +166,10 @@ const AssetForm: React.FC<AssetProps> = ({ params }) => {
         </div>
 
         <div className="w-full mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="goal">
+          <label
+            className="block text-gray-700 text-sm font-bold mb-2"
+            htmlFor="goal"
+          >
             Goal
           </label>
           <textarea
@@ -160,7 +177,9 @@ const AssetForm: React.FC<AssetProps> = ({ params }) => {
             className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-[100px] resize-y"
             placeholder="Enter your investment goal"
             value={formAsset.goal}
-            onChange={(e) => setFormAsset({ ...formAsset, goal: e.target.value })}
+            onChange={(e) =>
+              setFormAsset({ ...formAsset, goal: e.target.value })
+            }
             required
           />
         </div>

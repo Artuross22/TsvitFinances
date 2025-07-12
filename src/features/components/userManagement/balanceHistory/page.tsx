@@ -38,7 +38,6 @@ const UserBalanceHistory: React.FC<UserBalanceHistoryProps> = ({ user }) => {
         <div className="p-6">
           <div className="grid grid-cols-2 gap-4">
             {user.groupedBalanceFlows.map((group) => {
-              
               const groupId = `${group.balanceType}-${group.totalSum}`;
               const isExpanded = expandedGroups.has(groupId);
 

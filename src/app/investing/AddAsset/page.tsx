@@ -290,7 +290,7 @@ export default function AssetForm() {
             {chartFiles.map((chart, index) => (
               <div key={index} className="border rounded-lg p-4">
                 <div className="relative mb-2">
-                <Image
+                  <Image
                     src={chart.previewUrl}
                     alt={`Preview ${index + 1}`}
                     width={400}

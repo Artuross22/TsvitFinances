@@ -126,76 +126,80 @@ export const UserManagement = () => {
 
   return (
     <>
-        <div className="flex bg-gray-200 justify-center mt-2 px-2">
+      <div className="flex bg-gray-200 justify-center mt-2 px-2">
         <BackLink />
         <div className="ml-auto flex space-x-12 text-green"></div>
       </div>
 
-    <div className="min-h-screen bg-gray-100 p-8">
-      <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <div className="space-y-8">
-          <div className="bg-white rounded-xl shadow-lg overflow-hidden">
-            <div className="bg-blue-600 text-white p-5 flex items-center space-x-4">
-              <User className="w-8 h-8" />
-              <h2 className="text-xl font-bold">User Profile</h2>
-            </div>
-            <div className="p-6 grid grid-cols-2 gap-4">
-              <UserInfoItem label="ID" value={user.id} icon={CreditCard} />
-              <UserInfoItem label="Email" value={user.email} icon={Mail} />
-              <UserInfoItem
-                label="Nickname"
-                value={user.nickname}
-                icon={BookUser}
-              />
-              <UserInfoItem
-                label="Name"
-                value={`${user.firstName} ${user.lastName}`}
-                icon={User}
-              />
-              {user.phoneNumber && (
+      <div className="min-h-screen bg-gray-100 p-8">
+        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div className="space-y-8">
+            <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+              <div className="bg-blue-600 text-white p-5 flex items-center space-x-4">
+                <User className="w-8 h-8" />
+                <h2 className="text-xl font-bold">User Profile</h2>
+              </div>
+              <div className="p-6 grid grid-cols-2 gap-4">
+                <UserInfoItem label="ID" value={user.id} icon={CreditCard} />
+                <UserInfoItem label="Email" value={user.email} icon={Mail} />
                 <UserInfoItem
-                  label="Phone Number"
-                  value={user.phoneNumber}
-                  icon={Phone}
+                  label="Nickname"
+                  value={user.nickname}
+                  icon={BookUser}
                 />
-              )}
-              <UserInfoItem
-                label="Created On"
-                value={new Date(user.createdOn).toLocaleDateString()}
-                icon={Clock}
-              />
-              <UserInfoItem
-                label="Total Balance"
-                value={formatCurrency(user.totalBalance)}
-                icon={DollarSign}
-              />
+                <UserInfoItem
+                  label="Name"
+                  value={`${user.firstName} ${user.lastName}`}
+                  icon={User}
+                />
+                {user.phoneNumber && (
+                  <UserInfoItem
+                    label="Phone Number"
+                    value={user.phoneNumber}
+                    icon={Phone}
+                  />
+                )}
+                <UserInfoItem
+                  label="Created On"
+                  value={new Date(user.createdOn).toLocaleDateString()}
+                  icon={Clock}
+                />
+                <UserInfoItem
+                  label="Total Balance"
+                  value={formatCurrency(user.totalBalance)}
+                  icon={DollarSign}
+                />
+              </div>
+            </div>
+
+            <div className="bg-white rounded-xl shadow-lg">
+              <div className="flex border-b">
+                <button
+                  className={`flex-1 p-4 ${activeTab === "add" ? "bg-blue-50 text-blue-600 border-b-2 border-blue-600" : "text-gray-600 hover:bg-gray-50"}`}
+                  onClick={() => setActiveTab("add")}
+                >
+                  Add Balance
+                </button>
+                <button
+                  className={`flex-1 p-4 ${activeTab === "remove" ? "bg-blue-50 text-blue-600 border-b-2 border-blue-600" : "text-gray-600 hover:bg-gray-50"}`}
+                  onClick={() => setActiveTab("remove")}
+                >
+                  Remove Balance
+                </button>
+              </div>
+              <div className="p-6">
+                {activeTab === "add" ? (
+                  <AddBalanceFlow />
+                ) : (
+                  <TransferBalanceFlow />
+                )}
+              </div>
             </div>
           </div>
 
-          <div className="bg-white rounded-xl shadow-lg">
-            <div className="flex border-b">
-              <button
-                className={`flex-1 p-4 ${activeTab === "add" ? "bg-blue-50 text-blue-600 border-b-2 border-blue-600" : "text-gray-600 hover:bg-gray-50"}`}
-                onClick={() => setActiveTab("add")}
-              >
-                Add Balance
-              </button>
-              <button
-                className={`flex-1 p-4 ${activeTab === "remove" ? "bg-blue-50 text-blue-600 border-b-2 border-blue-600" : "text-gray-600 hover:bg-gray-50"}`}
-                onClick={() => setActiveTab("remove")}
-              >
-                Remove Balance
-              </button>
-            </div>
-            <div className="p-6">
-              {activeTab === "add" ? <AddBalanceFlow /> : <TransferBalanceFlow />}
-            </div>
-          </div>
+          <UserBalanceHistory user={user} />
         </div>
-
-        <UserBalanceHistory user={user} />
       </div>
-    </div>
     </>
   );
 };

@@ -2,8 +2,7 @@
 import ApplyStrategy from "@/app/strategy/ApplyStrategy/[publicId]/page";
 import ApplyStockMetrics from "@/features/components/asset/viewAsset/ApplyStockMetrics";
 import AssetCharts from "@/features/components/asset/viewAsset/AssetCharts";
-import AssetDetails, {
-} from "@/features/components/asset/viewAsset/AssetDetails";
+import AssetDetails from "@/features/components/asset/viewAsset/AssetDetails";
 import AssetHeader from "@/features/components/asset/viewAsset/AssetHeader";
 import AssetStrategy from "@/features/components/asset/viewAsset/AssetStrategy";
 import AssetTargets from "@/features/components/asset/viewAsset/AssetTargets";
@@ -74,9 +73,9 @@ const ViewAsset = ({ params }: AssetProps) => {
           />
 
           <ApplyStockMetrics
-            strategyPublicId={asset.strategyPublicId!} 
-            assetPublicId={asset.publicId!}        
-            />
+            strategyPublicId={asset.strategyPublicId!}
+            assetPublicId={asset.publicId!}
+          />
         </div>
 
         <div className="w-1/2 m-4 p-4">

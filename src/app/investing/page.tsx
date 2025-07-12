@@ -65,8 +65,9 @@ const ListAssets: React.FC = () => {
             closedAt,
             quantity,
           }) => {
-            const profitPercentage = (((currentPrice - boughtFor) * quantity) /
-              (boughtFor * quantity)) *
+            const profitPercentage =
+              (((currentPrice - boughtFor) * quantity) /
+                (boughtFor * quantity)) *
               100;
             const isProfitable = currentPrice >= boughtFor;
 
@@ -86,25 +87,37 @@ const ListAssets: React.FC = () => {
                       <TrendingDown className="w-5 h-5 text-red-600" />
                     )}
                   </div>
-                  
+
                   <div className="space-y-1 text-sm">
                     <div className="flex justify-between">
                       <span className="text-gray-600">Current Price:</span>
-                      <span className="font-medium">${currentPrice.toFixed(2)}</span>
+                      <span className="font-medium">
+                        ${currentPrice.toFixed(2)}
+                      </span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-600">Bought For:</span>
-                      <span className="font-medium">${boughtFor.toFixed(2)}</span>
+                      <span className="font-medium">
+                        ${boughtFor.toFixed(2)}
+                      </span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-600">Profit:</span>
-                      <span className={isProfitable ? "text-green-600" : "text-red-600"}>
+                      <span
+                        className={
+                          isProfitable ? "text-green-600" : "text-red-600"
+                        }
+                      >
                         ${(currentPrice - boughtFor).toFixed(2)}
                       </span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-600">Profit %:</span>
-                      <span className={isProfitable ? "text-green-600" : "text-red-600"}>
+                      <span
+                        className={
+                          isProfitable ? "text-green-600" : "text-red-600"
+                        }
+                      >
                         {profitPercentage.toFixed(2)}%
                       </span>
                     </div>
@@ -113,15 +126,17 @@ const ListAssets: React.FC = () => {
                   <div className="text-xs text-gray-500">
                     <div>Added: {new Date(addedAt).toLocaleDateString()}</div>
                     {closedAt && !active && (
-                      <div>Closed: {new Date(closedAt).toLocaleDateString()}</div>
+                      <div>
+                        Closed: {new Date(closedAt).toLocaleDateString()}
+                      </div>
                     )}
                   </div>
 
-                  <Link 
+                  <Link
                     href={`/investing/ViewAsset/${publicId}`}
                     className={`mt-2 flex items-center justify-center gap-2 p-2 rounded-md w-full ${
-                      isProfitable 
-                        ? "bg-green-500 hover:bg-green-600" 
+                      isProfitable
+                        ? "bg-green-500 hover:bg-green-600"
                         : "bg-red-500 hover:bg-red-600"
                     } text-white transition-colors`}
                   >
@@ -131,7 +146,7 @@ const ListAssets: React.FC = () => {
                 </div>
               </div>
             );
-          }
+          },
         )}
       </div>
     </div>

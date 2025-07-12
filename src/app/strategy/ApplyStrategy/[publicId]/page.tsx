@@ -16,7 +16,7 @@ export interface Targets {
   start?: number | null;
   end: number;
   percentageLevel: number;
-  positionScaling : number;
+  positionScaling: number;
 }
 
 export interface _Position {
@@ -167,7 +167,7 @@ export default function ApplyStrategy({ publicId }: Props) {
                       Percentage Level %
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                     Scaling Out $
+                      Scaling Out $
                     </th>
                   </tr>
                 </thead>
@@ -175,9 +175,7 @@ export default function ApplyStrategy({ publicId }: Props) {
                   {strategies.position.buyTargets.map((target, index) => (
                     <tr key={`buy-${index}`}>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        {target.start
-                          ? `${target.start} - ${target.end}`
-                          : `-`}
+                        {target.start ? `${target.start} - ${target.end}` : `-`}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         {target.percentageLevel}
@@ -213,9 +211,7 @@ export default function ApplyStrategy({ publicId }: Props) {
                   {strategies.position.sellTargets.map((target, index) => (
                     <tr key={`sell-${index}`}>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        {target.start
-                          ? `${target.start} - ${target.end}`
-                          : `-`}
+                        {target.start ? `${target.start} - ${target.end}` : `-`}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         {target.percentageLevel}

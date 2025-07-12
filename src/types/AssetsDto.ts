@@ -34,7 +34,7 @@ export type AddAsset = {
   name: string;
   ticker: string;
   currentPrice: number;
-  mainGoal : string;
+  mainGoal: string;
   addedAt: Date;
   boughtFor: number;
   quantity: number;

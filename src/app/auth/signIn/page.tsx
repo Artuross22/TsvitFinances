@@ -26,16 +26,17 @@ const LoginProps: FC<Login> = () => {
     try {
       setIsLoading(true);
       setError(null);
-    
-      
+
       const result = await signIn({
         email: input.email,
         password: input.password,
       });
-      
+
       router.push("/");
     } catch (error) {
-      setError("Failed to sign in. Please check your credentials and try again.");
+      setError(
+        "Failed to sign in. Please check your credentials and try again.",
+      );
     } finally {
       setIsLoading(false);
     }
@@ -50,7 +51,7 @@ const LoginProps: FC<Login> = () => {
             Enter your email and password to sign in
           </p>
         </div>
-        
+
         <div className="space-y-6">
           <div>
             <div className="relative">
@@ -65,7 +66,7 @@ const LoginProps: FC<Login> = () => {
               />
             </div>
           </div>
-          
+
           <div>
             <div className="relative">
               <Lock className="absolute left-3 top-3 h-5 w-5 text-gray-400" />

@@ -4,7 +4,6 @@ import { addBalanceFlow } from "@/api/user";
 import React, { useState } from "react";
 import { Balance } from "@/types/balanceFlow";
 
-
 export interface AddBalanceFlow {
   appUserId: string | "";
   balanceFlows: BalanceFlow[];

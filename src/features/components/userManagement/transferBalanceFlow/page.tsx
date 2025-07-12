@@ -52,7 +52,10 @@ export const TransferBalance: React.FC = () => {
         setError("From and To types cannot be the same.");
       } else {
         setError(null);
-        setFromBalanceFlows((prev) => ({ ...prev, balanceType: Number(value) }));
+        setFromBalanceFlows((prev) => ({
+          ...prev,
+          balanceType: Number(value),
+        }));
       }
     } else {
       if (value === fromBalanceFlows.balanceType) {
@@ -141,11 +144,7 @@ export const TransferBalance: React.FC = () => {
           </select>
         </div>
 
-        {error && (
-          <div className="text-red-500 text-sm mt-2">
-            {error}
-          </div>
-        )}
+        {error && <div className="text-red-500 text-sm mt-2">{error}</div>}
       </div>
       <div className="flex justify-between mt-6">
         <button

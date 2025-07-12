@@ -109,7 +109,9 @@ export const deleteTarget = async (
 
 export const getStrategy = async (publicId: UUID): Promise<GetStrategy> => {
   let userId = await getUserId();
-  const response = await axios.get<GetStrategy>(`${api}GetStrategy/${publicId}/${userId}`);
+  const response = await axios.get<GetStrategy>(
+    `${api}GetStrategy/${publicId}/${userId}`,
+  );
   return response.data;
 };
 
@@ -127,7 +129,9 @@ export async function createStrategy(stragy: Partial<AddStragy>) {
 export const editStrategyGet = async (publicId: string) => {
   let userId = await getUserId();
   console.log("WTF", publicId);
-  const response = await axios.get<EditStrategy>(`${api}EditStrategy/${publicId}/${userId}`);
+  const response = await axios.get<EditStrategy>(
+    `${api}EditStrategy/${publicId}/${userId}`,
+  );
   return response.data;
 };
 
@@ -164,7 +168,9 @@ export const editRiskManagementPost = async (
   return false;
 };
 
-export const editPositionScalingManagerGet = async (publicId: string): Promise<GetPositionScaling> => {
+export const editPositionScalingManagerGet = async (
+  publicId: string,
+): Promise<GetPositionScaling> => {
   try {
     const response = await axios.get(`${api}GetPositionManagement/${publicId}`);
     const data = response.data;
@@ -308,7 +314,6 @@ export async function deleteInvestmentIdea(publicId: string) {
 }
 
 export async function createStockMetrics(stragy: FinanceDataStockMetrics) {
-
   const response = await axios.post<boolean>(`${api}AddStockMetrics`, stragy);
   if (response.status === 200) {
     redirect(`/strategy`);
@@ -317,8 +322,13 @@ export async function createStockMetrics(stragy: FinanceDataStockMetrics) {
   }
 }
 
-export const applyStockMetrics = async (publicId: string, assetPublicId: string): Promise<ApplyStockMetricsModel> => {
-  const response = await axios.get(`${api}ApplyStockMetrics/${publicId}/${assetPublicId}`);
+export const applyStockMetrics = async (
+  publicId: string,
+  assetPublicId: string,
+): Promise<ApplyStockMetricsModel> => {
+  const response = await axios.get(
+    `${api}ApplyStockMetrics/${publicId}/${assetPublicId}`,
+  );
 
   const data = response.data;
 
@@ -328,9 +338,11 @@ export const applyStockMetrics = async (publicId: string, assetPublicId: string)
 export const positionRulePost = async (model: PositionRuleBinding) => {
   const response = await axios.post(`${api}ManagePositionRule`, model);
   return response.data;
-}
+};
 
-export const positionRuleGet = async (publicId : string) => {
-      const response = await axios.get<PositionRuleBinding>(`${api}ManagePositionRule/${publicId}`);
-      return response.data;
-}
+export const positionRuleGet = async (publicId: string) => {
+  const response = await axios.get<PositionRuleBinding>(
+    `${api}ManagePositionRule/${publicId}`,
+  );
+  return response.data;
+};

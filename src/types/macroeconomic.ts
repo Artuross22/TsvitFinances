@@ -1,37 +1,37 @@
 export enum EconomicType {
-    None = 0,
-    Positive,
-    Negative,
+  None = 0,
+  Positive,
+  Negative,
 }
 
 export interface MacroeconomicPost {
-    userId: string;
-    title: string;
-    description: string;
-    economicType: EconomicType;
+  userId: string;
+  title: string;
+  description: string;
+  economicType: EconomicType;
 }
 
 export interface MacroeconomicEvent {
-    publicId: string;
-    title: string;
-    description: string;
-    rating: number;
-    createAt: Date;
-    source: string;
+  publicId: string;
+  title: string;
+  description: string;
+  rating: number;
+  createAt: Date;
+  source: string;
 }
 
 export interface ViewMacroeconomic {
-    publicId: string;
-    title: string;
-    description: string;
-    economicType: EconomicType;
-    macroeconomicEvents?: ReadonlyArray<MacroeconomicEvent>;
+  publicId: string;
+  title: string;
+  description: string;
+  economicType: EconomicType;
+  macroeconomicEvents?: ReadonlyArray<MacroeconomicEvent>;
 }
 
 export interface AddEvent {
-    macroeconomicAnalysisId : string;
-    title: string;
-    description: string;
-    source: string;
-    rating?: number | null;
+  macroeconomicAnalysisId: string;
+  title: string;
+  description: string;
+  source: string;
+  rating?: number | null;
 }

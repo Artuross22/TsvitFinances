@@ -2,7 +2,17 @@
 
 import React from "react";
 import Link from "next/link";
-import { TrendingUp, TrendingDown, Edit, Calendar, DollarSign, Hash, Briefcase, MapPin, Target } from "lucide-react";
+import {
+  TrendingUp,
+  TrendingDown,
+  Edit,
+  Calendar,
+  DollarSign,
+  Hash,
+  Briefcase,
+  MapPin,
+  Target,
+} from "lucide-react";
 import { ViewAssetDto } from "@/app/investing/ViewAsset/[id]/page";
 
 interface AssetDetailsProps {
@@ -22,14 +32,16 @@ const AssetDetails = ({ asset }: AssetDetailsProps) => {
               <h1 className="text-2xl font-bold">{asset.name}</h1>
               <p className="text-gray-500 text-sm">{asset.ticker}</p>
             </div>
-            <div className={`flex items-center gap-2 ${
-              isProfitable ? "text-green-600" : "text-red-600"
-            } text-lg font-semibold`}>
+            <div
+              className={`flex items-center gap-2 ${
+                isProfitable ? "text-green-600" : "text-red-600"
+              } text-lg font-semibold`}
+            >
               {isProfitable ? <TrendingUp /> : <TrendingDown />}
               <span>{asset.percentageProfit.toFixed(2)}%</span>
             </div>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
             <div className="flex items-center text-gray-600">
               <Calendar className="w-4 h-4 mr-2" />
@@ -52,7 +64,9 @@ const AssetDetails = ({ asset }: AssetDetailsProps) => {
               <Target className="w-5 h-5" />
               Investment Goal
             </h2>
-            <p className="text-gray-700 whitespace-pre-wrap break-words max-w-full overflow-hidden">{asset.goal}</p>
+            <p className="text-gray-700 whitespace-pre-wrap break-words max-w-full overflow-hidden">
+              {asset.goal}
+            </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -64,7 +78,9 @@ const AssetDetails = ({ asset }: AssetDetailsProps) => {
               <div className="space-y-2">
                 <div className="flex justify-between">
                   <span className="text-gray-600">Current Price:</span>
-                  <span className="font-medium">${asset.currentPrice.toFixed(2)}</span>
+                  <span className="font-medium">
+                    ${asset.currentPrice.toFixed(2)}
+                  </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Quantity:</span>
@@ -85,13 +101,17 @@ const AssetDetails = ({ asset }: AssetDetailsProps) => {
               <div className="space-y-2">
                 <div className="flex justify-between">
                   <span className="text-gray-600">Bought For:</span>
-                  <span className="font-medium">${asset.boughtFor.toFixed(2)}</span>
+                  <span className="font-medium">
+                    ${asset.boughtFor.toFixed(2)}
+                  </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Current Profit:</span>
-                  <span className={`font-medium ${
-                    isProfitable ? "text-green-600" : "text-red-600"
-                  }`}>
+                  <span
+                    className={`font-medium ${
+                      isProfitable ? "text-green-600" : "text-red-600"
+                    }`}
+                  >
                     ${asset.profit.toFixed(2)}
                   </span>
                 </div>

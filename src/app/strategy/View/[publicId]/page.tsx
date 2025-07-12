@@ -39,7 +39,7 @@ export type PositionManagement = {
 export type PositionScaling = {
   publicId: string;
   equityPercentage: string;
-}
+};
 
 export type Diversification = {
   name: string;
@@ -49,7 +49,7 @@ export type Hedge = {
   name: string;
 };
 
- interface MacroeconomicEvents {
+interface MacroeconomicEvents {
   publicId: string;
   title: string;
   economicType: EconomicType;
@@ -80,7 +80,7 @@ const ViewStrategy: React.FC<Props> = ({ params }) => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-    <div className="flex bg-gray-200 justify-center mt-2 px-2">
+      <div className="flex bg-gray-200 justify-center mt-2 px-2">
         <button onClick={() => router.back()} className="mr-auto text-green">
           Back
         </button>
@@ -90,24 +90,32 @@ const ViewStrategy: React.FC<Props> = ({ params }) => {
       <div className="container mx-auto py-8 space-y-8 px-4">
         <div className="bg-white rounded-lg border shadow-sm p-8">
           <div className="flex items-center justify-between mb-3">
-            <h5 className="text-3xl font-bold text-gray-900">{strategy.name}</h5>
+            <h5 className="text-3xl font-bold text-gray-900">
+              {strategy.name}
+            </h5>
             <Link href={`/strategy/Edit/${params.publicId}`}>
               <button className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors">
                 Edit Strategy
               </button>
             </Link>
           </div>
-          <p className="text-gray-600 text-lg leading-relaxed">{strategy.description}</p>
+          <p className="text-gray-600 text-lg leading-relaxed">
+            {strategy.description}
+          </p>
           <div className="mt-4">
-            <h6 className="text-sm font-semibold text-gray-900">Macroeconomic events that may have an impact on the hypothesis :</h6>
+            <h6 className="text-sm font-semibold text-gray-900">
+              Macroeconomic events that may have an impact on the hypothesis :
+            </h6>
             <div className="mt-2 space-y-2">
               {strategy.macroeconomicEvents.map((event) => (
                 <div key={event.publicId} className="flex items-center">
-                  <span className={`${
-                    event.economicType === EconomicType.Positive 
-                      ? 'text-green-600' 
-                      : 'text-red-600' 
-                  }`}>
+                  <span
+                    className={`${
+                      event.economicType === EconomicType.Positive
+                        ? "text-green-600"
+                        : "text-red-600"
+                    }`}
+                  >
                     <Link href={`/macroeconomic/${event.publicId}`}>
                       {event.title}
                     </Link>
@@ -138,13 +146,17 @@ const ViewStrategy: React.FC<Props> = ({ params }) => {
             </div>
             <div className="p-6 space-y-6">
               <div>
-                <p className="text-sm font-medium text-gray-500 mb-1">Risk Percentage</p>
+                <p className="text-sm font-medium text-gray-500 mb-1">
+                  Risk Percentage
+                </p>
                 <p className="text-2xl font-semibold text-gray-900">
                   {strategy.riskManagement?.baseRiskPercentage}%
                 </p>
               </div>
               <div>
-                <p className="text-sm font-medium text-gray-500 mb-1">Risk Ratio</p>
+                <p className="text-sm font-medium text-gray-500 mb-1">
+                  Risk Ratio
+                </p>
                 <p className="text-2xl font-semibold text-gray-900">
                   1/{strategy.riskManagement?.riskToRewardRatio}
                 </p>
@@ -170,7 +182,7 @@ const ViewStrategy: React.FC<Props> = ({ params }) => {
                     href={`/strategy/EditPositionRule/${strategy.positionManagement?.publicId}`}
                   >
                     <button className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors">
-                       Position Rules
+                      Position Rules
                     </button>
                   </Link>
                   <Link
@@ -185,7 +197,9 @@ const ViewStrategy: React.FC<Props> = ({ params }) => {
             </div>
             <div className="p-6 space-y-6">
               <div>
-                <p className="text-sm font-medium text-gray-500 mb-1">Average Level</p>
+                <p className="text-sm font-medium text-gray-500 mb-1">
+                  Average Level
+                </p>
                 <p className="text-2xl font-semibold text-gray-900">
                   {strategy.positionManagement?.averageLevel}%
                 </p>
@@ -238,8 +252,12 @@ const ViewStrategy: React.FC<Props> = ({ params }) => {
             </div>
             <div className="p-6 space-y-6">
               <div>
-                <p className="text-sm font-medium text-gray-500 mb-1">Current Status</p>
-                <p className="text-lg font-medium text-gray-900">View and manage your portfolio diversification</p>
+                <p className="text-sm font-medium text-gray-500 mb-1">
+                  Current Status
+                </p>
+                <p className="text-lg font-medium text-gray-900">
+                  View and manage your portfolio diversification
+                </p>
               </div>
             </div>
           </div>

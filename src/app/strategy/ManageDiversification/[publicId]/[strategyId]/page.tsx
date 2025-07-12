@@ -240,7 +240,9 @@ export default function DiversificationPage({ params }: Props) {
                 value={div.minimumAssetsPerNiche || ""}
                 onChange={(e) => {
                   const updatedDiversifications = [...diversifications];
-                  updatedDiversifications[index].minimumAssetsPerNiche = Number(e.target.value);
+                  updatedDiversifications[index].minimumAssetsPerNiche = Number(
+                    e.target.value,
+                  );
                   setDiversifications(updatedDiversifications);
                 }}
                 min="1"

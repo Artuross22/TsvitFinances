@@ -23,7 +23,7 @@ const ShowCharts = ({ charts, publicId, name }: AssetChartsProps) => {
               View
             </Link>
           )}
-          <Link 
+          <Link
             href={`/positionEntryNotes/AddCharts/${publicId}/${name}`}
             className="block text-blue-600 hover:text-blue-800"
           >
