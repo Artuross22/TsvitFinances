@@ -70,7 +70,7 @@ export const List = () => {
           <BackLink />
         </div>
         <Link
-          href={`/InvestmentIdea/Add`}
+          href={`/investmentIdea/Add`}
           className="absolute right-1 text-green"
         >
           Create

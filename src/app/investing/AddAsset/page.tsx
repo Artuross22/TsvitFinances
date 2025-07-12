@@ -3,6 +3,7 @@
 import { createAssetGet, createAssetPost } from "@/api/asset";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import {
   AddAsset,
   InvestmentTerm,
@@ -221,6 +222,13 @@ export default function AssetForm() {
         />
         <input
           type="text"
+          name="currentPrice"
+          className="w-full px-4 py-2 border rounded-md mb-4"
+          onChange={handleChange}
+          required
+        />
+        <input
+          type="text"
           name="ticker"
           className="w-full px-4 py-2 border rounded-md mb-4"
           placeholder="Ticker"
@@ -282,10 +290,14 @@ export default function AssetForm() {
             {chartFiles.map((chart, index) => (
               <div key={index} className="border rounded-lg p-4">
                 <div className="relative mb-2">
-                  <img
+                <Image
                     src={chart.previewUrl}
                     alt={`Preview ${index + 1}`}
+                    width={400}
+                    height={192}
                     className="w-full h-48 object-cover rounded"
+                    style={{ objectFit: "cover" }}
+                    unoptimized
                   />
                   <button
                     type="button"

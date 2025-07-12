@@ -21,7 +21,7 @@ export interface AddInvestmentIdeaGet {
   name: string;
 }
 
-const AddInvestmentIdea = () => {
+const Add = () => {
   const [investmentIdea, setInvestmentIdea] = useState<AddInvestmentIdeaGet[]>(
     [],
   );
@@ -217,4 +217,4 @@ const AddInvestmentIdea = () => {
   );
 };
 
-export default AddInvestmentIdea;
+export default Add;

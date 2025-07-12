@@ -82,6 +82,11 @@ function Navbar({ userName }: Props) {
                     <span className="text-white no-underline hover:text-gray-300">Algorithms</span>
                   </Link>
                 </li>
+                <li>
+                  <Link href="/ibManagement/GetPaperAccounts" passHref>
+                    <span className="text-white no-underline hover:text-gray-300">IB Management</span>
+                  </Link>
+                </li>
               </ul>
             </div>
           </li>
