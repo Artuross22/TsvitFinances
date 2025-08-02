@@ -5,6 +5,7 @@ import { getUserId } from "./helpers/apiHelpers";
 import {
   AuthStatus,
   PaperAccount,
+  PlaceMarketOrder,
 } from "@/types/interactiveBrokers";
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
@@ -33,5 +34,11 @@ export const getPaperAccountPositions = async (accountId: string) => {
   const response = await axios.get(
     `${api}PaperTrading/GetPaperAccountPositions/${userId}/${accountId}`,
   );
+  return response.data;
+};
+
+export const PlaceMarketOrderPost = async (model: PlaceMarketOrder) => {
+  model.userId = await getUserId();
+  const response = await axios.post(`${api}PlaceMarketOrder`, model);
   return response.data;
 };

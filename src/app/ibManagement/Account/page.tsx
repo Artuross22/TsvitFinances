@@ -4,7 +4,7 @@ import AuthStatusInfo from "@/features/components/ibManagement/getAuthStatus/pag
 import ListPaperAccounts from "@/features/components/ibManagement/getPaperAccounts/page";
 import BackLink from "@/features/components/useful/BackLink";
 
-export const List = () => {
+export const Page = () => {
   return (
     <>
       <div>
@@ -32,4 +32,4 @@ export const List = () => {
   );
 };
 
-export default List;
+export default Page;

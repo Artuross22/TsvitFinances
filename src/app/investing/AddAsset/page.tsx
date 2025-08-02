@@ -194,6 +194,21 @@ export default function AssetForm() {
         />
         <input
           type="text"
+          name="goal"
+          className="w-full px-4 py-2 border rounded-md mb-4"
+          onChange={handleChange}
+          required
+        />
+        <input
+          type="text"
+          name="ticker"
+          className="w-full px-4 py-2 border rounded-md mb-4"
+          placeholder="Ticker"
+          value={values.ticker || ""}
+          onChange={handleChange}
+        />
+        <input
+          type="text"
           inputMode="decimal"
           name="currentPrice"
           className="w-full px-4 py-2 border rounded-md mb-4"
@@ -220,21 +235,7 @@ export default function AssetForm() {
           value={formatNumberForDisplay(values.quantity)}
           onChange={handleChange}
         />
-        <input
-          type="text"
-          name="currentPrice"
-          className="w-full px-4 py-2 border rounded-md mb-4"
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="text"
-          name="ticker"
-          className="w-full px-4 py-2 border rounded-md mb-4"
-          placeholder="Ticker"
-          value={values.ticker || ""}
-          onChange={handleChange}
-        />
+
         <select
           name="sector"
           className="w-full px-4 py-2 border rounded-md mb-4"

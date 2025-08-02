@@ -24,3 +24,11 @@ interface AuthDate {
   authenticated: boolean;
   message: string;
 }
+
+export interface PlaceMarketOrder {
+  accountId: string;
+  assetPublicId: string;
+  userId : string;
+  side: "BUY" | "SELL";
+  quantity: number;
+}
