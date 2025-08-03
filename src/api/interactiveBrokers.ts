@@ -4,7 +4,9 @@ import axios from "axios";
 import { getUserId } from "./helpers/apiHelpers";
 import {
   AuthStatus,
+  Orderlimits,
   PaperAccount,
+  PlaceLimitOrder,
   PlaceMarketOrder,
 } from "@/types/interactiveBrokers";
 
@@ -40,5 +42,17 @@ export const getPaperAccountPositions = async (accountId: string) => {
 export const PlaceMarketOrderPost = async (model: PlaceMarketOrder) => {
   model.userId = await getUserId();
   const response = await axios.post(`${api}PlaceMarketOrder`, model);
+  return response.data;
+};
+
+export const PlaceLimitOrderPost = async (model: PlaceLimitOrder) => {
+  model.userId = await getUserId();
+  const response = await axios.post(`${api}PlaceLimitOrder`, model);
+  return response.data;
+};
+
+export const GetOrders = async () => {
+  const userId = await getUserId();
+  const response = await axios.get<Orderlimits[]>(`${api}GetLiveOrders/${userId}`);
   return response.data;
 };

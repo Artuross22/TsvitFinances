@@ -32,3 +32,25 @@ export interface PlaceMarketOrder {
   side: "BUY" | "SELL";
   quantity: number;
 }
+
+export interface PlaceLimitOrder {
+  accountId: string;
+  assetPublicId: string;
+  userId: string;
+  side: "BUY" | "SELL";
+  quantity: number;
+  price: number;
+}
+
+export interface Orderlimits {
+  orderId: string;
+  accountId: string;
+  contractId: string;
+  ticker: string;
+  orderType: string;
+  status: string;
+  side: string;
+  quantity: number;
+  remainingQuantity:string;
+  price: number;
+}

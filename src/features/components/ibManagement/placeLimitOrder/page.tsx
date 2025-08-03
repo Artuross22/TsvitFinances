@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { PlaceMarketOrderPost } from "@/api/interactiveBrokers";
+import { PlaceLimitOrderPost } from "@/api/interactiveBrokers";
 
 interface Props {
   params: {
@@ -13,6 +13,7 @@ export const PlaceLimitOrder = ({ params }: Props) => {
   const [accountId, setAccountId] = useState("");
   const [side, setSide] = useState<"BUY" | "SELL">("BUY");
   const [quantity, setQuantity] = useState<string>("1");
+  const [price, setPrice] = useState<string>("0");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
 
@@ -22,12 +23,13 @@ export const PlaceLimitOrder = ({ params }: Props) => {
     setLoading(true);
     setMessage(null);
     try {
-      await PlaceMarketOrderPost({
+      await PlaceLimitOrderPost({
         accountId,
         side,
         quantity: Number(quantity),
         userId: "",
-        assetPublicId: params.assetPublicId
+        assetPublicId: params.assetPublicId,
+        price: Number(price)
       });
       setMessage("Order sent successfully!");
     } catch (err) {
@@ -75,12 +77,23 @@ export const PlaceLimitOrder = ({ params }: Props) => {
           required
         />
       </div>
+      <div>
+        <label className="block mb-2 text-sm font-medium text-gray-700">Price</label>
+        <input
+          type="number"
+          min={1}
+          value={price}
+          onChange={e => setPrice(e.target.value)}
+          className="w-full border border-gray-300 rounded-md p-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          required
+        />
+      </div>
       <button
         type="submit"
         className="w-full bg-blue-600 text-white rounded-md p-3 font-semibold hover:bg-blue-700 disabled:bg-gray-400 transition-colors"
         disabled={loading || !accountId || !isQuantityValid}
       >
-        {loading ? "Sending..." : "Send Order"}
+        {loading ? "Sending..." : "Send Limit Order"}
       </button>
       {message && <div className="mt-3 text-center text-sm text-blue-700">{message}</div>}
     </form>
