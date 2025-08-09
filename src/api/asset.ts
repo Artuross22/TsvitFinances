@@ -1,6 +1,6 @@
 "use server";
 
-import { AddAssetHistory, Asset, InvestmentTerm, Market, Sector } from "@/types/asset";
+import { AddAssetHistory, Asset, InvestmentTerm, ListAssetHistory, Market, Sector } from "@/types/asset";
 import { redirect } from "next/navigation";
 import axios from "axios";
 import { cookies } from "next/headers";
@@ -249,6 +249,13 @@ export const deleteAsset = async (root: string, id: string) => {
 };
 
 export const addAssetHistory = async (model: AddAssetHistory) => {
-  const response = await axios.post(`${api}/AddAssetHistory`, model);
+  console.log("Added");
+  const response = await axios.post(`${api}AddAssetHistory`, model);
+  return response.data;
+};
+
+export const listAssetHistory = async (assetPublicId: string) => {
+  console.log("Hello",assetPublicId);
+  const response = await axios.get<ListAssetHistory[]>(`${api}ListAssetHistory/${assetPublicId}`);
   return response.data;
 };

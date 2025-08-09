@@ -2,6 +2,7 @@
 
 import { addAssetHistory } from "@/api/asset";
 import { AddAssetHistory } from "@/types/asset";
+import { PositionType } from "@/types/enums";
 import { useState } from "react";
 
 interface PageProps {
@@ -10,22 +11,29 @@ interface PageProps {
 
 export const AddAssetHistoryPage = ({ assetId }: PageProps) => {
   const [formData, setFormData] = useState<Partial<AddAssetHistory>>({
-    quantity: 0,
-    price: 0,
-    type: "",
-    assetId: parseInt(assetId) || 0,
+    quantity: undefined,
+    price: undefined,
+    type: PositionType.Long,
+    assetId: assetId,
   });
+  
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [message, setMessage] = useState("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: name === 'quantity' || name === 'price' || name === 'assetId' 
-        ? parseFloat(value) || 0 
-        : value
-    }));
+    setFormData((prev) => {
+      if (name === "quantity" || name === "price") {
+        if (value === "") {
+          return { ...prev, [name]: undefined };
+        }
+        return { ...prev, [name]: parseFloat(value) };
+      }
+      if (name === "type") {
+        return { ...prev, type: value ? (parseInt(value, 10) as PositionType) : undefined };
+      }
+      return { ...prev, [name]: value };
+    });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -42,7 +50,7 @@ export const AddAssetHistoryPage = ({ assetId }: PageProps) => {
       const assetHistoryData: AddAssetHistory = {
         quantity: formData.quantity,
         price: formData.price,
-        type: formData.type,
+        type: formData.type!,
         assetId: formData.assetId,
       };
 
@@ -50,10 +58,10 @@ export const AddAssetHistoryPage = ({ assetId }: PageProps) => {
       setMessage("Asset history added successfully!");
       
       setFormData({
-        quantity: 0,
-        price: 0,
-        type: "",
-        assetId: parseInt(assetId) || 0,
+        quantity: undefined,
+        price: undefined,
+        type: PositionType.Long,
+        assetId: assetId,
       });
     } catch (error) {
       console.error("Error adding asset history:", error);
@@ -86,7 +94,7 @@ export const AddAssetHistoryPage = ({ assetId }: PageProps) => {
             type="number"
             id="quantity"
             name="quantity"
-            value={formData.quantity || ""}
+            value={formData.quantity ?? ""}
             onChange={handleChange}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="Enter quantity"
@@ -104,7 +112,7 @@ export const AddAssetHistoryPage = ({ assetId }: PageProps) => {
             type="number"
             id="price"
             name="price"
-            value={formData.price || ""}
+            value={formData.price ?? ""}
             onChange={handleChange}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="Enter price"
@@ -126,8 +134,9 @@ export const AddAssetHistoryPage = ({ assetId }: PageProps) => {
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             required
           >
-            <option value="buy">Buy</option>
-            <option value="sell">Sell</option>
+            <option value="" disabled>Select type</option>
+            <option value={PositionType.Long}>Buy</option>
+            <option value={PositionType.Short}>Sell</option>
           </select>
         </div>
 

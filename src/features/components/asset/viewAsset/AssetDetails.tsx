@@ -131,8 +131,15 @@ const AssetDetails = ({ asset }: AssetDetailsProps) => {
               <p className="text-gray-600">{asset.strategyName}</p>
             </div>
           )}
-
           <div className="flex justify-end gap-4 pt-4">
+          <Link
+              href={`/investing/ViewAssetHistory/${asset.publicId}`}
+              className="inline-flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-md transition-colors"
+            >
+              <Edit className="w-4 h-4" />
+              View Asset
+            </Link>
+
             <Link
               href={`/investing/EditAsset/${asset.publicId}`}
               className="inline-flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-md transition-colors"

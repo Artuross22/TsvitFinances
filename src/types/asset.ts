@@ -1,3 +1,5 @@
+import { PositionType } from "./enums";
+
 export type Asset = {
   id: string;
   publicId: string;
@@ -35,8 +37,16 @@ export type InvestmentTerm = {
 };
 
 export type AddAssetHistory = {
+  assetId: string;
   quantity: number;
   price: number;
-  type: string;
-  assetId: number;
+  type: PositionType;
 };
+
+export type ListAssetHistory = {
+  publicId: string;
+  quantity: number;
+  price: number;
+  type: PositionType;
+};
+

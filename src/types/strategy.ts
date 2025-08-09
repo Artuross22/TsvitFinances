@@ -8,11 +8,6 @@ export enum RiskCategory {
   High,
 }
 
-export enum PositionType {
-  Long = 1,
-  Short,
-}
-
 export interface EditStrategy {
   publicId: string;
   name: string;
