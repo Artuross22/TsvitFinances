@@ -33,3 +33,10 @@ export type InvestmentTerm = {
   value: number;
   text: string;
 };
+
+export type AddAssetHistory = {
+  quantity: number;
+  price: number;
+  type: string;
+  assetId: number;
+};

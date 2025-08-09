@@ -9,6 +9,7 @@ import AssetTargets from "@/features/components/asset/viewAsset/AssetTargets";
 import { ViewChart } from "@/types/assetsDto";
 import { getAsset } from "@/api/asset";
 import { useEffect, useState } from "react";
+import AddAssetHistoryPage from "@/features/components/asset/assetHistory/addAssetHistory";
 
 export type ViewAssetDto = {
   publicId: string;
@@ -65,6 +66,7 @@ const ViewAsset = ({ params }: AssetProps) => {
             publicId={asset.publicId}
           />
           <AssetDetails asset={asset} />
+          <AddAssetHistoryPage assetId = {asset.publicId} />
 
           <AssetCharts
             charts={asset.charts}

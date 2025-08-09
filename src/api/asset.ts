@@ -1,6 +1,6 @@
 "use server";
 
-import { Asset, InvestmentTerm, Market, Sector } from "@/types/asset";
+import { AddAssetHistory, Asset, InvestmentTerm, Market, Sector } from "@/types/asset";
 import { redirect } from "next/navigation";
 import axios from "axios";
 import { cookies } from "next/headers";
@@ -246,4 +246,9 @@ export const deleteAsset = async (root: string, id: string) => {
     console.error("Unexpected response status:", response.status);
     redirect("/");
   }
+};
+
+export const addAssetHistory = async (model: AddAssetHistory) => {
+  const response = await axios.post(`${api}/AddAssetHistory`, model);
+  return response.data;
 };
