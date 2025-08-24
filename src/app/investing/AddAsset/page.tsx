@@ -10,7 +10,7 @@ import {
   Market,
   Sector,
   _addChart,
-} from "@/types/assetsDto";
+} from "@/types/AssetsDto";
 
 type FormOptions = {
   sectors: Sector[];
@@ -94,11 +94,6 @@ export default function AssetForm() {
 
     try {
       await createAssetPost(formData);
-      setValues(initialAsset);
-      setChartFiles([]);
-      if (fileInputRef.current) {
-        fileInputRef.current.value = "";
-      }
     } catch (error) {
       console.error("Error in createAssetPost:", error);
     }

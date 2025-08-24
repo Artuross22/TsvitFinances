@@ -75,8 +75,6 @@ export const createAssetGet = async (): Promise<AssetOptions> => {
 };
 
 export async function createAssetPost(formData: FormData) {
-  try {
-    // Check if user is authenticated
     const authData = await checkverify();
     if (!authData || !authData.userPublicId || !authData.jti) {
       throw new Error("Authentication failed: Invalid or missing user data");
@@ -91,21 +89,12 @@ export async function createAssetPost(formData: FormData) {
       },
     });
 
-    if (response.status === 200) {
-      redirect(`/investing`);
-    } else {
-      redirect("/");
-    }
-  } catch (error) {
-    console.error("Error in createAssetPost:", error);
-    
-    if (error instanceof Error && error.message.includes("Authentication failed")) {
-      redirect("/auth/signIn");
+    if (response.status !== 200) {
+      throw new Error("Failed to create asset");
     }
     
-    redirect("/");
-  }
-}
+    redirect(`/investing`);
+ }  
 
 export const getAllAssets = async (): Promise<Asset[]> => {
   try {
