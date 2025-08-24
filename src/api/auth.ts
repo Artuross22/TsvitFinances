@@ -1,8 +1,8 @@
-import { Login } from "@/types/login";
+import { Login } from "@/types/Login";
 import axios from "axios";
 import Cookies from "js-cookie";
 
-const api = "https://localhost:44309/api/Auth/login";
+const api = "https://localhost:7095/api/Auth/login";
 
 export const signIn = async (signIn: Login) => {
   try {
@@ -10,6 +10,7 @@ export const signIn = async (signIn: Login) => {
       api,
       signIn,
     );
+
     Cookies.set("jwtToken", response.data.token, { expires: 1, secure: true });
 
     return response.data;

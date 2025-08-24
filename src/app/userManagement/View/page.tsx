@@ -12,7 +12,7 @@ import {
   Mail,
   Phone,
   DollarSign,
-  BookUser,
+  User2,
 } from "lucide-react";
 import UserBalanceHistory from "@/features/components/userManagement/balanceHistory/page";
 import BackLink from "@/features/components/useful/BackLink";
@@ -145,7 +145,7 @@ export const UserManagement = () => {
                 <UserInfoItem
                   label="Nickname"
                   value={user.nickname}
-                  icon={BookUser}
+                  icon={User2}
                 />
                 <UserInfoItem
                   label="Name"

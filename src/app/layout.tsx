@@ -4,6 +4,7 @@ import Navbar from "../features/navbar/navbar";
 import { jwtVerify } from "jose";
 import { getJwtSecretKey } from "@/lib/auth";
 import { cookies } from "next/headers";
+import ErrorBoundary from "@/helpers/ErrorHandler";
 
 interface UserJwtPayload {
   jti: string;
@@ -20,25 +21,30 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const cookieStore = cookies();
-  const token = cookieStore.get("jwtToken")?.value;
+  let name = "";
 
-  var name = "";
+  try {
+    const cookieStore = cookies();
+    const token = cookieStore.get("jwtToken")?.value;
 
-  if (token) {
-    const verified = await jwtVerify(
-      token,
-      new TextEncoder().encode(getJwtSecretKey()),
-    );
-    console.log("VERIFIED", verified);
-    name = (verified.payload as UserJwtPayload).sub || "";
+    if (token) {
+      const verified = await jwtVerify(
+        token,
+        new TextEncoder().encode(getJwtSecretKey()),
+      );
+      name = (verified.payload as UserJwtPayload).sub || "";
+    }
+  } catch (error) {
+    console.error("Error verifying JWT in layout:", error);
   }
 
   return (
     <html lang="en">
       <body>
-        <Navbar userName={name} />
-        {children}
+        <ErrorBoundary>
+          <Navbar userName={name} />
+          {children}
+        </ErrorBoundary>
       </body>
     </html>
   );

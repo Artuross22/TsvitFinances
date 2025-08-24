@@ -25,7 +25,7 @@ import { TargetLevels } from "@/features/components/asset/viewAsset/AssetTargets
 import axios from "axios";
 import { UUID } from "crypto";
 import { redirect } from "next/navigation";
-import { api, checkverify, getUserId } from "./helpers/apiHelpers";
+import { apiTsvit, checkverify, getUserId } from "./helpers/apiHelpers";
 import { GetPositionScaling } from "@/app/strategy/EditPositionScalingManagement/[publicId]/page";
 import { FinanceDataStockMetrics } from "@/app/strategy/AddStockMetrics/[publicId]/[strategyId]/page";
 import { ApplyStockMetricsModel } from "@/features/components/asset/viewAsset/ApplyStockMetrics";
@@ -36,7 +36,7 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
 export const listStrategies = async (): Promise<ListStrategies[]> => {
   try {
-    const response = await axios.get(`${api}ListStrategy/${await getUserId()}`);
+    const response = await axios.get(`${apiTsvit}ListStrategy/${await getUserId()}`);
     return response.data;
   } catch (error) {
     console.error("Error fetching strategies:", error);
@@ -50,7 +50,7 @@ export const listStrategiesForAsset = async (
   try {
     const userId = await getUserId();
     const response = await axios.get(
-      `${api}AddStrategyToAsset/${userId}/${assetPublicId}`,
+      `${apiTsvit}AddStrategyToAsset/${userId}/${assetPublicId}`,
     );
     return response.data;
   } catch (error) {
@@ -64,7 +64,7 @@ export const addStragyToAsset = async (
 ): Promise<boolean> => {
   try {
     const response = await axios.post<boolean>(
-      api + "AddStrategyToAsset",
+      apiTsvit + "AddStrategyToAsset",
       addToStrategy,
     );
 
@@ -84,14 +84,14 @@ export const applaStrategy = async (
 ): Promise<ApplyStrategyInput> => {
   let userId = await getUserId();
   const response = await axios.get(
-    `${api}ApplyStrategies/${publicId}/${userId}`,
+    `${apiTsvit}ApplyStrategies/${publicId}/${userId}`,
   );
   const data = response.data;
   return data as ApplyStrategyInput;
 };
 
 export const listTargets = async (publicId: string): Promise<TargetLevels> => {
-  const response = await axios.get(`${api}ListTargets/${publicId}`);
+  const response = await axios.get(`${apiTsvit}ListTargets/${publicId}`);
   const data = response.data;
   return data as TargetLevels;
 };
@@ -100,7 +100,7 @@ export const deleteTarget = async (
   publicId: UUID,
   name: string,
 ): Promise<boolean> => {
-  const response = await axios.delete(`${api}DeleteTarget/${publicId}/${name}`);
+  const response = await axios.delete(`${apiTsvit}DeleteTarget/${publicId}/${name}`);
   if (response.status === 200) {
     return true;
   }
@@ -110,18 +110,33 @@ export const deleteTarget = async (
 export const getStrategy = async (publicId: UUID): Promise<GetStrategy> => {
   let userId = await getUserId();
   const response = await axios.get<GetStrategy>(
-    `${api}GetStrategy/${publicId}/${userId}`,
+    `${apiTsvit}GetStrategy/${publicId}/${userId}`,
   );
   return response.data;
 };
 
 export async function createStrategy(stragy: Partial<AddStragy>) {
-  stragy.userPublicId = await checkverify().then((data) => data.userPublicId!);
+  try {
+    const authData = await checkverify();
+    if (!authData || !authData.userPublicId) {
+      throw new Error("Authentication failed: Invalid or missing user data");
+    }
 
-  const response = await axios.post<boolean>(`${api}AddStrategies`, stragy);
-  if (response.status === 200) {
-    redirect(`/strategy`);
-  } else {
+    stragy.userPublicId = authData.userPublicId;
+
+    const response = await axios.post<boolean>(`${apiTsvit}AddStrategies`, stragy);
+    if (response.status === 200) {
+      redirect(`/strategy`);
+    } else {
+      redirect("/");
+    }
+  } catch (error) {
+    console.error("Error in createStrategy:", error);
+    
+    if (error instanceof Error && error.message.includes("Authentication failed")) {
+      redirect("/auth/signIn");
+    }
+    
     redirect("/");
   }
 }
@@ -130,7 +145,7 @@ export const editStrategyGet = async (publicId: string) => {
   let userId = await getUserId();
   console.log("WTF", publicId);
   const response = await axios.get<EditStrategy>(
-    `${api}EditStrategy/${publicId}/${userId}`,
+    `${apiTsvit}EditStrategy/${publicId}/${userId}`,
   );
   return response.data;
 };
@@ -138,7 +153,7 @@ export const editStrategyGet = async (publicId: string) => {
 export const editStrategyPost = async (
   model: EditStrategy,
 ): Promise<boolean> => {
-  const response = await axios.put<boolean>(`${api}EditStrategy/`, model);
+  const response = await axios.put<boolean>(`${apiTsvit}EditStrategy/`, model);
   if (response.status === 200) {
     return true;
   }
@@ -149,7 +164,7 @@ export const editEditRiskManagementGet = async (
   publicId: string,
 ): Promise<EditRiskManagement> => {
   try {
-    const response = await axios.get(`${api}GetRiskManagement/${publicId}`);
+    const response = await axios.get(`${apiTsvit}GetRiskManagement/${publicId}`);
     const data = response.data;
     return data as EditRiskManagement;
   } catch (error) {
@@ -161,7 +176,7 @@ export const editEditRiskManagementGet = async (
 export const editRiskManagementPost = async (
   model: EditRiskManagement,
 ): Promise<boolean> => {
-  const response = await axios.put<boolean>(`${api}PutRiskManagement/`, model);
+  const response = await axios.put<boolean>(`${apiTsvit}PutRiskManagement/`, model);
   if (response.status === 200) {
     return true;
   }
@@ -172,7 +187,7 @@ export const editPositionScalingManagerGet = async (
   publicId: string,
 ): Promise<GetPositionScaling> => {
   try {
-    const response = await axios.get(`${api}GetPositionManagement/${publicId}`);
+    const response = await axios.get(`${apiTsvit}GetPositionManagement/${publicId}`);
     const data = response.data;
     return data as GetPositionScaling;
   } catch (error) {
@@ -185,7 +200,7 @@ export const editPositionScalingManagerPost = async (
   model: GetPositionScaling,
 ): Promise<boolean> => {
   const response = await axios.put<boolean>(
-    `${api}PutPositionManagement/`,
+    `${apiTsvit}PutPositionManagement/`,
     model,
   );
   if (response.status === 200) {
@@ -198,7 +213,7 @@ export const editPositionManagementGet = async (
   publicId: string,
 ): Promise<EditPositionManagement> => {
   try {
-    const response = await axios.get(`${api}GetPositionManagement/${publicId}`);
+    const response = await axios.get(`${apiTsvit}GetPositionManagement/${publicId}`);
     const data = response.data;
     return data as EditPositionManagement;
   } catch (error) {
@@ -211,7 +226,7 @@ export const editPositionManagementPost = async (
   model: EditPositionManagement,
 ): Promise<boolean> => {
   const response = await axios.put<boolean>(
-    `${api}PutPositionManagement/`,
+    `${apiTsvit}PutPositionManagement/`,
     model,
   );
   if (response.status === 200) {
@@ -222,7 +237,7 @@ export const editPositionManagementPost = async (
 
 export async function getDiversifications(publicId: string) {
   try {
-    const response = await axios.get(`${api}EditDiversification/${publicId}`);
+    const response = await axios.get(`${apiTsvit}EditDiversification/${publicId}`);
     const data = response.data;
     return data as EditDiversification;
   } catch (error) {
@@ -233,7 +248,7 @@ export async function getDiversifications(publicId: string) {
 
 export async function updateDiversification(model: EditDiversification) {
   const response = await axios.post<boolean>(
-    `${api}EditDiversification`,
+    `${apiTsvit}EditDiversification`,
     model,
   );
   if (response.status !== 200) {
@@ -244,7 +259,7 @@ export async function updateDiversification(model: EditDiversification) {
 export async function createInvestmentIdeaGet() {
   let userId = await getUserId();
   const response = await axios.get<AddInvestmentIdeaGet[]>(
-    `${api}AddInvestmentIdea/${userId}`,
+    `${apiTsvit}AddInvestmentIdea/${userId}`,
   );
   if (response.status === 200) {
     return response.data;
@@ -255,7 +270,7 @@ export async function createInvestmentIdeaGet() {
 
 export async function createInvestmentIdeaPost(model: AddInvestmentIdeaPost) {
   model.appUserId = await getUserId();
-  const response = await axios.post(`${api}AddInvestmentIdea`, model);
+  const response = await axios.post(`${apiTsvit}AddInvestmentIdea`, model);
   if (response.status === 200) {
     redirect(`/investmentIdea/view${response.data}`);
   } else {
@@ -266,7 +281,7 @@ export async function createInvestmentIdeaPost(model: AddInvestmentIdeaPost) {
 export async function listInvestmentIdeas() {
   let userId = await getUserId();
   const response = await axios.get<ListInvestmentIdeas[]>(
-    `${api}ListInvestmentIdeas/${userId}`,
+    `${apiTsvit}ListInvestmentIdeas/${userId}`,
   );
   if (response.status === 200) {
     return response.data;
@@ -277,20 +292,20 @@ export async function listInvestmentIdeas() {
 
 export async function viewInvestmentIdea(publicId: string) {
   const response = await axios.get<ViewInvestmentIdea>(
-    `${api}ViewInvestmentIdea/${publicId}`,
+    `${apiTsvit}ViewInvestmentIdea/${publicId}`,
   );
   return response.data;
 }
 
 export async function editInvestmentIdeaGet(publicId: string) {
   const response = await axios.get<EditInvestmentIdea>(
-    `${api}EditInvestmentIdea/${publicId}`,
+    `${apiTsvit}EditInvestmentIdea/${publicId}`,
   );
   return response.data;
 }
 
 export async function investmentIdeaPost(model: EditInvestmentIdea) {
-  const response = await axios.post(`${api}EditInvestmentIdea`, model);
+  const response = await axios.post(`${apiTsvit}EditInvestmentIdea`, model);
   if (response.status === 200) {
     redirect(`/InvestmentIdea/View/${model.publicId}`);
   } else {
@@ -301,20 +316,20 @@ export async function investmentIdeaPost(model: EditInvestmentIdea) {
 export async function getAllAssetsForIdea() {
   let userPublicId = await getUserId();
   const response = await axios.get<AssetsForIdea[]>(
-    `${api}GetAssetsForIdea/${userPublicId}`,
+    `${apiTsvit}GetAssetsForIdea/${userPublicId}`,
   );
   return response.data;
 }
 
 export async function deleteInvestmentIdea(publicId: string) {
-  const response = await axios.delete(`${api}DeleteInvestmentIdea/${publicId}`);
+  const response = await axios.delete(`${apiTsvit}DeleteInvestmentIdea/${publicId}`);
   if (response.status === 200) {
     redirect(`/InvestmentIdea/ListIdeas`);
   }
 }
 
 export async function createStockMetrics(stragy: FinanceDataStockMetrics) {
-  const response = await axios.post<boolean>(`${api}AddStockMetrics`, stragy);
+  const response = await axios.post<boolean>(`${apiTsvit}AddStockMetrics`, stragy);
   if (response.status === 200) {
     redirect(`/strategy`);
   } else {
@@ -327,7 +342,7 @@ export const applyStockMetrics = async (
   assetPublicId: string,
 ): Promise<ApplyStockMetricsModel> => {
   const response = await axios.get(
-    `${api}ApplyStockMetrics/${publicId}/${assetPublicId}`,
+    `${apiTsvit}ApplyStockMetrics/${publicId}/${assetPublicId}`,
   );
 
   const data = response.data;
@@ -336,13 +351,13 @@ export const applyStockMetrics = async (
 };
 
 export const positionRulePost = async (model: PositionRuleBinding) => {
-  const response = await axios.post(`${api}ManagePositionRule`, model);
+  const response = await axios.post(`${apiTsvit}ManagePositionRule`, model);
   return response.data;
 };
 
 export const positionRuleGet = async (publicId: string) => {
   const response = await axios.get<PositionRuleBinding>(
-    `${api}ManagePositionRule/${publicId}`,
+    `${apiTsvit}ManagePositionRule/${publicId}`,
   );
   return response.data;
 };
