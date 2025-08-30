@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { ViewChart } from "@/types/assetsDto";
+import { ViewChart } from "@/types/AssetsDto";
 
 interface AssetChartsProps {
   charts: ViewChart[];
@@ -17,14 +17,14 @@ const ShowCharts = ({ charts, publicId, name }: AssetChartsProps) => {
         <div>
           {charts && charts.length > 0 && (
             <Link
-              href={`/positionEntryNotes/ListPositionEntry/${publicId}/${name}`}
+              href={`/PositionEntryNotes/ListPositionEntry/${publicId}/${name}`}
               className="block mb-2 text-blue-600 hover:text-blue-800"
             >
               View
             </Link>
           )}
           <Link
-            href={`/positionEntryNotes/AddCharts/${publicId}/${name}`}
+            href={`/PositionEntryNotes/AddCharts/${publicId}/${name}`}
             className="block text-blue-600 hover:text-blue-800"
           >
             Add

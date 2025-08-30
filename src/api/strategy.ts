@@ -81,13 +81,23 @@ export const addStragyToAsset = async (
 
 export const applaStrategy = async (
   publicId: string,
-): Promise<ApplyStrategyInput> => {
-  let userId = await getUserId();
-  const response = await axios.get(
-    `${apiTsvit}ApplyStrategies/${publicId}/${userId}`,
-  );
-  const data = response.data;
-  return data as ApplyStrategyInput;
+): Promise<ApplyStrategyInput | null> => {
+  try {
+    let userId = await getUserId();
+    const response = await axios.get(
+      `${apiTsvit}ApplyStrategies/${publicId}/${userId}`,
+    );
+    
+    if (!response.data) {
+      return null;
+    }
+    
+    const data = response.data;
+    return data as ApplyStrategyInput;
+  } catch (error) {
+    console.error("Error fetching strategy:", error);
+    return null;
+  }
 };
 
 export const listTargets = async (publicId: string): Promise<TargetLevels> => {

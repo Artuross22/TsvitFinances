@@ -50,7 +50,11 @@ export default function ApplyStrategy({ publicId }: Props) {
     const fetchTarget = async () => {
       try {
         const data = await applaStrategy(publicId);
-        setStrategies(data);
+        if (!data) {
+          setStatus({ type: "error", message: "No strategy data found for this asset" });
+        } else {
+          setStrategies(data);
+        }
       } catch {
         setStatus({ type: "error", message: "Failed to load target" });
       } finally {

@@ -6,7 +6,7 @@ import AssetDetails from "@/features/components/asset/viewAsset/AssetDetails";
 import AssetHeader from "@/features/components/asset/viewAsset/AssetHeader";
 import AssetStrategy from "@/features/components/asset/viewAsset/AssetStrategy";
 import AssetTargets from "@/features/components/asset/viewAsset/AssetTargets";
-import { ViewChart } from "@/types/assetsDto";
+import { ViewChart } from "@/types/AssetsDto";
 import { getAsset } from "@/api/asset";
 import { useEffect, useState } from "react";
 
