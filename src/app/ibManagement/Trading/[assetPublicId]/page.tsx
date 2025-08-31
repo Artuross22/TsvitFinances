@@ -13,8 +13,6 @@ interface Props {
     };
   }
 
-  
-
 export const Page = ({ params }: Props) => {
   return (
     <>
@@ -31,31 +29,15 @@ export const Page = ({ params }: Props) => {
 
 
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
-      {/* Header Section */}
-      <div className="bg-white shadow-sm border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between py-4">
-            <div className="flex items-center space-x-2">
-              <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
-              <span className="text-sm font-medium text-gray-600">Live Trading</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Account Status Section */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+      <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 py-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <IBAccounts />
           <AuthStatusInfo />
         </div>
       </div>
-
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div className="mb-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Market Order Card */}
             <div className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100">
               <div className="p-6">
                 <div className="flex items-center justify-between mb-4">
@@ -77,8 +59,6 @@ export const Page = ({ params }: Props) => {
                 <PlaceMarketOrder params={params} />
               </div>
             </div>
-
-            {/* Limit Order Card */}
             <div className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100">
               <div className="p-6">
                 <div className="flex items-center justify-between mb-4">
@@ -102,8 +82,6 @@ export const Page = ({ params }: Props) => {
             </div>
           </div>
         </div>
-
-        {/* Orders Table Section */}
         <div className="bg-white rounded-xl shadow-lg border border-gray-100">
           <div className="p-6 border-b border-gray-200">
             <div className="flex items-center justify-between">
