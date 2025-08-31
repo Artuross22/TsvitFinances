@@ -17,12 +17,10 @@ export const Page = () => {
             <strong>Interactive brokers</strong>
           </h2>
         </div>
-
         <div className="flex">
           <div className="w-1/2 m-4 p-4">
             <IBAccounts />
           </div>
-
           <div className="w-1/2 m-4 p-4">
             <AuthStatusInfo /> 
           </div>
