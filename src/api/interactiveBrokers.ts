@@ -5,17 +5,17 @@ import { apiTsvit, getUserId } from "./helpers/apiHelpers";
 import {
   AuthStatus,
   Orderlimits,
-  PaperAccount,
+  AccountInfo,
   PlaceLimitOrder,
   PlaceMarketOrder,
 } from "@/types/interactiveBrokers";
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
-export const getPaperAccounts = async () => {
+export const getAccounts = async (): Promise<AccountInfo> => {
   const userId = await getUserId();
-  const response = await axios.get<PaperAccount>(
-    `${apiTsvit}PaperTrading/GetPaperAccounts/${userId}`,
+  const response = await axios.get<AccountInfo>(
+    `${apiTsvit}GetCureentAccounts/${userId}`,
   );
   return response.data;
 };

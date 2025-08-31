@@ -1,7 +1,7 @@
 "use client";
 
 import AuthStatusInfo from "@/features/components/ibManagement/getAuthStatus/page";
-import ListPaperAccounts from "@/features/components/ibManagement/getPaperAccounts/page";
+import IBAccounts from "@/features/components/ibManagement/getAccounts/page";
 import BackLink from "@/features/components/useful/BackLink";
 
 export const Page = () => {
@@ -20,7 +20,7 @@ export const Page = () => {
 
         <div className="flex">
           <div className="w-1/2 m-4 p-4">
-            <ListPaperAccounts />
+            <IBAccounts />
           </div>
 
           <div className="w-1/2 m-4 p-4">

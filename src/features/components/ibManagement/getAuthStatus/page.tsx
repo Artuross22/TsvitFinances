@@ -16,7 +16,6 @@ export const AuthStatusInfo = () => {
 
   return (
     <>
-      <h2 className="text-2xl font-semibold mb-4">Auth Status</h2>
       <div className="border border-gray-200 rounded-lg p-4 max-w-md bg-gray-50 shadow-sm">
         {authStatus ? (
           <>

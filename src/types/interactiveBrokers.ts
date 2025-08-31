@@ -1,6 +1,7 @@
-export interface PaperAccount {
-  error: string | null;
-  data: PaperAccountDate[];
+export interface AccountInfo {
+  accountId: string;
+  alias: string;
+  isPaperAccount: boolean;
 }
 
 export interface PaperAccountDate {
