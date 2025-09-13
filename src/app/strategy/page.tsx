@@ -2,6 +2,7 @@
 
 import { listStrategies } from "@/api/strategy";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export type ListStrategies = {
@@ -12,12 +13,17 @@ export type ListStrategies = {
 export default function ListStrategies() {
   const [strategies, setStrategies] = useState<ListStrategies[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchStrategies = async () => {
       try {
         const fetchedStrategies = await listStrategies();
         setStrategies(fetchedStrategies);
+        
+        if (fetchedStrategies.length === 0) {
+          router.push('/strategy/AddStrategy');
+        }
       } catch (error) {
         console.error("Error:", error);
       } finally {

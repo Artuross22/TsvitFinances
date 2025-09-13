@@ -3,6 +3,7 @@
 import { addStragyToAsset, listStrategiesForAsset } from "@/api/strategy";
 import { UUID } from "crypto";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export type ListStrategiesForAsset = {
@@ -26,12 +27,17 @@ const addStrategyToAsset: React.FC<Props> = ({ params }) => {
   const [strategies, setStrategies] = useState<ListStrategiesForAsset[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchStrategies = async () => {
       try {
         const fetchedStrategies = await listStrategiesForAsset(params.publicId);
         setStrategies(fetchedStrategies);
+        
+        if (fetchedStrategies.length === 0) {
+          router.push('/strategy/AddStrategy');
+        }
       } catch (error) {
         console.error("Error:", error);
         setError("Failed to load strategies");

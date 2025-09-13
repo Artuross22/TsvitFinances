@@ -242,10 +242,9 @@ export const editAssetGet = async (id: string): Promise<EditAssetDto> => {
 };
 
 export const editAsset = async (asset: EditAssetDto): Promise<void> => {
-  try {
     const authData = await checkverify();
     if (!authData || !authData.userPublicId) {
-      throw new Error("Authentication failed: Invalid or missing user data");
+      redirect("/auth/signIn");
     }
 
     asset.userPublicId = authData.userPublicId;
@@ -257,15 +256,6 @@ export const editAsset = async (asset: EditAssetDto): Promise<void> => {
     } else {
       redirect("/");
     }
-  } catch (error) {
-    console.error("Error in editAsset:", error);
-    
-    if (error instanceof Error && error.message.includes("Authentication failed")) {
-      redirect("/auth/signIn");
-    }
-    
-    redirect("/");
-  }
 };
 
 export const deleteAsset = async (root: string, id: string) => {
