@@ -26,11 +26,16 @@ interface AuthDate {
   message: string;
 }
 
+export enum PositionType {
+  Long = 1,
+  Short,
+}
+
 export interface PlaceMarketOrder {
   accountId: string;
   assetPublicId: string;
   userId : string;
-  side: "BUY" | "SELL";
+  type: PositionType;
   quantity: number;
 }
 
@@ -38,7 +43,7 @@ export interface PlaceLimitOrder {
   accountId: string;
   assetPublicId: string;
   userId: string;
-  side: "BUY" | "SELL";
+  type: PositionType;
   quantity: number;
   price: number;
 }

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { PlaceLimitOrderPost } from "@/api/interactiveBrokers";
+import { type PlaceLimitOrder, PositionType } from "@/types/interactiveBrokers";
 
 interface Props {
   params: {
@@ -9,11 +10,15 @@ interface Props {
   };
 }
 
-export const PlaceLimitOrder = ({ params }: Props) => {
-  const [accountId, setAccountId] = useState("");
-  const [side, setSide] = useState<"BUY" | "SELL">("BUY");
-  const [quantity, setQuantity] = useState<string>("1");
-  const [price, setPrice] = useState<string>("0");
+export const PlaceLimitOrderComponent = ({ params }: Props) => {
+  const [orderModel, setOrderModel] = useState<PlaceLimitOrder>({
+    accountId: "",
+    assetPublicId: params.assetPublicId,
+    userId: "",
+    type: PositionType.Long,
+    quantity: 1,
+    price: 0
+  });
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
 
@@ -23,14 +28,7 @@ export const PlaceLimitOrder = ({ params }: Props) => {
     setLoading(true);
     setMessage(null);
     try {
-      await PlaceLimitOrderPost({
-        accountId,
-        side,
-        quantity: Number(quantity),
-        userId: "",
-        assetPublicId: params.assetPublicId,
-        price: Number(price)
-      });
+      await PlaceLimitOrderPost(orderModel);
       setMessage("Order sent successfully!");
     } catch (err) {
       setMessage("Error while sending order");
@@ -39,7 +37,8 @@ export const PlaceLimitOrder = ({ params }: Props) => {
     }
   };
 
-  const isQuantityValid = quantity !== "" && !isNaN(Number(quantity)) && Number(quantity) >= 1;
+  const isQuantityValid = orderModel.quantity >= 1;
+  const isPriceValid = orderModel.price > 0;
 
   return (
     <form onSubmit={handleSubmit} className="p-6 space-y-4">
@@ -49,8 +48,8 @@ export const PlaceLimitOrder = ({ params }: Props) => {
         <label className="block mb-2 text-sm font-medium text-gray-700">Account ID</label>
         <input
           type="text"
-          value={accountId}
-          onChange={e => setAccountId(e.target.value)}
+          value={orderModel.accountId}
+          onChange={e => setOrderModel(prev => ({ ...prev, accountId: e.target.value }))}
           className="w-full border border-gray-300 rounded-md p-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           required
         />
@@ -58,12 +57,12 @@ export const PlaceLimitOrder = ({ params }: Props) => {
       <div>
         <label className="block mb-2 text-sm font-medium text-gray-700">Side</label>
         <select
-          value={side}
-          onChange={e => setSide(e.target.value as "BUY" | "SELL")}
+          value={orderModel.type}
+          onChange={e => setOrderModel(prev => ({ ...prev, type: Number(e.target.value) as PositionType }))}
           className="w-full border border-gray-300 rounded-md p-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
         >
-          <option value="BUY">BUY</option>
-          <option value="SELL">SELL</option>
+          <option value={PositionType.Long}>BUY</option>
+          <option value={PositionType.Short}>SELL</option>
         </select>
       </div>
       <div>
@@ -71,8 +70,8 @@ export const PlaceLimitOrder = ({ params }: Props) => {
         <input
           type="number"
           min={1}
-          value={quantity}
-          onChange={e => setQuantity(e.target.value)}
+          value={orderModel.quantity}
+          onChange={e => setOrderModel(prev => ({ ...prev, quantity: Number(e.target.value) }))}
           className="w-full border border-gray-300 rounded-md p-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           required
         />
@@ -81,9 +80,10 @@ export const PlaceLimitOrder = ({ params }: Props) => {
         <label className="block mb-2 text-sm font-medium text-gray-700">Price</label>
         <input
           type="number"
-          min={1}
-          value={price}
-          onChange={e => setPrice(e.target.value)}
+          min={0.01}
+          step={0.01}
+          value={orderModel.price}
+          onChange={e => setOrderModel(prev => ({ ...prev, price: Number(e.target.value) }))}
           className="w-full border border-gray-300 rounded-md p-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           required
         />
@@ -91,7 +91,7 @@ export const PlaceLimitOrder = ({ params }: Props) => {
       <button
         type="submit"
         className="w-full bg-blue-600 text-white rounded-md p-3 font-semibold hover:bg-blue-700 disabled:bg-gray-400 transition-colors"
-        disabled={loading || !accountId || !isQuantityValid}
+        disabled={loading || !orderModel.accountId || !isQuantityValid || !isPriceValid}
       >
         {loading ? "Sending..." : "Send Limit Order"}
       </button>
@@ -100,4 +100,4 @@ export const PlaceLimitOrder = ({ params }: Props) => {
   );
 };
 
-export default PlaceLimitOrder;
+export default PlaceLimitOrderComponent;
