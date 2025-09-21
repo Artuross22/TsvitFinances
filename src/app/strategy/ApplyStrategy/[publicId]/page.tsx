@@ -17,6 +17,7 @@ export interface Targets {
   end: number;
   percentageLevel: number;
   positionScaling: number;
+  persent: number;
 }
 
 export interface _Position {
@@ -111,16 +112,16 @@ export default function ApplyStrategy({ publicId }: Props) {
               <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Sector
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Total Niche Sum
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Recommended %
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Total
                     </th>
                   </tr>
@@ -135,16 +136,16 @@ export default function ApplyStrategy({ publicId }: Props) {
                           : ""
                       }
                     >
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      <td className="px-2 py-3 whitespace-nowrap text-sm">
                         {div.sector}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      <td className="px-2 py-3 whitespace-nowrap text-sm">
                         {div.totalNicheSum}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      <td className="px-2 py-3 whitespace-nowrap text-sm">
                         {div.recommendedNichePercentage}%
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      <td className="px-2 py-3 whitespace-nowrap text-sm">
                         {div.totalPercentage}%
                       </td>
                     </tr>
@@ -157,35 +158,41 @@ export default function ApplyStrategy({ publicId }: Props) {
       </div>
       <div className="bg-white rounded-lg shadow-md p-6">
         <h2 className="text-2xl font-bold mb-4">Position Strategy</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 gap-6">
           <div>
             <h3 className="text-lg font-medium mb-2">Buy Targets</h3>
             <div className="overflow-x-auto">
               <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Target Range
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Percentage Level %
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Scaling Out $
+                    </th>
+                    <th className="px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Percent %
                     </th>
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
                   {strategies.position.buyTargets.map((target, index) => (
                     <tr key={`buy-${index}`}>
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      <td className="px-2 py-3 whitespace-nowrap text-sm">
                         {target.start ? `${target.start} - ${target.end}` : `-`}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      <td className="px-2 py-3 whitespace-nowrap text-sm">
                         {target.percentageLevel}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      <td className="px-2 py-3 whitespace-nowrap text-sm">
                         {target.positionScaling}%
+                      </td>
+                      <td className="px-2 py-3 whitespace-nowrap text-sm">
+                        {target.persent || 0}%
                       </td>
                     </tr>
                   ))}
@@ -200,28 +207,34 @@ export default function ApplyStrategy({ publicId }: Props) {
               <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Target Range
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Percentage Level %
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Scaling In $
+                    </th>
+                    <th className="px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Percent %
                     </th>
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
                   {strategies.position.sellTargets.map((target, index) => (
                     <tr key={`sell-${index}`}>
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      <td className="px-2 py-3 whitespace-nowrap text-sm">
                         {target.start ? `${target.start} - ${target.end}` : `-`}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      <td className="px-2 py-3 whitespace-nowrap text-sm">
                         {target.percentageLevel}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      <td className="px-2 py-3 whitespace-nowrap text-sm">
                         {target.positionScaling}%
+                      </td>
+                      <td className="px-2 py-3 whitespace-nowrap text-sm">
+                        {target.persent || 0}%
                       </td>
                     </tr>
                   ))}

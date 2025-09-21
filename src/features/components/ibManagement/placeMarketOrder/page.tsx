@@ -16,7 +16,7 @@ export const PlaceMarketOrderComponent = ({ params }: Props) => {
     assetPublicId: params.assetPublicId,
     userId: "",
     type: PositionType.Long,
-    quantity: 1
+    quantity: 0.01
   });
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
@@ -35,7 +35,7 @@ export const PlaceMarketOrderComponent = ({ params }: Props) => {
     }
   };
 
-  const isQuantityValid = orderModel.quantity >= 1;
+  const isQuantityValid = orderModel.quantity >= 0.01;
 
   return (
     <form onSubmit={handleSubmit} className="p-6 space-y-4">
@@ -66,8 +66,9 @@ export const PlaceMarketOrderComponent = ({ params }: Props) => {
         <label className="block mb-2 text-sm font-medium text-gray-700">Quantity</label>
         <input
           type="number"
-          min={1}
-          value={orderModel.quantity}
+          min={0.01}
+          step={0.01}
+          value={orderModel.quantity || ""}
           onChange={e => setOrderModel(prev => ({ ...prev, quantity: Number(e.target.value) }))}
           className="w-full border border-gray-300 rounded-md p-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           required

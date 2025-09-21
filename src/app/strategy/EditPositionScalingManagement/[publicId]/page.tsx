@@ -1,16 +1,17 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { PositionType } from "@/types/strategy";
 import {
   editPositionScalingManagerGet,
   editPositionScalingManagerPost,
 } from "@/api/strategy";
 import BackLink from "@/features/components/useful/BackLink";
+import { PositionType } from "@/types/enums";
 
 interface PositionScalings {
   publicId: string;
   equityPercentage: string;
+  priceTriggerPercent: string;
   positionType: PositionType;
 }
 
@@ -51,15 +52,30 @@ const PositionScalingManager: React.FC<Props> = ({ params }) => {
   const savePositionScaling = async () => {
     if (!positionManagement) return;
 
-    const hasInvalidValues = positionManagement.positionScalings?.some(
+    const hasInvalidEquityValues = positionManagement.positionScalings?.some(
       (scaling) => {
         const value = parseFloat(scaling.equityPercentage);
         return isNaN(value) || value < 0.01;
       },
     );
 
-    if (hasInvalidValues) {
+    if (hasInvalidEquityValues) {
       setValidationError("All equity percentages must be at least 0.01%");
+      return;
+    }
+
+    const hasInvalidPriceTriggerValues = positionManagement.positionScalings?.some(
+      (scaling) => {
+        if (!scaling.priceTriggerPercent || scaling.priceTriggerPercent === "") {
+          return false; // Allow empty price trigger percent
+        }
+        const value = parseFloat(scaling.priceTriggerPercent);
+        return isNaN(value) || value <= 0;
+      },
+    );
+
+    if (hasInvalidPriceTriggerValues) {
+      setValidationError("Price trigger percentages must be greater than 0% when provided");
       return;
     }
 
@@ -128,6 +144,7 @@ const PositionScalingManager: React.FC<Props> = ({ params }) => {
     const newScaling: PositionScalings = {
       publicId: crypto.randomUUID(),
       equityPercentage: "",
+      priceTriggerPercent: "",
       positionType: positionType,
     };
 
@@ -151,18 +168,7 @@ const PositionScalingManager: React.FC<Props> = ({ params }) => {
     if (!positionManagement?.positionScalings) return;
 
     const updatedScalings = [...positionManagement.positionScalings];
-
-    if (updates.equityPercentage !== undefined) {
-      if (
-        updates.equityPercentage === "" ||
-        updates.equityPercentage === "0." ||
-        /^\d*\.?\d*$/.test(updates.equityPercentage)
-      ) {
-        updatedScalings[index] = { ...updatedScalings[index], ...updates };
-      }
-    } else {
-      updatedScalings[index] = { ...updatedScalings[index], ...updates };
-    }
+    updatedScalings[index] = { ...updatedScalings[index], ...updates };
 
     if (validatePositionTotals(updatedScalings)) {
       setPositionManagement({
@@ -387,6 +393,30 @@ const PositionScalingManager: React.FC<Props> = ({ params }) => {
                               </div>
                             </div>
                           </div>
+                          <div>
+                            <label className="block text-xs font-medium text-gray-700 mb-1">
+                              Price Trigger Percentage
+                            </label>
+                            <div className="relative">
+                              <input
+                                type="text"
+                                value={scaling.priceTriggerPercent}
+                                onChange={(e) =>
+                                  updatePositionScaling(
+                                    positionManagement.positionScalings?.findIndex(
+                                      (s) => s.publicId === scaling.publicId,
+                                    ) ?? -1,
+                                    { priceTriggerPercent: e.target.value },
+                                  )
+                                }
+                                className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all"
+                                placeholder="Optional - e.g. 5.0"
+                              />
+                              <div className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+                                <span className="text-gray-500 text-sm">%</span>
+                              </div>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     ))}
@@ -455,6 +485,30 @@ const PositionScalingManager: React.FC<Props> = ({ params }) => {
                                 }
                                 className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all"
                                 placeholder="Minimum 0.01"
+                              />
+                              <div className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+                                <span className="text-gray-500 text-sm">%</span>
+                              </div>
+                            </div>
+                          </div>
+                          <div>
+                            <label className="block text-xs font-medium text-gray-700 mb-1">
+                              Price Trigger Percentage
+                            </label>
+                            <div className="relative">
+                              <input
+                                type="text"
+                                value={scaling.priceTriggerPercent}
+                                onChange={(e) =>
+                                  updatePositionScaling(
+                                    positionManagement.positionScalings?.findIndex(
+                                      (s) => s.publicId === scaling.publicId,
+                                    ) ?? -1,
+                                    { priceTriggerPercent: e.target.value },
+                                  )
+                                }
+                                className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all"
+                                placeholder="Optional - e.g. 5.0"
                               />
                               <div className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
                                 <span className="text-gray-500 text-sm">%</span>
